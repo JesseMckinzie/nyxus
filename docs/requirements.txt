@@ -7,6 +7,7 @@ autodocsumm
 sphinx-autodoc-typehints
 httpolice
 versioneer
+importlib_metadata
 cx_Freeze==6.10
 ghapi==0.1.20
 nox==2022.1.7
