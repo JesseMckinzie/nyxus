@@ -68,9 +68,6 @@ add_module_names = False
 
 html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
-# autodoc settings
-autodoc_mock_imports = []
-
 autodoc_member_order = 'groupwise'
 autodoc_typehints = 'description'
 
