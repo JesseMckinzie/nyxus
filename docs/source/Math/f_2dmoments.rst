@@ -5,108 +5,131 @@
 Raw moments
 -----------
 
-Raw (spatial) moments $m_{ij}$ of a 2-dimensional greyscale image  $I(x,y)$ are calculated as
+Raw (spatial) moments :math:`m_{ij}` of a 2-dimensional greyscale image  :math:`I(x,y)`` are calculated as
+
+.. math::
+   
+   m_{{ij}}=\sum _{x}\sum _{y}x^{i}y^{j}I(x,y)
 
 Spatial moment features are calculated as:
-SPAT_MOMENT\ *00 $=m*\ {00}$    
-SPAT_MOMENT\ *01 $=m*\ {01}$    
-SPAT_MOMENT\ *02 $=m*\ {02}$    
-SPAT_MOMENT\ *03 $=m*\ {03}$    
-SPAT_MOMENT\ *10 $=m*\ {10}$    
-SPAT_MOMENT\ *11 $=m*\ {11}$    
-SPAT_MOMENT\ *12 $=m*\ {12}$    
-SPAT_MOMENT\ *20 $=m*\ {20}$    
-SPAT_MOMENT\ *21 $=m*\ {21}$    
-SPAT_MOMENT\ *30 $=m*\ {30}$    
+
+| SPAT_MOMENT_00 :math:`=m_{00}` 
+| SPAT_MOMENT_01 :math:`=m_{01}`   
+| SPAT_MOMENT_02 :math:`=m_{02}`    
+| SPAT_MOMENT_03 :math:`=m_{03}`   
+| SPAT_MOMENT_10 :math:`=m_{10}`   
+| SPAT_MOMENT_11 :math:`=m_{11}`  
+| SPAT_MOMENT_12 :math:`=m_{12}`   
+| SPAT_MOMENT_20 :math:`=m_{20}`    
+| SPAT_MOMENT_21 :math:`=m_{21}`    
+| SPAT_MOMENT_30 :math:`=m_{30}`    
 
 Central moments
 ---------------
 
-A central moment $\mu_{ij}$ is defined as 
+A central moment :math:`\mu_{ij}` is defined as 
 
-$$\mu *{{ij}}=\sum *\ {{x}}\sum _{{y}}(x-{\bar  {x}})^{i}(y-{\bar  {y}})^{j}I(x,y)$$
+.. math::
 
-Central moment features are calculated as:\
-CENTRAL_MOMENT\ *02 $=\mu*\ {02}$   \
-CENTRAL_MOMENT\ *03 $=\mu*\ {03}$   \
-CENTRAL_MOMENT\ *11 $=\mu*\ {11}$   \
-CENTRAL_MOMENT\ *12 $=\mu*\ {12}$   \
-CENTRAL_MOMENT\ *20 $=\mu*\ {20}$   \
-CENTRAL_MOMENT\ *21 $=\mu*\ {21}$   \
-CENTRAL_MOMENT\ *30 $=\mu*\ {20}$   
+   \mu_{{ij}}=\sum_{{x}}\sum _{{y}}(x-{\bar  {x}})^{i}(y-{\bar  {y}})^{j}I(x,y)
+
+Central moment features are calculated as: 
+
+| CENTRAL_MOMENT_02 :math:`=\mu_{02}`  
+| CENTRAL_MOMENT_03 :math:`=\mu_{03}`   
+| CENTRAL_MOMENT_11 :math:`=\mu_{11}`   
+| CENTRAL_MOMENT_12 :math:`=\mu_{12}`   
+| CENTRAL_MOMENT_20 :math:`=\mu_{20}`   
+| CENTRAL_MOMENT_21 :math:`=\mu_{21}`   
+| CENTRAL_MOMENT_30 :math:`=\mu_{20}`   
 
 Normalized raw moments
 ----------------------
 
-Raw (spatial) moments $m_{ij}$ of a 2-dimensional greyscale image  I(x,y) are calculated by
+Raw (spatial) moments :math:`m_{ij}` of a 2-dimensional greyscale image :math:`I(x,y)` are calculated by
 
-$$\displaystyle w\ *{{ij}} = \frac {\mu*\ {ij}}{\mu_{22}^ {max(i,j)} }$$
+.. math::
 
-Spatial moment features are calculated as:\
-NORM_SPAT_MOMENT\ *00 $=w*\ {00}$    \
-NORM_SPAT_MOMENT\ *01 $=w*\ {01}$    \
-NORM_SPAT_MOMENT\ *02 $=w*\ {02}$    \
-NORM_SPAT_MOMENT\ *03 $=w*\ {03}$    \
-NORM_SPAT_MOMENT\ *10 $=w*\ {10}$    \
-NORM_SPAT_MOMENT\ *20 $=w*\ {20}$    \
-NORM_SPAT_MOMENT\ *30 $=w*\ {30}$    
+   \displaystyle w_{{ij}} = \frac {\mu_{ij}}{\mu_{22}^ {max(i,j)} }
+
+Spatial moment features are calculated as:
+
+| NORM_SPAT_MOMENT_00 :math:`=w_{00}`
+| NORM_SPAT_MOMENT_01 :math:`=w_{01}`    
+| NORM_SPAT_MOMENT_02 :math:`=w_{02}`    
+| NORM_SPAT_MOMENT_03 :math:`=w_{03}`   
+| NORM_SPAT_MOMENT_10 :math:`=w_{10}` 
+| NORM_SPAT_MOMENT_20 :math:`=w_{20}`  
+| NORM_SPAT_MOMENT_30 :math:`=w_{30}`    
 
 Normalized central moments
 --------------------------
 
-A normalized central moment $\eta *{ij}$ is defined as 
-$$\eta *\ {{ij}}={\frac  {\mu *{{ij}}}{\mu *\ {{00}}^{{\left(1+{\frac  {i+j}{2}}\right)}}}}\,\$$
+A normalized central moment :math:`\eta_{ij}` is defined as 
 
-where $\mu _{{ij}}$ is central moment.
+.. math::
 
-Normalized central moment features are calculated as:\
-NORM_CENTRAL_MOMENT\ *02 $=\eta *\ {{02}}$\
-NORM_CENTRAL_MOMENT\ *03 $=\eta *\ {{03}}$\
-NORM_CENTRAL_MOMENT\ *11 $=\eta *\ {{11}}$\
-NORM_CENTRAL_MOMENT\ *12 $=\eta *\ {{12}}$\
-NORM_CENTRAL_MOMENT\ *20 $=\eta *\ {{20}}$\
-NORM_CENTRAL_MOMENT\ *21 $=\eta *\ {{21}}$\
-NORM_CENTRAL_MOMENT\ *30 $=\eta *\ {{30}}$
+   \eta_{{ij}}={\frac  {\mu_{{ij}}}{\mu_{{00}}^{{\left(1+{\frac  {i+j}{2}}\right)}}}}\,
+
+where :math:`\mu _{{ij}}` is central moment.
+
+Normalized central moment features are calculated as:
+
+| NORM_CENTRAL_MOMENT_02 :math:`=\eta_{{02}}`
+| NORM_CENTRAL_MOMENT_03 :math:`=\eta_{{03}}`
+| NORM_CENTRAL_MOMENT_11 :math:`=\eta_{{11}}`
+| NORM_CENTRAL_MOMENT_12 :math:`=\eta_{{12}}`
+| NORM_CENTRAL_MOMENT_20 :math:`=\eta_{{20}}`
+| NORM_CENTRAL_MOMENT_21 :math:`=\eta_{{21}}`
+| NORM_CENTRAL_MOMENT_30 :math:`=\eta_{{30}}`
 
 Hu moments
 ----------
 
-Hu invariants HU_M1 through HU_M7 are calculated as\
+Hu invariants HU_M1 through HU_M7 are calculated as
 
-HU\ *M1 $=\eta *\ {{20}}+\eta _{{02}}$\
-HU\ *M2 $=(\eta *\ {{20}}-\eta *{{02}})^{2}+4\eta *\ {{11}}^{2}$\
-HU\ *M3 $=(\eta *\ {{30}}-3\eta *{{12}})^{2}+(3\eta *\ {{21}}-\eta _{{03}})^{2}$\
-HU\ *M4 $=(\eta *\ {{30}}+\eta *{{12}})^{2}+(\eta *\ {{21}}+\eta _{{03}})^{2}$\
-HU\ *M5 $=(\eta *\ {{30}}-3\eta *{{12}})(\eta *\ {{30}}+\eta *{{12}})[(\eta *\ {{30}}+\eta *{{12}})^{2}-3(\eta *\ {{21}}+\eta *{{03}})^{2}]+(3\eta *\ {{21}}-\eta *{{03}})(\eta *\ {{21}}+\eta *{{03}})[3(\eta *\ {{30}}+\eta *{{12}})^{2}-(\eta *\ {{21}}+\eta _{{03}})^{2}]$\
-HU\ *M6 $=(\eta *\ {{20}}-\eta *{{02}})[(\eta *\ {{30}}+\eta *{{12}})^{2}-(\eta *\ {{21}}+\eta *{{03}})^{2}]+4\eta *\ {{11}}(\eta *{{30}}+\eta *\ {{12}})(\eta *{{21}}+\eta *\ {{03}})$\
-HU\ *M7 $=(3\eta *\ {{21}}-\eta *{{03}})(\eta *\ {{30}}+\eta *{{12}})[(\eta *\ {{30}}+\eta *{{12}})^{2}-3(\eta *\ {{21}}+\eta *{{03}})^{2}]-(\eta *\ {{30}}-3\eta *{{12}})(\eta *\ {{21}}+\eta *{{03}})[3(\eta *\ {{30}}+\eta *{{12}})^{2}-(\eta *\ {{21}}+\eta _{{03}})^{2}]$\
+| HU_M1 :math:`=\eta_{{20}}+\eta _{{02}}`
+| HU_M2 :math:`=(\eta_{{20}}-\eta_{{02}})^{2}+4\eta_{{11}}^{2}`
+| HU_M3 :math:`=(\eta_{{30}}-3\eta_{{12}})^{2}+(3\eta_{{21}}-\eta _{{03}})^{2}`
+| HU_M4 :math:`=(\eta_{{30}}+\eta_{{12}})^{2}+(\eta_{{21}}+\eta _{{03}})^{2}`
+| HU_M5 :math:`=(\eta_{{30}}-3\eta_{{12}})(\eta_{{30}}+\eta_{{12}})[(\eta_{{30}}+\eta_{{12}})^{2}-3(\eta_{{21}}+\eta_{{03}})^{2}]+(3\eta_{{21}}-\eta_{{03}})(\eta_{{21}}+\eta_{{03}})[3(\eta_{{30}}+\eta_{{12}})^{2}-(\eta_{{21}}+\eta _{{03}})^{2}]`
+| HU_M6 :math:`=(\eta_{{20}}-\eta_{{02}})[(\eta_{{30}}+\eta_{{12}})^{2}-(\eta_{{21}}+\eta_{{03}})^{2}]+4\eta_{{11}}(\eta_{{30}}+\eta_{{12}})(\eta_{{21}}+\eta_{{03}})`
+| HU_M7 :math:`=(3\eta_{{21}}-\eta_{{03}})(\eta_{{30}}+\eta_{{12}})[(\eta_{{30}}+\eta_{{12}})^{2}-3(\eta_{{21}}+\eta_{{03}})^{2}]-(\eta_{{30}}-3\eta_{{12}})(\eta_{{21}}+\eta_{{03}})[3(\eta_{{30}}+\eta_{{12}})^{2}-(\eta_{{21}}+\eta _{{03}})^{2}]`
 
 Weighted raw moments
 --------------------
 
-Let $W(x,y)$ be a 2-dimensional weighted greyscale image such that each pixel of $I$ is weighted with respect to its distance to the nearest contour pixel: $W(x,y) = \frac {I(x,y)} {\min_i d^2(x,y,C\ *i)}$ where C - set of 2-dimensional ROI contour pixels, $d^2(.)$ - Euclidean distance norm. Weighted raw moments $w*\ {Mij}$ are defined as
+Let :math:`W(x,y)` be a 2-dimensional weighted greyscale image such that each pixel of :math:`I` is weighted with respect to its distance to the nearest contour pixel: :math:`W(x,y) = \frac {I(x,y)} {\min_i d^2(x,y,C_i)}` where C - set of 2-dimensional ROI contour pixels, :math:`d^2(.)` - Euclidean distance norm. Weighted raw moments :math:`w_{Mij}`` are defined as
 
-$$\displaystyle w\ *{Mij}=\sum *\ {x}\sum _{y}x^{i}y^{j}W(x,y)\$$
+.. math::
+   
+   w_{Mij}=\sum_{x}\sum _{y}x^{i}y^{j}W(x,y)
 
 Weighted central moments
 ------------------------
 
-Weighted central moments $w\ *{\mu ij}$ are defined as 
-$$w*\ {\mu ij} = \sum *{{x}}\sum *\ {{y}}(x-{\bar  {x}})^{i}(y-{\bar  {y}})^{j}W(x,y)$$
+Weighted central moments :math:`w_{\mu ij}` are defined as 
+
+.. math::
+
+   w_{\mu ij} = \sum_{{x}}\sum_{{y}}(x-{\bar  {x}})^{i}(y-{\bar  {y}})^{j}W(x,y)
 
 Weighted Hu moments
 -------------------
 
-A normalized weighted central moment $w *{\eta ij}$ is defined as 
-$$w *\ {{\eta ij}}={\frac  {w *{{\mu ij}}}{w *\ {{\mu 00}}^{{\left(1+{\frac  {i+j}{2}}\right)}}}}\,\$$
+A normalized weighted central moment :math:`w_{\eta ij}` is defined as 
 
-where $w _{{\mu ij}}$ is weighted central moment.
+.. math::
+   
+   w_{{\eta ij}}={\frac  {w_{{\mu ij}}}{w_{{\mu 00}}^{{\left(1+{\frac  {i+j}{2}}\right)}}}}\,
+
+where :math:`w _{{\mu ij}}` is weighted central moment.
 Weighted Hu moments are defined as
 
-WEIGHTED_HU\ *M1 $=w *\ {\eta 20}+w _{\eta 02}$\
-WEIGHTED_HU\ *M2 $=(w *\ {\eta 20}-w *{\eta 02})^{2}+4w *\ {\eta 11}^{2}$\
-WEIGHTED_HU\ *M3 $=(w *\ {\eta 30}-3w *{\eta 12})^{2}+(3w *\ {\eta 21}-w _{\eta 03})^{2}$\
-WEIGHTED_HU\ *M4 $=(w *\ {\eta 30}+w *{\eta 12})^{2}+(w *\ {\eta 21}+w _{\eta 03})^{2}$\
-WEIGHTED_HU\ *M5 $=(w *\ {\eta 30}-3w *{\eta 12})(w *\ {\eta 30}+w *{\eta 12})[(w *\ {\eta 30}+w *{\eta 12})^{2}-3(w *\ {\eta 21}+w *{\eta 03})^{2}]+(3w *\ {\eta 21}-w *{\eta 03})(w *\ {\eta 21}+w *{\eta 03})[3(w *\ {\eta 30}+w *{\eta 12})^{2}-(w *\ {\eta 21}+w _{\eta 03})^{2}]$\
-WEIGHTED_HU\ *M6 $=(w *\ {\eta 20}-w *{\eta 02})[(w *\ {\eta 30}+w *{\eta 12})^{2}-(w *\ {\eta 21}+w *{\eta 03})^{2}]+4w *\ {\eta 11}(w *{\eta 30}+w *\ {\eta 12})(w *{\eta 21}+w *\ {\eta 03})$\
-WEIGHTED_HU\ *M7 $=(3w *\ {\eta 21}-w *{\eta 03})(w *\ {\eta 30}+w *{\eta 12})[(w *\ {\eta 30}+w *{\eta 12})^{2}-3(w *\ {\eta 21}+w *{\eta 03})^{2}]-(w *\ {\eta 30}-3w *{\eta 12})(w *\ {\eta 21}+w *{\eta 03})[3(w *\ {\eta 30}+w *{\eta 12})^{2}-(w *\ {\eta 21}+w _{\eta 03})^{2}]$
+| WEIGHTED_HU_M1 :math:`=w_{\eta 20}+w_{\eta 02}` 
+| WEIGHTED_HU_M2 :math:`=(w_{\eta 20}-w_{\eta 02})^{2}+4w_{\eta 11}^{2}` 
+| WEIGHTED_HU_M3 :math:`=(w_{\eta 30}-3w_{\eta 12})^{2}+(3w_{\eta 21}-w _{\eta 03})^{2}` 
+| WEIGHTED_HU_M4 :math:`=(w_{\eta 30}+w_{\eta 12})^{2}+(w_{\eta 21}+w _{\eta 03})^{2}` 
+| WEIGHTED_HU_M5 :math:`=(w_{\eta 30}-3w_{\eta 12})(w_{\eta 30}+w_{\eta 12})[(w_{\eta 30}+w_{\eta 12})^{2}-3(w_{\eta 21}+ w_{\eta 03})^{2}]+(3w_{\eta 21}-w_{\eta 03})(w_{\eta 21}+w_{\eta 03})[3(w_{\eta 30}+w_{\eta 12})^{2}-(w_{\eta 21}+w _{\eta 03})^{2}]` 
+| WEIGHTED_HU_M6 :math:`=(w_{\eta 20}-w_{\eta 02})[(w_{\eta 30}+w_{\eta 12})^{2}-(w_{\eta 21}+w_{\eta 03})^{2}]+4w_{\eta 11}(w_{\eta 30}+w_{\eta 12})(w_{\eta 21}+w_{\eta 03})` 
+| WEIGHTED_HU_M7 :math:`=(3w_{\eta 21}-w_{\eta 03})(w_{\eta 30}+w_{\eta 12})[(w_{\eta 30}+w_{\eta 12})^{2}-3(w_{\eta 21}+w_{\eta 03})^{2}]-(w_{\eta 30}-3w_{\eta 12})(w_{\eta 21}+w_{\eta 03})[3(w_{\eta 30}+w_{\eta 12})^{2}-(w_{\eta 21}+w _{\eta 03})^{2}]` 

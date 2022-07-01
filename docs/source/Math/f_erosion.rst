@@ -2,7 +2,7 @@
 Erosion features
 ================
 
-These features use the morphological erosion of the binary ROI image with respect to the $3 \times 3$ structuring element ker. The input ROI image is in the form of an image matrix.
+These features use the morphological erosion of the binary ROI image with respect to the :math:`3 \times 3` structuring element ker. The input ROI image is in the form of an image matrix.
 
 EROSIONS_2_VANISH
 -----------------

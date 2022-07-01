@@ -2,14 +2,14 @@
 Fractal dimension features
 ==========================
 
-Suppose $A$ is a shape's area and $P$ is its perimeter, and we are determining $D$.
+Suppose :math:`A` is a shape's area and :math:`P` is its perimeter, and we are determining :math:`D`.
 
 FRACT_DIM_BOXCOUNT
 ------------------
 
-The underlying relation is $n = b^{-D}$. The feature is calculated as the slope $-D$ of the plot $\text {log} \: n$ against $\text {log} \: b$.
+The underlying relation is :math:`n = b^{-D}`. The feature is calculated as the slope :math:`-D` of the plot :math:`\text {log} \: n` against :math:`\text {log} \: b`.
 
 FRACT_DIM_PERIMETER
 -------------------
 
-The underlying relation is $n = P^{2/D}$. The feature is calculated as the slope of the plot $\text {log} \: A$ against $\text {log} \: P$.
+The underlying relation is :math:`n = P^{2/D}`. The feature is calculated as the slope of the plot :math:`\text {log} \: A` against :math:`\text {log} \: P`.
