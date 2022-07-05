@@ -46,9 +46,9 @@ CIRCULARITY = :math:`\sqrt { \frac {4 \pi S}{P^2}}` where :math:`S` and :math:`P
 
 EQUIVALENT_DIAMETER = :math:`\frac {P}{\pi}`
 
-EDGE_MEAN_INTENSITY :math:` \gets \mu_C =\frac{1}{card(C)}\sum_i C_i`
+EDGE_MEAN_INTENSITY :math:`\gets \mu_C =\frac{1}{card(C)}\sum_i C_i`
 
-EDGE_MAX_INTENSITY = :math:` \max \: \textrm C`
+EDGE_MAX_INTENSITY = :math:`\max \: \textrm C`
 
 EDGE_MIN_INTENSITY = :math:`\min \: \textrm C`
 
