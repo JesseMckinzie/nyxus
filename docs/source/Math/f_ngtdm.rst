@@ -10,9 +10,7 @@ Let :math:`\textbf{X}_{gl}` be a set of segmented voxels and :math:`x_{gl}(j_x,j
 .. math::
 
     \bar{A}_i &= \bar{A}(j_x, j_y, j_z) \\
-    &= \frac{1}{W} \sum_{k_x=-\delta}^{\delta}\sum_{k_y=-\delta}^{\delta}
-
-   \sum_{k_z=-\delta}^{\delta}{x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z)},
+    &= \frac{1}{W} \sum_{k_x=-\delta}^{\delta}\sum_{k_y=-\delta}^{\delta} \sum_{k_z=-\delta}^{\delta}{x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z)},
 
 where
 
@@ -94,8 +92,8 @@ NGTDM_COARSENESS :math:`=  \frac{1}{\sum^{N_g}_{i=1}{p_{i}s_{i}}}`
 Contrast
 --------
 
-NGTDM_CONTRAST :math:`= \left(\frac{1}{N_{g,p}(N_{g,p}-1)}\sum^{N_g}_{i=1}\sum^{N_g}_{j=1}{p_{i}p_{j}(i-j)^2}\right)
-    \left(\frac{1}{N_{v,p}}\sum^{N_g}_{i=1}{s_i}\right)` where :math:`p_i \neq 0`, :math:`p_j \neq 0`
+NGTDM_CONTRAST :math:`= \left(\frac{1}{N_{g,p}(N_{g,p}-1)}\sum^{N_g}_{i=1}\sum^{N_g}_{j=1}{p_{i}p_{j}(i-j)^2}\right) \left(\frac{1}{N_{v,p}}\sum^{N_g}_{i=1}{s_i}\right)` 
+where :math:`p_i \neq 0`, :math:`p_j \neq 0`
 
 Busyness
 --------
@@ -105,8 +103,8 @@ NGTDM_BUSYNESS :math:`= \frac{\sum^{N_g}_{i = 1}{p_{i}s_{i}}}{\sum^{N_g}_{i = 1}
 Complexity
 ----------
 
-NGTDM_COMPLEXITY :math:`= \frac{1}{N_{v,p}}\sum^{N_g}_{i = 1}\sum^{N_g}_{j = 1}{|i - j|
-    \frac{p_{i}s_{i} + p_{j}s_{j}}{p_i + p_j}}` where :math:`p_i \neq 0, p_j \neq 0`
+NGTDM_COMPLEXITY :math:`= \frac{1}{N_{v,p}}\sum^{N_g}_{i = 1}\sum^{N_g}_{j = 1}{|i - j| \frac{p_{i}s_{i} + p_{j}s_{j}}{p_i + p_j}}` 
+where :math:`p_i \neq 0, p_j \neq 0`
 
 Strength
 --------
