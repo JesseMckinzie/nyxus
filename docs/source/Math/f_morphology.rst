@@ -165,6 +165,7 @@ Feret diameter
 ^^^^^^^^^^^^^^
 
 .. image:: feret3.jpg
+  :align: center
   :width: 400
 
 MIN_FERET_DIAMETER - minimum :math:`X_{Fe}`  \\
@@ -184,6 +185,7 @@ Martin diameter
 ^^^^^^^^^^^^^^^
 
 .. image:: martin.jpg
+  :align: center
   :width: 400
 
 Statistics of Martin diameter at 0-90 degree rotation angles:
@@ -198,6 +200,7 @@ Nassenstein diameter
 ^^^^^^^^^^^^^^^^^^^^
 
 .. image:: nassenstein.jpg
+  :align: center
   :width: 400
 
 Statistics of Nassenstein diameter at 0-90 degree rotation angles:
@@ -212,6 +215,7 @@ All-chords features
 ^^^^^^^^^^^^^^^^^^^
 
 .. image:: chord.jpg
+  :align: center
   :width: 400
 
 ALLCHORDS_MAX \\
