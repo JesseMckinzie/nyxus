@@ -48,4 +48,4 @@ P01, P10, P25, P75, P90, P99 - the 1%, 10%, 25% (aka :math:`C_1`), 75% (aka :mat
 
 INTERQUARTILE_RANGE = :math:`Q_3 - Q_1`,
 
-ROBUST_MEAN_ABSOLUTE_DEVIATION = :math:`\frac{1}{k} \sum_i^k | b_{Ci} - \mu_b|$ where $b_{Ci}` is the centered value of bin :math:`i` and :math:`\mu_b` is the mean histogram bin value
+ROBUST_MEAN_ABSOLUTE_DEVIATION = :math:`\frac{1}{k} \sum_i^k | b_{Ci} - \mu_b|` where :math:`b_{Ci}` is the centered value of bin :math:`i` and :math:`\mu_b` is the mean histogram bin value
