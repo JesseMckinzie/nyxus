@@ -11,13 +11,13 @@ AREA_PIXELS_COUNT :math:`= S = card(A)`
 
 AREA_UM2 :math:`= card(A) s^2` where :math:`s` is pixel size in micrometers 
 
-CENTROID_X :math:`\gets c_X = \frac{1}{n} \sum *i ^n  A*\ {Xi}`
+CENTROID_X :math:`\gets c_X = \frac{1}{n} \sum *i ^n  A_{Xi}`
 
-CENTROID_Y :math:`\gets c_Y =  \frac{1}{n} \sum *i ^n  A*\ {Yi}`
+CENTROID_Y :math:`\gets c_Y =  \frac{1}{n} \sum *i ^n  A_{Yi}`
 
-WEIGHTED_CENTROID_X :math:`\gets w_X = \frac{1}{n} \sum _i ^n  A_i (A*\ {Xi}-c_X)`
+WEIGHTED_CENTROID_X :math:`\gets w_X = \frac{1}{n} \sum _i ^n  A_i (A_{Xi}-c_X)`
 
-WEIGHTED_CENTROID_Y :math:`= \frac{1}{n} \sum _i ^n  A_i (A*\ {Yi}-c_Y) \to w_Y`
+WEIGHTED_CENTROID_Y :math:`= \frac{1}{n} \sum _i ^n  A_i (A_{Yi}-c_Y) \to w_Y`
 
 MASS_DISPLACEMENT :math:`= \sqrt {( w_X - c_X)^2 + ( w_Y - c_Y)^2}`
 
@@ -42,24 +42,24 @@ Let :math:`C` be the set of contour pixels of ROI :math:`A`.
 
 PERIMETER :math:`\gets P = card(C)`
 
-CIRCULARITY :math:` =\sqrt { \frac {4 \pi S}{P^2}}` where :math:`S` and :math:`P` are ROI area and perimeter (features AREA_PIXELS_COUNT and PERIMETER)
+CIRCULARITY = :math:`\sqrt { \frac {4 \pi S}{P^2}}` where :math:`S` and :math:`P` are ROI area and perimeter (features AREA_PIXELS_COUNT and PERIMETER)
 
-EQUIVALENT_DIAMETER :math:` = \frac {P}{\pi}`
+EQUIVALENT_DIAMETER = :math:`\frac {P}{\pi}`
 
 EDGE_MEAN_INTENSITY :math:` \gets \mu_C =\frac{1}{card(C)}\sum_i C_i`
 
-EDGE_MAX_INTENSITY :math:`= \max \: \textrm C`
+EDGE_MAX_INTENSITY = :math:` \max \: \textrm C`
 
-EDGE_MIN_INTENSITY :math:`= \min \: \textrm C`
+EDGE_MIN_INTENSITY = :math:`\min \: \textrm C`
 
-EDGE_STDDEV_INTENSITY :math:` = \left[\frac{1}{card(C)}\sum_i (C_i-\mu_C)^2\right]^{\frac {1}{2}}`
+EDGE_STDDEV_INTENSITY = :math:`\left[\frac{1}{card(C)}\sum_i (C_i-\mu_C)^2\right]^{\frac {1}{2}}`
 
-EDGE_INTEGRATEDINTENSITY :math:` = \sum _i {C_i}` 
+EDGE_INTEGRATEDINTENSITY = :math:`\sum _i {C_i}` 
 
 Features related to ROI's convex hull
 -------------------------------------
 
-CONVEX_HULL_AREA :math:`=S_H= {\frac {1}{2}}{\Biggl \vert }\sum *\ {i=0}^{n_H-1}(x*\ {i}y_{i+1}-x*\ {i+1}y_{i}){\Biggr \vert }` where :math:`n_H` is the number of convex hull vertices, :math:` {(x_i,y_i)}, i=0, 1, ..., n_H-1` are Cartesian coordinates of the vertives.
+CONVEX_HULL_AREA :math:`=S_H= {\frac {1}{2}}{\Biggl \vert }\sum _{i=0}^{n_H-1}(x_{i}y_{i+1}-x_{i+1}y_{i}){\Biggr \vert }` where :math:`n_H` is the number of convex hull vertices, :math:` {(x_i,y_i)}, i=0, 1, ..., n_H-1` are Cartesian coordinates of the vertives.
 
 SOLIDITY :math:` = \frac {S}{S_H}` where :math:`S` is ROI area (feature AREA_PIXELS_COUNT)
 
@@ -124,9 +124,9 @@ Polygonal representation features
 
 POLYGONALITY_AVE :math:` = 5 (r_S + r_A)` where :math:` r_S = 1 - \left|1-\frac{\frac{P}{n_N}}{\sqrt{\frac{4S\tg \frac{\pi}{n_N}}{n_N}}} \right|` - polygonal size ratio, :math:` r_A = 1 - \left| 1 - \frac{S\tg \frac{\pi}{n_N}}{\frac{1}{4} \: n_N \: P^2}\right|` - polygonal area ratio, :math:`n_N` - number of ROI's neighbors, :math:`P` and :math:`S` - ROI's perimeter and area.
 
-HEXAGONALITY_AVE :math:` = \sqrt {\frac {r*\ {\sigma A}^2 + r_{\sigma P}^2}{2} }`
+HEXAGONALITY_AVE :math:` = \sqrt {\frac {r_{\sigma A}^2 + r_{\sigma P}^2}{2} }`
 
-HEXAGONALITY_STDDEV :math:` = 5 (r*\ {HS} + r_{HP})`
+HEXAGONALITY_STDDEV :math:` = 5 (r_{HS} + r_{HP})`
 
 Other features
 --------------
@@ -168,15 +168,15 @@ Feret diameter
 
 :raw-html-m2r:`<img src="./feret3.jpg" height=200>`
 
-MIN_FERET_DIAMETER - minimum :math:`X*\ {Fe}` \
-MAX_FERET_DIAMETER - maximum :math:`X*\ {Fe}` \
-MIN_FERET_ANGLE - rotation angle delivering :math:`\min X*\ {Fe}` \
-MAX_FERET_ANGLE - rotation angle delivering :math:`\max X*\ {Fe}`
+MIN_FERET_DIAMETER - minimum :math:`X_{Fe}` \
+MAX_FERET_DIAMETER - maximum :math:`X_{Fe}` \
+MIN_FERET_ANGLE - rotation angle delivering :math:`\min X_{Fe}` \
+MAX_FERET_ANGLE - rotation angle delivering :math:`\max X_{Fe}`
 
 Statistics of Feret diameter at 0-90 degree rotation angles:
-STAT_FERET_DIAM_MIN :math:`=\min X*\ {Fe}`\
-STAT_FERET_DIAM_MAX :math:`=\max X*\ {Fe}`\
-STAT_FERET_DIAM_MEAN :math:`=\operatorname {E} ( X*\ {Fe} )`\
+STAT_FERET_DIAM_MIN :math:`=\min X_{Fe}`\
+STAT_FERET_DIAM_MAX :math:`=\max X_{Fe}`\
+STAT_FERET_DIAM_MEAN :math:`=\operatorname {E} ( X_{Fe} )`\
 STAT_FERET_DIAM_MEDIAN\
 STAT_FERET_DIAM_STDDEV\
 STAT_FERET_DIAM_MODE
