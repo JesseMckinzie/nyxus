@@ -25,12 +25,12 @@ For :math:`\alpha=0` and :math:`\delta = 1`, the GLDM then becomes:
 
 .. math::
 
-\textbf{P} = \begin{bmatrix}
-0 & 1 & 2 & 1 \\
-1 & 2 & 3 & 0 \\
-1 & 4 & 4 & 0 \\
-1 & 2 & 0 & 0 \\
-3 & 0 & 0 & 0 \end{bmatrix}
+    \textbf{P} = \begin{bmatrix}
+    0 & 1 & 2 & 1 \\
+    1 & 2 & 3 & 0 \\
+    1 & 4 & 4 & 0 \\
+    1 & 2 & 0 & 0 \\
+    3 & 0 & 0 & 0 \end{bmatrix}
 
 
 Let:
