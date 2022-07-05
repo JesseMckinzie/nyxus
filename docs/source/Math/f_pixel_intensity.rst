@@ -32,15 +32,15 @@ HYPERFLATNESS = :math:`\frac {n M_5} {M_2^3}` if :math:`n>6` and :math:`M_2 \neq
 
 MEAN_ABSOLUTE_DEVIATION = :math:`\sigma = \frac{1}{n} \sum _x\sum_y \left| I_{x,y}-\mu\right|` where :math:`\mu` is the mean
 
-ENERGY :math:`\gets E = \sum _x \sum *y I_{x,y}^2`
+ENERGY :math:`\gets E = \sum _x \sum_y I_{x,y}^2`
 
 ROOT_MEAN_SQUARED :math:`= \frac {\sqrt E} {n}`, where :math:`E` is the energy
 
-ENTROPY :math:`= \sum *i^k - b_{i} \: \textrm log b_{i}` where :math:`b_i` is a non-zero value of the image histogram of size :math:`k`,
+ENTROPY :math:`= \sum_i^k - b_{i} \: \textrm log b_{i}` where :math:`b_i` is a non-zero value of the image histogram of size :math:`k`,
 
 MODE - the histogram bin value having the highest count,
 
-UNIFORMITY = :math:`\sum *i^k b_{i}^2` where :math:`b_i` is a value of the image histogram of size :math:`k`
+UNIFORMITY = :math:`\sum_i^k b_{i}^2` where :math:`b_i` is a value of the image histogram of size :math:`k`
 
 UNIFORMITY_PIU = :math:`(1 - \frac{\max \: \textrm I - \min \: \textrm I}{\max \: \textrm I + \min \: \textrm I}) \times 100`
 
@@ -48,4 +48,4 @@ P01, P10, P25, P75, P90, P99 - the 1%, 10%, 25% (aka :math:`C_1`), 75% (aka :mat
 
 INTERQUARTILE_RANGE = :math:`Q_3 - Q_1`,
 
-ROBUST_MEAN_ABSOLUTE_DEVIATION = :math:`\frac{1}{k} \sum *i^k | b_{Ci} - \mu_b|$ where $b_{Ci}` is the centered value of bin :math:`i` and :math:`\mu_b` is the mean histogram bin value
+ROBUST_MEAN_ABSOLUTE_DEVIATION = :math:`\frac{1}{k} \sum_i^k | b_{Ci} - \mu_b|$ where $b_{Ci}` is the centered value of bin :math:`i` and :math:`\mu_b` is the mean histogram bin value
