@@ -9,7 +9,7 @@ Let:
 
 ASPECT_RATIO :math:`Np`
 
-ASPECT_RATIO :math:` = x + y`
+ASPECT_RATIO = :math:`x + y`
 
 ASPECT_RATIO :math:` = x + y`
 
