@@ -47,9 +47,9 @@ Texture features / GLCM
 * :math:`p_x(i) = \sum^{N_g}*\ {j=1}{p_{ij}}` be the marginal row probabilities
 * :math:`p_y(j) = \sum^{N_g}*\ {i=1}{p_{ij}}`` be the marginal column probabilities
 * :math:`\mu_x`` be the mean gray level intensity of :math:`p_x` and defined as
-  :math:`\mu_x = \displaystyle\sum^{N_g}*\ {i=1}{p_x(i)i}`
+  :math:`\mu_x = \sum^{N_g}*\ {i=1}{p_x(i)i}`
 * :math:`\mu_y`` be the mean gray level intensity of :math:`p_y` and defined as
-  :math:`\mu_y = \displaystyle\sum^{N_g}*\ {j=1}{p_y(j)j}`
+  :math:`\mu_y = \sum^{N_g}*\ {j=1}{p_y(j)j}`
 * :math:`\sigma_x` be the standard deviation of :math:`p_x``
 * :math:`\sigma_y`` be the standard deviation of :math:`p_y`
 * :math:`p_{x+y}(k) = \sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{p_{ij}},\text{ where }i+j=k,\text{ and }k=2,3,\dots,2N_g`
@@ -69,69 +69,69 @@ Texture features / GLCM
 2nd angular moment
 ------------------
 
-GLCM_ANGULAR2NDMOMENT :math:`= \displaystyle \sum^{N_g}*\ {i=1}\displaystyle\sum^{N_g}*\ {j=1}{p_{i,j}^2}`
+GLCM_ANGULAR2NDMOMENT :math:`=  \sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{p_{i,j}^2}`
 
 Contrast
 --------
 
-GLCM_CONTRAST :math:`=\displaystyle \sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{(i-j)^2p_{ij}}`
+GLCM_CONTRAST :math:`= \sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{(i-j)^2p_{ij}}`
 
 Correlation
 -----------
 
-GLCM_CORRELATION :math:`=\displaystyle \frac{\sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{p_{ij}ij-\mu_x\mu_y}}{\sigma_x(i)\sigma_y(j)}`
+GLCM_CORRELATION :math:`= \frac{\sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{p_{ij}ij-\mu_x\mu_y}}{\sigma_x(i)\sigma_y(j)}`
 
 Variance
 --------
 
-GLCM_VARIANCE :math:`= \displaystyle\sum^{N_g}*\ {i=1}\displaystyle\sum^{N_g}*\ {j=1}{(i-\mu_x)^2p*\ {ij}}`
+GLCM_VARIANCE :math:`= \sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{(i-\mu_x)^2p*\ {ij}}`
 
 Inverse difference moment
 -------------------------
 
-GLCM_INVERSEDIFFERENCEMOMENT :math:`= \displaystyle\sum^{N_g-1}*\ {k=0}{\frac{p_{x-y}(k)}{1+k^2}}`
+GLCM_INVERSEDIFFERENCEMOMENT :math:`= \sum^{N_g-1}*\ {k=0}{\frac{p_{x-y}(k)}{1+k^2}}`
 
 
 Sum average
 -----------
 
-GLCM_SUMAVERAGE :math:`= \displaystyle\sum^{2N_g}_{k=2} {p_{x+y}(k)k}`
+GLCM_SUMAVERAGE :math:`= \sum^{2N_g}_{k=2} {p_{x+y}(k)k}`
 
 Sum variance
 ------------
 
-GLCM_SUMVARIANCE :math:`= \displaystyle\sum^{2N_g}_{k=2} {(k-SA)^2p_{x+y}(k)}`
+GLCM_SUMVARIANCE :math:`= \sum^{2N_g}_{k=2} {(k-SA)^2p_{x+y}(k)}`
 
 Sum entropy
 -----------
 
-GLCM_SUMENTROPY :math:`= \displaystyle\sum^{2N_g}_{k=2} {p_{x+y}(k)\log_2\big(p*\ {x+y}(k)+\epsilon\big)}`
+GLCM_SUMENTROPY :math:`= \sum^{2N_g}_{k=2} {p_{x+y}(k)\log_2\big(p*\ {x+y}(k)+\epsilon\big)}`
 
 Entropy
 -------
 
-GLCM_ENTROPY :math:`= -\displaystylen \sum^{N_g}_{i=1}\displaystyle\sum^{N_g}_{j=1}
+GLCM_ENTROPY :math:`= -n \sum^{N_g}_{i=1}\sum^{N_g}_{j=1}
       {p_{ij}\log_2\big(p_{ij}+\epsilon\big)}`
 
 Difference variance
 -------------------
 
-GLCM_DIFFERENCEVARIANCE :math:`= \displaystyle\sum^{N_g-1}*\ {k=0}{(k-DA)^2p_{x-y}(k)}`
+GLCM_DIFFERENCEVARIANCE :math:`= \sum^{N_g-1}*\ {k=0}{(k-DA)^2p_{x-y}(k)}`
 
 Difference entropy
 ------------------
 
-GLCM_DIFFERENCEENTROPY :math:`= \displaystyle\sum^{N_g-1}*\ {k=0}{p_{x-y}(k)\log_2\big(p*\ {x-y}(k)+\epsilon\big)}`
+GLCM_DIFFERENCEENTROPY :math:`= \sum^{N_g-1}*\ {k=0}{p_{x-y}(k)\log_2\big(p*\ {x-y}(k)+\epsilon\big)}`
 
 Informational Measure of Correlation 1
 --------------------------------------
 
-GLCM_INFOMEAS1 :math:`= \displaystyle\frac{HXY-HXY1}{\max{HX,HY}}`
+GLCM_INFOMEAS1 :math:`= \frac{HXY-HXY1}{\max{HX,HY}}`
 
 Informational Measure of Correlation 2
 --------------------------------------
 
-GLCM_INFOMEAS2 :math:`= \displaystyle\sqrt{1-e^{-2(HXY2-HXY)}}`
+GLCM_INFOMEAS2 :math:`= \sqrt{1-e^{-2(HXY2-HXY)}}`
 
 References
 ----------
