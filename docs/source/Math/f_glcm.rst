@@ -110,8 +110,7 @@ GLCM_SUMENTROPY :math:`= \sum^{2N_g}_{k=2} {p_{x+y}(k)\log_2\big(p_{x+y}(k)+\eps
 Entropy
 -------
 
-GLCM_ENTROPY :math:`= -n \sum^{N_g}_{i=1}\sum^{N_g}_{j=1}
-      {p_{ij}\log_2\big(p_{ij}+\epsilon\big)}`
+GLCM_ENTROPY :math:`= -n \sum^{N_g}_{i=1}\sum^{N_g}_{j=1} {p_{ij}\log_2\big(p_{ij}+\epsilon\big)}`
 
 Difference variance
 -------------------
