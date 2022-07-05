@@ -164,7 +164,8 @@ Caliper features
 Feret diameter
 ^^^^^^^^^^^^^^
 
-:raw-html-m2r:`<img src="./feret3.jpg" height=200>`
+.. image:: feret3.jpg
+  height=200
 
 MIN_FERET_DIAMETER - minimum :math:`X_{Fe}` \
 MAX_FERET_DIAMETER - maximum :math:`X_{Fe}` \
@@ -182,7 +183,8 @@ STAT_FERET_DIAM_MODE
 Martin diameter
 ^^^^^^^^^^^^^^^
 
-:raw-html-m2r:`<img src="./martin.jpg" height=200>`
+.. image:: martin.jpg
+  height=200
 
 Statistics of Martin diameter at 0-90 degree rotation angles:
 STAT_MARTIN_DIAM_MIN\
@@ -195,7 +197,8 @@ STAT_MARTIN_DIAM_MODE
 Nassenstein diameter
 ^^^^^^^^^^^^^^^^^^^^
 
-:raw-html-m2r:`<img src="./nassenstein.jpg" height=200>`
+.. image:: nassenstein.jpg
+  height=200
 
 Statistics of Nassenstein diameter at 0-90 degree rotation angles:
 STAT_NASSENSTEIN_DIAM_MIN\
@@ -208,25 +211,26 @@ STAT_NASSENSTEIN_DIAM_MODE
 All-chords features
 ^^^^^^^^^^^^^^^^^^^
 
-:raw-html-m2r:`<img src="./chord.jpg" height=200>`
+.. image:: chord.jpg
+  height=200
 
-ALLCHORDS_MAX\
-ALLCHORDS_MAX_ANG\
-ALLCHORDS_MIN\
-ALLCHORDS_MIN_ANG\
-ALLCHORDS_MEDIAN\
-ALLCHORDS_MEAN\
-ALLCHORDS_MODE\
+ALLCHORDS_MAX\\
+ALLCHORDS_MAX_ANG\\
+ALLCHORDS_MIN\\
+ALLCHORDS_MIN_ANG\\
+ALLCHORDS_MEDIAN\\
+ALLCHORDS_MEAN\\
+ALLCHORDS_MODE\\
 ALLCHORDS_STDDEV
 
 Max-chord features
 ^^^^^^^^^^^^^^^^^^
 
-MAXCHORDS_MAX\
-MAXCHORDS_MAX_ANG\
-MAXCHORDS_MIN\
-MAXCHORDS_MIN_ANG\
-MAXCHORDS_MEDIAN\
-MAXCHORDS_MEAN\
-MAXCHORDS_MODE\
+MAXCHORDS_MAX\\
+MAXCHORDS_MAX_ANG\\
+MAXCHORDS_MIN\\
+MAXCHORDS_MIN_ANG\\
+MAXCHORDS_MEDIAN\\
+MAXCHORDS_MEAN\\
+MAXCHORDS_MODE\\
 MAXCHORDS_STDDEV
