@@ -32,7 +32,7 @@ BBOX_HEIGHT :math:`\gets \epsilon_V = \operatorname {max}A_Y - \epsilon_Y`
 
 BBOX_WIDTH :math:`\gets \epsilon_H = \operatorname {max}A_X - \epsilon_X`
 
-ASPECT_RATIO :math:` = x + y` 
+ASPECT_RATIO :math:` = x + y`
 
 ..
   ASPECT_RATIO :math:` = \left{\begin{array}{cc} \frac{\epsilon_V}{\epsilon_H} & \epsilon_V>=\epsilon_H \frac{\epsilon_H}{\epsilon_V} & \epsilon_V<\epsilon_H \end{array}\right.`
