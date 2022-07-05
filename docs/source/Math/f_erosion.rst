@@ -8,6 +8,7 @@ A structuring element is a matrix that identifies the pixel in the image being p
 
 .. figure:: structuring_element.jpg
     :width: 400
+    :align: center
     :alt: Example structuring element
 
     Figure from www.mathworks.com
