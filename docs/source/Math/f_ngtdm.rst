@@ -4,16 +4,26 @@ Texture features / NGTDM
 
 A Neighbouring Gray Tone Difference Matrix quantifies the difference between a gray value and the average gray value
 of its neighbours within distance :math:`\delta`. The sum of absolute differences for gray level :math:`i` is stored in the matrix.
-Let :math:`\textbf{X}_{gl}` be a set of segmented voxels and :math:`x*\ {gl}(j_x,j_y,j_z) \in \textbf{X}*\ {gl}` be the gray level of a voxel at postion
+Let :math:`\textbf{X}_{gl}` be a set of segmented voxels and :math:`x_{gl}(j_x,j_y,j_z) \in \textbf{X}_{gl}` be the gray level of a voxel at postion
 :math:`(j_x,j_y,j_z)`, then the average gray level of the neigbourhood is:
 
 .. math::
-    \bar{A}_i = \bar{A}(j_x, j_y, j_z) 
-    = \frac{1}{W} \sum*\ {k_x=-\delta}^{\delta}\sum*\ {k_y=-\delta}^{\delta}
+
+    \bar{A}_i &= \bar{A}(j_x, j_y, j_z) \\
+    &= \frac{1}{W} \sum_{k_x=-\delta}^{\delta}\sum_{k_y=-\delta}^{\delta}
+
+   \sum_{k_z=-\delta}^{\delta}{x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z)},
+
+where
 
 .. math::
 
-   \sum_{k_z=-\delta}^{\delta}{x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z)}, \\\text{ where } (k_x,k_y,k_z)\neq(0,0,0) \\ \text{ and } x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z) \in \textbf{X}_{gl}
+    (k_x,k_y,k_z)\neq(0,0,0) 
+and 
+
+.. math::
+
+    x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z) \in \textbf{X}_{gl}
 
 
 
@@ -59,10 +69,10 @@ Similar for gray values 3 and 5:
 
 Let:
 
-:math:`n_i` be the number of voxels in :math:`X*\ {gl}` with gray level :math:`i`
+:math:`n_i` be the number of voxels in :math:`X_{gl}` with gray level :math:`i`
 
-:math:`N_{v,p}` be the total number of voxels in :math:`X*\ {gl}` and equal to :math:`\sum{n_i}` (i.e. the number of voxels
-with a valid region; at least 1 neighbor). :math:`N*\ {v,p} \leq N_p`, where :math:`N_p` is the total number of voxels in the ROI.
+:math:`N_{v,p}` be the total number of voxels in :math:`X_{gl}` and equal to :math:`\sum{n_i}` (i.e. the number of voxels
+with a valid region; at least 1 neighbor). :math:`N_{v,p} \leq N_p`, where :math:`N_p` is the total number of voxels in the ROI.
 
 :math:`p_i` be the gray level probability and equal to :math:`n_i/N_v`
 
@@ -79,29 +89,29 @@ be the sum of absolute differences for gray level :math:`i`.
 Coarseness
 ----------
 
-NGTDM_COARSENESS :math:`=  \frac{1}{\sum^{N_g}*\ {i=1}{p_{i}s*\ {i}}}`
+NGTDM_COARSENESS :math:`=  \frac{1}{\sum^{N_g}_{i=1}{p_{i}s_{i}}}`
 
 Contrast
 --------
 
-NGTDM_CONTRAST :math:`= \left(\frac{1}{N*\ {g,p}(N_{g,p}-1)}\sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{p_{i}p*\ {j}(i-j)^2}\right)
-    \left(\frac{1}{N_{v,p}}\sum^{N_g}*\ {i=1}{s_i}\right)` where :math:`p_i \neq 0`, :math:`p_j \neq 0`
+NGTDM_CONTRAST :math:`= \left(\frac{1}{N_{g,p}(N_{g,p}-1)}\sum^{N_g}_{i=1}\sum^{N_g}_{j=1}{p_{i}p_{j}(i-j)^2}\right)
+    \left(\frac{1}{N_{v,p}}\sum^{N_g}_{i=1}{s_i}\right)` where :math:`p_i \neq 0`, :math:`p_j \neq 0`
 
 Busyness
 --------
 
-NGTDM_BUSYNESS :math:`= \frac{\sum^{N_g}*\ {i = 1}{p_{i}s*\ {i}}}{\sum^{N_g}*\ {i = 1}\sum^{N_g}*\ {j = 1}{|ip_i - jp_j|}}` where :math:`p_i \neq 0`, :math:`p_j \neq 0`
+NGTDM_BUSYNESS :math:`= \frac{\sum^{N_g}_{i = 1}{p_{i}s_{i}}}{\sum^{N_g}_{i = 1}\sum^{N_g}_{j = 1}{|ip_i - jp_j|}}` where :math:`p_i \neq 0`, :math:`p_j \neq 0`
 
 Complexity
 ----------
 
-NGTDM_COMPLEXITY :math:`= \frac{1}{N*\ {v,p}}\sum^{N_g}*\ {i = 1}\sum^{N_g}*\ {j = 1}{|i - j|
-    \frac{p_{i}s*\ {i} + p_{j}s*\ {j}}{p_i + p_j}}` where :math:`p_i \neq 0, p_j \neq 0`
+NGTDM_COMPLEXITY :math:`= \frac{1}{N_{v,p}}\sum^{N_g}_{i = 1}\sum^{N_g}_{j = 1}{|i - j|
+    \frac{p_{i}s_{i} + p_{j}s_{j}}{p_i + p_j}}` where :math:`p_i \neq 0, p_j \neq 0`
 
 Strength
 --------
 
-NGTDM_STRENGTH :math:`=  \frac{\sum^{N_g}*\ {i = 1}\sum^{N_g}*\ {j = 1}{(p_i + p_j)(i-j)^2}}{\sum^{N_g}*\ {i = 1}{s_i}}` where :math:`p_i \neq 0, p_j \neq 0`
+NGTDM_STRENGTH :math:`=  \frac{\sum^{N_g}_{i = 1}\sum^{N_g}_{j = 1}{(p_i + p_j)(i-j)^2}}{\sum^{N_g}_{i = 1}{s_i}}` where :math:`p_i \neq 0, p_j \neq 0`
 
 References
 ----------

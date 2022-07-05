@@ -32,12 +32,7 @@ BBOX_HEIGHT :math:`\gets \epsilon_V = \operatorname {max}A_Y - \epsilon_Y`
 
 BBOX_WIDTH :math:`\gets \epsilon_H = \operatorname {max}A_X - \epsilon_X`
 
-ASPECT_RATIO :math:` =
-\left{\begin{array}{cc} 
-\frac{\epsilon_V}{\epsilon_H} & \epsilon_V>=\epsilon_H \
-\frac{\epsilon_H}{\epsilon_V} & \epsilon_V<\epsilon_H 
-\end{array}\right.
-` 
+ASPECT_RATIO :math:` = \left{\begin{array}{cc} \frac{\epsilon_V}{\epsilon_H} & \epsilon_V>=\epsilon_H \frac{\epsilon_H}{\epsilon_V} & \epsilon_V<\epsilon_H \end{array}\right.` 
 
 EXTENT :math:`= \frac {S}{S_{BB}}` where :math:`S_BB=\epsilon_H\epsilon_V`
 
@@ -46,7 +41,7 @@ Features related to ROI's contour
 
 Let :math:`C` be the set of contour pixels of ROI :math:`A`. 
 
-PERIMETER :math:` \gets P = card(C)`
+PERIMETER :math:`\gets P = card(C)`
 
 CIRCULARITY :math:` =\sqrt { \frac {4 \pi S}{P^2}}` where :math:`S` and :math:`P` are ROI area and perimeter (features AREA_PIXELS_COUNT and PERIMETER)
 
@@ -54,9 +49,9 @@ EQUIVALENT_DIAMETER :math:` = \frac {P}{\pi}`
 
 EDGE_MEAN_INTENSITY :math:` \gets \mu_C =\frac{1}{card(C)}\sum_i C_i`
 
-EDGE_MAX_INTENSITY :math:`= max \: \textrm C`
+EDGE_MAX_INTENSITY :math:`= \max \: \textrm C`
 
-EDGE_MIN_INTENSITY :math:`= min \: \textrm C`
+EDGE_MIN_INTENSITY :math:`= \min \: \textrm C`
 
 EDGE_STDDEV_INTENSITY :math:` = \left[\frac{1}{card(C)}\sum_i (C_i-\mu_C)^2\right]^{\frac {1}{2}}`
 
