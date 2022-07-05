@@ -59,7 +59,8 @@ EDGE_INTEGRATEDINTENSITY = :math:`\sum _i {C_i}`
 Features related to ROI's convex hull
 -------------------------------------
 
-CONVEX_HULL_AREA = :math:`S_H= {\frac {1}{2}}{\Biggl \vert }\sum _{i=0}^{n_H-1}(x_{i}y_{i+1}-x_{i+1}y_{i}){\Biggr \vert }` where :math:`n_H` is the number of convex hull vertices, :math:` {(x_i,y_i)}, i=0, 1, ..., n_H-1` are Cartesian coordinates of the vertives.
+CONVEX_HULL_AREA = :math:`S_H= {\frac {1}{2}}{\Biggl \vert }\sum _{i=0}^{n_H-1}(x_{i}y_{i+1}-x_{i+1}y_{i}){\Biggr \vert }` where :math:`n_H` is the number of convex hull vertices, 
+:math:`{(x_i,y_i)}, i=0, 1, ..., n_H-1` are Cartesian coordinates of the vertives.
 
 SOLIDITY = :math:`\frac {S}{S_H}` where :math:`S` is ROI area (feature AREA_PIXELS_COUNT)
 
@@ -74,14 +75,14 @@ ECCENTRICITY :math:`=  \sqrt {1 - \frac {b^2} {a^2}}`
 
 ELONGATION :math:`=  \sqrt{\frac{\lambda_2}{\lambda_1}}`
 
-ORIENTATION :math:` \theta = \left{\begin{array}{cc} 0 & b=0 \:\text{and}\: a \ge c \ \frac{\pi}{2} & b=0 \:\text{and}\: a < c \ \arctg \frac{\lambda_1-a}{b} & b \ne 0 \end{array}\right.`
+ORIENTATION :math:`\theta = \left{\begin{array}{cc} 0 & b=0 \:\text{and}\: a \ge c \ \frac{\pi}{2} & b=0 \:\text{and}\: a < c \ \arctg \frac{\lambda_1-a}{b} & b \ne 0 \end{array}\right.`
 
 where 
 
 .. math:: 
   
   cov = \left(\begin{array}{cc} 
-  a & b\
+  a & b \\
   b & c
   \end{array}\right)
 
@@ -89,7 +90,7 @@ where
   
   and 
 
-  :math:` \lambda_1 = \frac{a+c}{2}+\sqrt{(\frac{a-c}{2})^2 + b^2}$, $ \lambda_2 = \frac{a+c}{2}-\sqrt{(\frac{a-c}{2})^2 + b^2}`
+  :math:`\lambda_1 = \frac{a+c}{2}+\sqrt{(\frac{a-c}{2})^2 + b^2}$, $ \lambda_2 = \frac{a+c}{2}-\sqrt{(\frac{a-c}{2})^2 + b^2}`
 
 ROUNDNESS = :math:`\frac {4 S}{\pi a b}`
 
@@ -139,7 +140,7 @@ Let :math:`l_G` - geodetic length, :math:`t_G` - thickness. Assuming
 .. math::
    
   \left{\begin{array}{cc} 
-  S = l_G t_G \
+  S = l_G t_G \\
   P = 2(l_G+t_G)
   \end{array}\right.
 
