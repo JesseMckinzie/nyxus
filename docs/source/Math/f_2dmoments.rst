@@ -54,7 +54,7 @@ Raw (spatial) moments :math:`m_{ij}` of a 2-dimensional greyscale image :math:`I
 
 .. math::
 
-   \displaystyle w_{{ij}} = \frac {\mu_{ij}}{\mu_{22}^ {max(i,j)} }
+   w_{{ij}} = \frac {\mu_{ij}}{\mu_{22}^ {max(i,j)} }
 
 Spatial moment features are calculated as:
 
