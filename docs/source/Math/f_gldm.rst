@@ -14,12 +14,12 @@ As an example, consider the following 5x5 image, with 5 gray levels:
 
 .. math::
 
-\textbf{I} = \begin{bmatrix}
-5 & 2 & 5 & 4 & 4\\
-3 & 3 & 3 & 1 & 3\\
-2 & 1 & 1 & 1 & 3\\
-4 & 2 & 2 & 2 & 3\\
-3 & 5 & 3 & 3 & 2 \end{bmatrix}
+    \textbf{I} = \begin{bmatrix}
+    5 & 2 & 5 & 4 & 4\\
+    3 & 3 & 3 & 1 & 3\\
+    2 & 1 & 1 & 1 & 3\\
+    4 & 2 & 2 & 2 & 3\\
+    3 & 5 & 3 & 3 & 2 \end{bmatrix}
 
 For :math:`\alpha=0` and :math:`\delta = 1`, the GLDM then becomes:
 
