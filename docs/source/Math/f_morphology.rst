@@ -5,15 +5,7 @@
 Morphology features
 ===================
 
-Let:
-
-ASPECT_RATIO :math:`Np`
-
-ASPECT_RATIO = :math:`x + y`
-
-ASPECT_RATIO :math:` = x + y`
-
-:math:`A` be a set of :math:`Np` pixels included in the ROI
+Let :math:`A` be a set of :math:`Np` pixels included in the ROI.
 
 AREA_PIXELS_COUNT :math:`= S = card(A)`
 
@@ -39,10 +31,8 @@ BBOX_HEIGHT :math:`\gets \epsilon_V = \operatorname {max}A_Y - \epsilon_Y`
 
 BBOX_WIDTH :math:`\gets \epsilon_H = \operatorname {max}A_X - \epsilon_X`
 
-ASPECT_RATIO :math:` = x + y`
 
-..
-  ASPECT_RATIO :math:` = \left{\begin{array}{cc} \frac{\epsilon_V}{\epsilon_H} & \epsilon_V>=\epsilon_H \frac{\epsilon_H}{\epsilon_V} & \epsilon_V<\epsilon_H \end{array}\right.`
+ASPECT_RATIO = :math:`\left{\begin{array}{cc} \frac{\epsilon_V}{\epsilon_H} & \epsilon_V>=\epsilon_H \frac{\epsilon_H}{\epsilon_V} & \epsilon_V<\epsilon_H \end{array}\right.`
 
 
 EXTENT :math:`= \frac {S}{S_{BB}}` where :math:`S_BB=\epsilon_H\epsilon_V`
