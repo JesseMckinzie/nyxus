@@ -86,11 +86,11 @@ where
   b & c
   \end{array}\right)
 
-  * \text {covariance matrix of ROI pixel coordinates}
-  
-  and 
+is the covariance matrix of ROI pixel coordinates and 
 
-  :math:`\lambda_1 = \frac{a+c}{2}+\sqrt{(\frac{a-c}{2})^2 + b^2}$, $ \lambda_2 = \frac{a+c}{2}-\sqrt{(\frac{a-c}{2})^2 + b^2}`
+.. math::
+
+  \lambda_1 = \frac{a+c}{2}+\sqrt{(\frac{a-c}{2})^2 + b^2}$, $ \lambda_2 = \frac{a+c}{2}-\sqrt{(\frac{a-c}{2})^2 + b^2}
 
 ROUNDNESS = :math:`\frac {4 S}{\pi a b}`
 
