@@ -11,6 +11,8 @@ ASPECT_RATIO :math:`Np`
 
 ASPECT_RATIO :math:` = x + y`
 
+ASPECT_RATIO :math:` = x + y`
+
 :math:`A` be a set of :math:`Np` pixels included in the ROI
 
 AREA_PIXELS_COUNT :math:`= S = card(A)`
