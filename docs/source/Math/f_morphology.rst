@@ -22,7 +22,7 @@ WEIGHTED_CENTROID_Y :math:`= \frac{1}{n} \sum _i ^n  A_i (A*\ {Yi}-c_Y) \to w_Y`
 
 MASS_DISPLACEMENT :math:`= \sqrt {( w_X - c_X)^2 + ( w_Y - c_Y)^2}`
 
-COMPACTNESS :math:`= \frac {1}{n} \displaystyle {\sqrt {\operatorname {E} \left[(A-(c_X,c_Y)) )^{2}\right]}}`
+COMPACTNESS :math:`= \frac {1}{n}  {\sqrt {\operatorname {E} \left[(A-(c_X,c_Y)) )^{2}\right]}}`
 
 BBOX_YMIN :math:`\gets \epsilon_X = \operatorname {min}A_Y`
 
@@ -32,7 +32,7 @@ BBOX_HEIGHT :math:`\gets \epsilon_V = \operatorname {max}A_Y - \epsilon_Y`
 
 BBOX_WIDTH :math:`\gets \epsilon_H = \operatorname {max}A_X - \epsilon_X`
 
-ASPECT_RATIO :math:`\displaystyle =
+ASPECT_RATIO :math:` =
 \left{\begin{array}{cc} 
 \frac{\epsilon_V}{\epsilon_H} & \epsilon_V>=\epsilon_H \
 \frac{\epsilon_H}{\epsilon_V} & \epsilon_V<\epsilon_H 
@@ -46,28 +46,28 @@ Features related to ROI's contour
 
 Let :math:`C` be the set of contour pixels of ROI :math:`A`. 
 
-PERIMETER :math:`\displaystyle \gets P = card(C)`
+PERIMETER :math:` \gets P = card(C)`
 
-CIRCULARITY :math:`\displaystyle =\sqrt { \frac {4 \pi S}{P^2}}` where :math:`S` and :math:`P` are ROI area and perimeter (features AREA_PIXELS_COUNT and PERIMETER)
+CIRCULARITY :math:` =\sqrt { \frac {4 \pi S}{P^2}}` where :math:`S` and :math:`P` are ROI area and perimeter (features AREA_PIXELS_COUNT and PERIMETER)
 
-EQUIVALENT_DIAMETER :math:`\displaystyle = \frac {P}{\pi}`
+EQUIVALENT_DIAMETER :math:` = \frac {P}{\pi}`
 
-EDGE_MEAN_INTENSITY :math:`\displaystyle \gets \mu_C =\frac{1}{card(C)}\sum_i C_i`
+EDGE_MEAN_INTENSITY :math:` \gets \mu_C =\frac{1}{card(C)}\sum_i C_i`
 
 EDGE_MAX_INTENSITY :math:`= max \: \textrm C`
 
 EDGE_MIN_INTENSITY :math:`= min \: \textrm C`
 
-EDGE_STDDEV_INTENSITY :math:`\displaystyle = \left[\frac{1}{card(C)}\sum_i (C_i-\mu_C)^2\right]^{\frac {1}{2}}`
+EDGE_STDDEV_INTENSITY :math:` = \left[\frac{1}{card(C)}\sum_i (C_i-\mu_C)^2\right]^{\frac {1}{2}}`
 
-EDGE_INTEGRATEDINTENSITY :math:`\displaystyle = \sum _i {C_i}` 
+EDGE_INTEGRATEDINTENSITY :math:` = \sum _i {C_i}` 
 
 Features related to ROI's convex hull
 -------------------------------------
 
-CONVEX_HULL_AREA :math:`=S_H=\displaystyle {\frac {1}{2}}{\Biggl \vert }\sum *\ {i=0}^{n_H-1}(x*\ {i}y_{i+1}-x*\ {i+1}y_{i}){\Biggr \vert }` where :math:`n_H` is the number of convex hull vertices, :math:`\displaystyle {(x_i,y_i)}, i=0, 1, ..., n_H-1` are Cartesian coordinates of the vertives.
+CONVEX_HULL_AREA :math:`=S_H= {\frac {1}{2}}{\Biggl \vert }\sum *\ {i=0}^{n_H-1}(x*\ {i}y_{i+1}-x*\ {i+1}y_{i}){\Biggr \vert }` where :math:`n_H` is the number of convex hull vertices, :math:` {(x_i,y_i)}, i=0, 1, ..., n_H-1` are Cartesian coordinates of the vertives.
 
-SOLIDITY :math:`\displaystyle = \frac {S}{S_H}` where :math:`S` is ROI area (feature AREA_PIXELS_COUNT)
+SOLIDITY :math:` = \frac {S}{S_H}` where :math:`S` is ROI area (feature AREA_PIXELS_COUNT)
 
 Features related to interpreting ROI pixels as a sampled ellipse
 ----------------------------------------------------------------
@@ -76,12 +76,12 @@ MAJOR_AXIS_LENGTH :math:`= a = 4 \sqrt {\lambda_1}` where :math:`\lambda_1` is t
 
 MINOR_AXIS_LENGTH :math:`= b = 4 \sqrt {\lambda_2}` where :math:`\lambda_2` is the second largest principal component 
 
-ECCENTRICITY :math:`= \displaystyle \sqrt {1 - \frac {b^2} {a^2}}`
+ECCENTRICITY :math:`=  \sqrt {1 - \frac {b^2} {a^2}}`
 
-ELONGATION :math:`= \displaystyle \sqrt{\frac{\lambda_2}{\lambda_1}}`
+ELONGATION :math:`=  \sqrt{\frac{\lambda_2}{\lambda_1}}`
 
 ORIENTATION 
-:math:`\displaystyle \theta =
+:math:` \theta =
 \left{\begin{array}{cc} 
 0 & b=0 \:\text{and}\: a \ge c \
 \frac{\pi}{2} & b=0 \:\text{and}\: a < c \
@@ -100,9 +100,9 @@ where
   
   and 
 
-  :math:`\displaystyle \lambda_1 = \frac{a+c}{2}+\sqrt{(\frac{a-c}{2})^2 + b^2}$, $\displaystyle \lambda_2 = \frac{a+c}{2}-\sqrt{(\frac{a-c}{2})^2 + b^2}`
+  :math:` \lambda_1 = \frac{a+c}{2}+\sqrt{(\frac{a-c}{2})^2 + b^2}$, $ \lambda_2 = \frac{a+c}{2}-\sqrt{(\frac{a-c}{2})^2 + b^2}`
 
-ROUNDNESS :math:`\displaystyle = \frac {4 S}{\pi a b}`
+ROUNDNESS :math:` = \frac {4 S}{\pi a b}`
 
 Neighbor features
 -----------------
@@ -128,11 +128,11 @@ ANG_BW_NEIGHBORS_MODE - the histogram bin value of angle between ROI's neighbors
 Polygonal representation features
 ---------------------------------
 
-POLYGONALITY_AVE :math:`\displaystyle = 5 (r_S + r_A)` where :math:`\displaystyle r_S = 1 - \left|1-\frac{\frac{P}{n_N}}{\sqrt{\frac{4S\tg \frac{\pi}{n_N}}{n_N}}} \right|` - polygonal size ratio, :math:`\displaystyle r_A = 1 - \left| 1 - \frac{S\tg \frac{\pi}{n_N}}{\frac{1}{4} \: n_N \: P^2}\right|` - polygonal area ratio, :math:`n_N` - number of ROI's neighbors, :math:`P` and :math:`S` - ROI's perimeter and area.
+POLYGONALITY_AVE :math:` = 5 (r_S + r_A)` where :math:` r_S = 1 - \left|1-\frac{\frac{P}{n_N}}{\sqrt{\frac{4S\tg \frac{\pi}{n_N}}{n_N}}} \right|` - polygonal size ratio, :math:` r_A = 1 - \left| 1 - \frac{S\tg \frac{\pi}{n_N}}{\frac{1}{4} \: n_N \: P^2}\right|` - polygonal area ratio, :math:`n_N` - number of ROI's neighbors, :math:`P` and :math:`S` - ROI's perimeter and area.
 
-HEXAGONALITY_AVE :math:`\displaystyle = \sqrt {\frac {r*\ {\sigma A}^2 + r_{\sigma P}^2}{2} }`
+HEXAGONALITY_AVE :math:` = \sqrt {\frac {r*\ {\sigma A}^2 + r_{\sigma P}^2}{2} }`
 
-HEXAGONALITY_STDDEV :math:`\displaystyle = 5 (r*\ {HS} + r_{HP})`
+HEXAGONALITY_STDDEV :math:` = 5 (r*\ {HS} + r_{HP})`
 
 Other features
 --------------
@@ -146,7 +146,7 @@ DIAMETER_INSCRIBING_CIRCLE maximum diameter of a circle centered at the ROI cent
 Let :math:`l_G` - geodetic length, :math:`t_G` - thickness. Assuming
 
 .. math::
-  \displaystyle 
+   
   \left{\begin{array}{cc} 
   S = l_G t_G \
   P = 2(l_G+t_G)
@@ -154,15 +154,15 @@ Let :math:`l_G` - geodetic length, :math:`t_G` - thickness. Assuming
 
 we can express the following features as:
 
-GEODETIC_LENGTH :math:`\displaystyle \gets l_G = \frac{P}{4} + \sqrt{\max \left(\frac{P^2}{16}-S, 0\right)}`
+GEODETIC_LENGTH :math:` \gets l_G = \frac{P}{4} + \sqrt{\max \left(\frac{P^2}{16}-S, 0\right)}`
 
-THICKNESS :math:`\displaystyle \gets t_G = \frac{P}{2} - l_G`
+THICKNESS :math:` \gets t_G = \frac{P}{2} - l_G`
 
 Let :math:`O=o_X,o_Y` be the ROI centroid and :math:`OC_i` - segment connecting centroid to an edge pixel :math:`i`. Then
 
-ROI_RADIUS_MEAN :math:`\displaystyle \gets \mu_r =\frac{1}{card(C)}\sum_i ||OC_i||`
+ROI_RADIUS_MEAN :math:` \gets \mu_r =\frac{1}{card(C)}\sum_i ||OC_i||`
 
-ROI_RADIUS_MAX :math:`\displaystyle = \max OC_i`
+ROI_RADIUS_MAX :math:` = \max OC_i`
 
 ROI_RADIUS_MEDIAN - median radius :math:`OC_i`
 

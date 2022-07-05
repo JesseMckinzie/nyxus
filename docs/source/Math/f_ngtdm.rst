@@ -9,11 +9,11 @@ Let :math:`\textbf{X}_{gl}` be a set of segmented voxels and :math:`x*\ {gl}(j_x
 
 .. math::
     \bar{A}_i = \bar{A}(j_x, j_y, j_z) 
-    = \displaystyle\frac{1}{W} \displaystyle\sum*\ {k_x=-\delta}^{\delta}\displaystyle\sum*\ {k_y=-\delta}^{\delta}
+    = \frac{1}{W} \sum*\ {k_x=-\delta}^{\delta}\sum*\ {k_y=-\delta}^{\delta}
 
 .. math::
 
-   \displaystyle\sum_{k_z=-\delta}^{\delta}{x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z)}, \\\text{ where } (k_x,k_y,k_z)\neq(0,0,0) \\ \text{ and } x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z) \in \textbf{X}_{gl}
+   \sum_{k_z=-\delta}^{\delta}{x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z)}, \\\text{ where } (k_x,k_y,k_z)\neq(0,0,0) \\ \text{ and } x_{gl}(j_x+k_x, j_y+k_y, j_z+k_z) \in \textbf{X}_{gl}
 
 
 
@@ -79,13 +79,13 @@ be the sum of absolute differences for gray level :math:`i`.
 Coarseness
 ----------
 
-NGTDM_COARSENESS :math:`= \displaystyle \frac{1}{\sum^{N_g}*\ {i=1}{p_{i}s*\ {i}}}`
+NGTDM_COARSENESS :math:`=  \frac{1}{\sum^{N_g}*\ {i=1}{p_{i}s*\ {i}}}`
 
 Contrast
 --------
 
-NGTDM_CONTRAST :math:`= \left(\frac{1}{N*\ {g,p}(N_{g,p}-1)}\displaystyle\sum^{N_g}*\ {i=1}\displaystyle\sum^{N_g}*\ {j=1}{p_{i}p*\ {j}(i-j)^2}\right)
-    \left(\frac{1}{N_{v,p}}\displaystyle\sum^{N_g}*\ {i=1}{s_i}\right)` where :math:`p_i \neq 0`, :math:`p_j \neq 0`
+NGTDM_CONTRAST :math:`= \left(\frac{1}{N*\ {g,p}(N_{g,p}-1)}\sum^{N_g}*\ {i=1}\sum^{N_g}*\ {j=1}{p_{i}p*\ {j}(i-j)^2}\right)
+    \left(\frac{1}{N_{v,p}}\sum^{N_g}*\ {i=1}{s_i}\right)` where :math:`p_i \neq 0`, :math:`p_j \neq 0`
 
 Busyness
 --------
@@ -95,13 +95,13 @@ NGTDM_BUSYNESS :math:`= \frac{\sum^{N_g}*\ {i = 1}{p_{i}s*\ {i}}}{\sum^{N_g}*\ {
 Complexity
 ----------
 
-NGTDM_COMPLEXITY :math:`= \frac{1}{N*\ {v,p}}\displaystyle\sum^{N_g}*\ {i = 1}\displaystyle\sum^{N_g}*\ {j = 1}{|i - j|
+NGTDM_COMPLEXITY :math:`= \frac{1}{N*\ {v,p}}\sum^{N_g}*\ {i = 1}\sum^{N_g}*\ {j = 1}{|i - j|
     \frac{p_{i}s*\ {i} + p_{j}s*\ {j}}{p_i + p_j}}` where :math:`p_i \neq 0, p_j \neq 0`
 
 Strength
 --------
 
-NGTDM_STRENGTH :math:`= \displaystyle \frac{\sum^{N_g}*\ {i = 1}\sum^{N_g}*\ {j = 1}{(p_i + p_j)(i-j)^2}}{\sum^{N_g}*\ {i = 1}{s_i}}` where :math:`p_i \neq 0, p_j \neq 0`
+NGTDM_STRENGTH :math:`=  \frac{\sum^{N_g}*\ {i = 1}\sum^{N_g}*\ {j = 1}{(p_i + p_j)(i-j)^2}}{\sum^{N_g}*\ {i = 1}{s_i}}` where :math:`p_i \neq 0, p_j \neq 0`
 
 References
 ----------
