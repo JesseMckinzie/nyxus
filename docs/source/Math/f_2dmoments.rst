@@ -15,16 +15,16 @@ Spatial moment features are calculated as:
 
 .. math::
 
-   \text{SPAT_MOMENT_00} =m_{00} 
-   \text{SPAT_MOMENT_01} =m_{01}   
-   \text{SPAT_MOMENT_02} =m_{02}    
-   \text{SPAT_MOMENT_03} =m_{03}   
-   \text{SPAT_MOMENT_10} =m_{10}   
-   \text{SPAT_MOMENT_11} =m_{11}  
-   \text{SPAT_MOMENT_12} =m_{12}   
-   \text{SPAT_MOMENT_20} =m_{20}    
-   \text{SPAT_MOMENT_21} =m_{21}    
-   \text{SPAT_MOMENT_30} =m_{30}    
+   \text{SPAT_MOMENT_00} &=m_{00} \\
+   \text{SPAT_MOMENT_01} &=m_{01} \\
+   \text{SPAT_MOMENT_02} &=m_{02} \\    
+   \text{SPAT_MOMENT_03} &=m_{03} \\  
+   \text{SPAT_MOMENT_10} &=m_{10} \\   
+   \text{SPAT_MOMENT_11} &=m_{11} \\  
+   \text{SPAT_MOMENT_12} &=m_{12} \\   
+   \text{SPAT_MOMENT_20} &=m_{20} \\   
+   \text{SPAT_MOMENT_21} &=m_{21} \\   
+   \text{SPAT_MOMENT_30} &=m_{30} 
 
 Central moments
 ---------------
@@ -39,13 +39,13 @@ Central moment features are calculated as:
 
 .. math:: 
 
-   \text{CENTRAL_MOMENT_02} =\mu_{02}
-   \text{CENTRAL_MOMENT_03} =\mu_{03}   
-   \text{CENTRAL_MOMENT_11} =\mu_{11}   
-   \text{CENTRAL_MOMENT_12} =\mu_{12}   
-   \text{CENTRAL_MOMENT_20} =\mu_{20}   
-   \text{CENTRAL_MOMENT_21} =\mu_{21}   
-   \text{CENTRAL_MOMENT_30} =\mu_{20}   
+   \text{CENTRAL_MOMENT_02} &=\mu_{02} \\
+   \text{CENTRAL_MOMENT_03} &=\mu_{03} \\  
+   \text{CENTRAL_MOMENT_11} &=\mu_{11} \\  
+   \text{CENTRAL_MOMENT_12} &=\mu_{12} \\  
+   \text{CENTRAL_MOMENT_20} &=\mu_{20} \\  
+   \text{CENTRAL_MOMENT_21} &=\mu_{21} \\  
+   \text{CENTRAL_MOMENT_30} &=\mu_{20} \\  
 
 Normalized raw moments
 ----------------------
@@ -60,13 +60,13 @@ Spatial moment features are calculated as:
 
 .. math::
 
-   \text{NORM_SPAT_MOMENT_00} =w_{00}
-   \text{NORM_SPAT_MOMENT_01} =w_{01}    
-   \text{NORM_SPAT_MOMENT_02} =w_{02}    
-   \text{NORM_SPAT_MOMENT_03} =w_{03}   
-   \text{NORM_SPAT_MOMENT_10} =w_{10} 
-   \text{NORM_SPAT_MOMENT_20} =w_{20}  
-   \text{NORM_SPAT_MOMENT_30} =w_{30}    
+   \text{NORM_SPAT_MOMENT_00} =w_{00} \\
+   \text{NORM_SPAT_MOMENT_01} =w_{01} \\    
+   \text{NORM_SPAT_MOMENT_02} =w_{02} \\   
+   \text{NORM_SPAT_MOMENT_03} =w_{03} \\  
+   \text{NORM_SPAT_MOMENT_10} =w_{10} \\
+   \text{NORM_SPAT_MOMENT_20} =w_{20} \\ 
+   \text{NORM_SPAT_MOMENT_30} =w_{30} \\  
 
 Normalized central moments
 --------------------------
@@ -82,13 +82,13 @@ where :math:`\mu _{{ij}}` is central moment.
 Normalized central moment features are calculated as:
 
 .. math:: 
-   \text{NORM_CENTRAL_MOMENT_02} =\eta_{{02}}
-   \text{NORM_CENTRAL_MOMENT_03} =\eta_{{03}}
-   \text{NORM_CENTRAL_MOMENT_11} =\eta_{{11}}
-   \text{NORM_CENTRAL_MOMENT_12} =\eta_{{12}}
-   \text{NORM_CENTRAL_MOMENT_20} =\eta_{{20}}
-   \text{NORM_CENTRAL_MOMENT_21} =\eta_{{21}}
-   \text{NORM_CENTRAL_MOMENT_30} =\eta_{{30}}
+   \text{NORM_CENTRAL_MOMENT_02} &=\eta_{{02}} \\
+   \text{NORM_CENTRAL_MOMENT_03} &=\eta_{{03}} \\
+   \text{NORM_CENTRAL_MOMENT_11} &=\eta_{{11}} \\
+   \text{NORM_CENTRAL_MOMENT_12} &=\eta_{{12}} \\
+   \text{NORM_CENTRAL_MOMENT_20} &=\eta_{{20}} \\
+   \text{NORM_CENTRAL_MOMENT_21} &=\eta_{{21}} \\
+   \text{NORM_CENTRAL_MOMENT_30} &=\eta_{{30}} 
 
 Hu moments
 ----------
