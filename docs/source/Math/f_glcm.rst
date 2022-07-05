@@ -53,7 +53,7 @@ Let:
 * :math:`p_{x-y}(k) = \sum^{N_g}_{i=1}\sum^{N_g}_{j=1}{p_{ij}},\text{ where }|i-j|=k,\text{ and }k=0,1,\dots,N_g-1`
 * :math:`HX =  -\sum^{N_g}_{i=1}{p_x(i)\log_2\big(p_x(i)+\epsilon\big)}` be the entropy of :math:`p_x`
 * :math:`HY =  -\sum^{N_g}_{j=1}{p_y(j)\log_2\big(p_y(j)+\epsilon\big)}`` be the entropy of :math:`p_y`
-* :math:`HXY =  -\sum^{N_g}_{i=1}\sum^{N_g}_{j=1}{p_{ij}\log_2\big(p_{ij}+\epsilon\big)}`` be the entropy of:math:`p_{ij}`
+* :math:`HXY =  -\sum^{N_g}_{i=1}\sum^{N_g}_{j=1}{p_{ij}\log_2\big(p_{ij}+\epsilon\big)}`` be the entropy of :math:`p_{ij}`
 * :math:`HXY1 =  -\sum^{N_g}_{i=1}\sum^{N_g}_{j=1}{p_{ij}\log_2\big(p_x(i)p_y(j)+\epsilon\big)}`
 * :math:`HXY2 =  -\sum^{N_g}_{i=1}\sum^{N_g}_{j=1}{p_x(i)p_y(j)\log_2\big(p_x(i)p_y(j)+\epsilon\big)}``
 
