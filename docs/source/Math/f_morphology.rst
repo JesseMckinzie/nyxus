@@ -122,11 +122,11 @@ ANG_BW_NEIGHBORS_MODE - the histogram bin value of angle between ROI's neighbors
 Polygonal representation features
 ---------------------------------
 
-POLYGONALITY_AVE :math:` = 5 (r_S + r_A)` where :math:` r_S = 1 - \left|1-\frac{\frac{P}{n_N}}{\sqrt{\frac{4S\tg \frac{\pi}{n_N}}{n_N}}} \right|` - polygonal size ratio, :math:` r_A = 1 - \left| 1 - \frac{S\tg \frac{\pi}{n_N}}{\frac{1}{4} \: n_N \: P^2}\right|` - polygonal area ratio, :math:`n_N` - number of ROI's neighbors, :math:`P` and :math:`S` - ROI's perimeter and area.
+POLYGONALITY_AVE = :math:`5 (r_S + r_A)` where :math:` r_S = 1 - \left|1-\frac{\frac{P}{n_N}}{\sqrt{\frac{4S\tg \frac{\pi}{n_N}}{n_N}}} \right|` - polygonal size ratio, :math:` r_A = 1 - \left| 1 - \frac{S\tg \frac{\pi}{n_N}}{\frac{1}{4} \: n_N \: P^2}\right|` - polygonal area ratio, :math:`n_N` - number of ROI's neighbors, :math:`P` and :math:`S` - ROI's perimeter and area.
 
-HEXAGONALITY_AVE :math:` = \sqrt {\frac {r_{\sigma A}^2 + r_{\sigma P}^2}{2} }`
+HEXAGONALITY_AVE = :math:`\sqrt {\frac {r_{\sigma A}^2 + r_{\sigma P}^2}{2} }`
 
-HEXAGONALITY_STDDEV :math:` = 5 (r_{HS} + r_{HP})`
+HEXAGONALITY_STDDEV = :math:`5 (r_{HS} + r_{HP})`
 
 Other features
 --------------
@@ -156,7 +156,7 @@ Let :math:`O=o_X,o_Y` be the ROI centroid and :math:`OC_i` - segment connecting 
 
 ROI_RADIUS_MEAN :math:` \gets \mu_r =\frac{1}{card(C)}\sum_i ||OC_i||`
 
-ROI_RADIUS_MAX :math:` = \max OC_i`
+ROI_RADIUS_MAX = :math:`\max OC_i`
 
 ROI_RADIUS_MEDIAN - median radius :math:`OC_i`
 
