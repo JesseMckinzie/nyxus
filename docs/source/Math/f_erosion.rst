@@ -7,7 +7,7 @@ These features use the morphological erosion of the binary ROI image with respec
 A structuring element is a matrix that identifies the pixel in the image being processed and defines the neighborhood used in the processing of each pixel. For example, the following illustrates the origin of a diamond-shaped structuring element: 
 
 .. figure:: structuring_element.jpg
-    :width: 200
+    :width: 400
     :alt: Example structuring element
 
     Figure from www.mathworks.com
