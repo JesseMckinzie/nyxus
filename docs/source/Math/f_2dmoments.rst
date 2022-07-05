@@ -141,6 +141,19 @@ A normalized weighted central moment :math:`w_{\eta ij}` is defined as
 where :math:`w _{{\mu ij}}` is weighted central moment.
 Weighted Hu moments are defined as
 
+.. math:: 
+   \text{WEIGHTED_HU_M1} =& w_{\eta 20}+w_{\eta 02} \\
+   \text{WEIGHTED_HU_M2} =& (w_{\eta 20}-w_{\eta 02})^{2}+4w_{\eta 11}^{2} \\
+   \text{WEIGHTED_HU_M3} =& (w_{\eta 30}-3w_{\eta 12})^{2}+(3w_{\eta 21}-w _{\eta 03})^{2} \\
+   \text{WEIGHTED_HU_M4} =& (w_{\eta 30}+w_{\eta 12})^{2}+(w_{\eta 21}+w _{\eta 03})^{2} \\
+   \text{ WEIGHTED_HU_M5} =& (w_{\eta 30}-3w_{\eta 12})(w_{\eta 30}+w_{\eta 12})[(w_{\eta 30}+w_{\eta 12})^{2}-3(w_{\eta 21}+ w_{\eta 03})^{2}]+ \\ 
+   &(3w_{\eta 21}-w_{\eta 03})(w_{\eta 21}+w_{\eta 03})[3(w_{\eta 30}+w_{\eta 12})^{2}-(w_{\eta 21}+w _{\eta 03})^{2}] \\
+   \text{WEIGHTED_HU_M6} =& (w_{\eta 20}-w_{\eta 02})[(w_{\eta 30}+w_{\eta 12})^{2}-(w_{\eta 21}+w_{\eta 03})^{2}]+4w_{\eta 11}(w_{\eta 30}+w_{\eta 12})(w_{\eta 21}+w_{\eta 03})\\
+   \text{WEIGHTED_HU_M7} =& (3w_{\eta 21}-w_{\eta 03})(w_{\eta 30}+w_{\eta 12})[(w_{\eta 30}+w_{\eta 12})^{2}-3(w_{\eta 21}+w_{\eta 03})^{2}]- \\
+   &(w_{\eta 30}-3w_{\eta 12})(w_{\eta 21}+w_{\eta 03})[3(w_{\eta 30}+w_{\eta 12})^{2}-(w_{\eta 21}+w _{\eta 03})^{2}] 
+
+
+
 | WEIGHTED_HU_M1 :math:`=w_{\eta 20}+w_{\eta 02}` 
 | WEIGHTED_HU_M2 :math:`=(w_{\eta 20}-w_{\eta 02})^{2}+4w_{\eta 11}^{2}` 
 | WEIGHTED_HU_M3 :math:`=(w_{\eta 30}-3w_{\eta 12})^{2}+(3w_{\eta 21}-w _{\eta 03})^{2}` 
