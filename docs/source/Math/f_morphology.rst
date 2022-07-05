@@ -7,6 +7,8 @@ Morphology features
 
 Let:
 
+ASPECT_RATIO :math:`Np`
+
 ASPECT_RATIO :math:` = x + y`
 
 :math:`A` be a set of :math:`Np` pixels included in the ROI
