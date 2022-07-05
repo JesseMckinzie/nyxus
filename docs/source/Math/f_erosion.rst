@@ -8,13 +8,13 @@ A structuring element is a matrix that identifies the pixel in the image being p
 
 .. figure:: structuring_element.jpg
     :alt: Example structuring element
-    
+
     Figure from www.mathworks.com
 
 EROSIONS_2_VANISH
 -----------------
 
-This feature calulates the number of erosion operations on a ROI to vanish in its axis aligned bounding box in a sense that each pixel intensity becomes :math:'=0'.
+This feature calculates the number of erosion operations on a ROI to vanish in its axis aligned bounding box in a sense that each pixel intensity becomes :math:`=0`.
 
 EROSIONS_2_VANISH_COMPLEMENT
 ----------------------------
