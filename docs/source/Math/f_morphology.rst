@@ -11,9 +11,9 @@ AREA_PIXELS_COUNT :math:`= S = card(A)`
 
 AREA_UM2 :math:`= card(A) s^2` where :math:`s` is pixel size in micrometers 
 
-CENTROID_X :math:`\gets c_X = \frac{1}{n} \sum *i ^n  A_{Xi}`
+CENTROID_X :math:`\gets c_X = \frac{1}{n} \sum_i ^n  A_{Xi}`
 
-CENTROID_Y :math:`\gets c_Y =  \frac{1}{n} \sum *i ^n  A_{Yi}`
+CENTROID_Y :math:`\gets c_Y =  \frac{1}{n} \sum_i ^n  A_{Yi}`
 
 WEIGHTED_CENTROID_X :math:`\gets w_X = \frac{1}{n} \sum _i ^n  A_i (A_{Xi}-c_X)`
 
@@ -75,7 +75,7 @@ ECCENTRICITY :math:`=  \sqrt {1 - \frac {b^2} {a^2}}`
 
 ELONGATION :math:`=  \sqrt{\frac{\lambda_2}{\lambda_1}}`
 
-ORIENTATION :math:`\theta = \left{\begin{array}{cc} 0 & b=0 \:\text{and}\: a \ge c \ \frac{\pi}{2} & b=0 \:\text{and}\: a < c \ \arctg \frac{\lambda_1-a}{b} & b \ne 0 \end{array}\right.`
+ORIENTATION :math:`\theta = \left{\begin{array}{cc} 0 & b=0 \:\text{and}\: a \ge c \ \frac{\pi}{2} & b=0 \:\text{and}\: a < c \ \arctan \frac{\lambda_1-a}{b} & b \ne 0 \end{array}\right.`
 
 where 
 
@@ -118,8 +118,8 @@ ANG_BW_NEIGHBORS_MODE - the histogram bin value of angle between ROI's neighbors
 Polygonal representation features
 ---------------------------------
 
-POLYGONALITY_AVE = :math:`5 (r_S + r_A)` where :math:`r_S = 1 - \left|1-\frac{\frac{P}{n_N}}{\sqrt{\frac{4S\tg \frac{\pi}{n_N}}{n_N}}} \right|` - polygonal size 
-:math:`r_A = 1 - \left| 1 - \frac{S\tg \frac{\pi}{n_N}}{\frac{1}{4} \: n_N \: P^2}\right|` - polygonal area ratio, 
+POLYGONALITY_AVE = :math:`5 (r_S + r_A)` where :math:`r_S = 1 - \left|1-\frac{\frac{P}{n_N}}{\sqrt{\frac{4S\tan \frac{\pi}{n_N}}{n_N}}} \right|` - polygonal size 
+:math:`r_A = 1 - \left| 1 - \frac{S\tan \frac{\pi}{n_N}}{\frac{1}{4} \: n_N \: P^2}\right|` - polygonal area ratio, 
 :math:`n_N` - number of ROI's neighbors, :math:`P` and :math:`S` - ROI's perimeter and area.
 
 HEXAGONALITY_AVE = :math:`\sqrt {\frac {r_{\sigma A}^2 + r_{\sigma P}^2}{2} }`

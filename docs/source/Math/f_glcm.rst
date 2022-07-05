@@ -2,7 +2,7 @@
 Texture features / GLCM
 =======================
 
- A Gray Level Co-occurrence Matrix (GLCM) of size :math:`N_g \times N_g` describes the second-order joint probability function of an image and is defined as :math:`\textbf{P}(i,j|\delta,\theta)`.
+A Gray Level Co-occurrence Matrix (GLCM) of size :math:`N_g \times N_g` describes the second-order joint probability function of an image and is defined as :math:`\textbf{P}(i,j|\delta,\theta)`.
 The :math:`(i,j)`-th element of this matrix represents the number of times the combination of
 indices :math:`i` and :math:`j` occur in two pixels in the image, that are separated by a distance of :math:`\delta`
 pixels along angle :math:`\theta`.

@@ -3,34 +3,34 @@ Texture features / GLDM
 =======================
 
 A Gray Level Dependence Matrix (GLDM) quantifies gray level dependencies in an image.
-  A gray level dependency is defined as a the number of connected voxels within distance $\delta$ that are
-  dependent on the center voxel.
-  A neighbouring voxel with gray level :math:`j` is considered dependent on center voxel with gray level :math:`i`
-  if :math:`|i-j|\le\alpha`. In a gray level dependence matrix :math:`\textbf{P}(i,j)` the :math:`(i,j)`-th
-  element describes the number of times a voxel with gray level :math:`i` with :math:`j` dependent voxels
-  in its neighbourhood appears in image.
+A gray level dependency is defined as a the number of connected voxels within distance :math:`\delta` that are
+dependent on the center voxel.
+A neighbouring voxel with gray level :math:`j` is considered dependent on center voxel with gray level :math:`i`
+if :math:`|i-j|\le\alpha`. In a gray level dependence matrix :math:`\textbf{P}(i,j)` the :math:`(i,j)`-th
+element describes the number of times a voxel with gray level :math:`i` with :math:`j` dependent voxels
+in its neighbourhood appears in image.
 
-  As an example, consider the following 5x5 image, with 5 gray levels:
+As an example, consider the following 5x5 image, with 5 gray levels:
 
 .. math::
-  
-  \textbf{I} = \begin{bmatrix}
-  5 & 2 & 5 & 4 & 4\\
-  3 & 3 & 3 & 1 & 3\\
-  2 & 1 & 1 & 1 & 3\\
-  4 & 2 & 2 & 2 & 3\\
-  3 & 5 & 3 & 3 & 2 \end{bmatrix}
+
+\textbf{I} = \begin{bmatrix}
+5 & 2 & 5 & 4 & 4\\
+3 & 3 & 3 & 1 & 3\\
+2 & 1 & 1 & 1 & 3\\
+4 & 2 & 2 & 2 & 3\\
+3 & 5 & 3 & 3 & 2 \end{bmatrix}
 
 For :math:`\alpha=0` and :math:`\delta = 1`, the GLDM then becomes:
 
 .. math::
 
-  \textbf{P} = \begin{bmatrix}
-  0 & 1 & 2 & 1 \\
-  1 & 2 & 3 & 0 \\
-  1 & 4 & 4 & 0 \\
-  1 & 2 & 0 & 0 \\
-  3 & 0 & 0 & 0 \end{bmatrix}
+\textbf{P} = \begin{bmatrix}
+0 & 1 & 2 & 1 \\
+1 & 2 & 3 & 0 \\
+1 & 4 & 4 & 0 \\
+1 & 2 & 0 & 0 \\
+3 & 0 & 0 & 0 \end{bmatrix}
 
 
 Let:
@@ -38,8 +38,7 @@ Let:
 
 * :math:`N_g` be the number of discrete intensity values in the image
 * :math:`N_d` be the number of discrete dependency sizes in the image
-* :math:`N_z` be the number of dependency zones in the image, which is equal to
-  :math:`\sum^{N_g}_{i=1}\sum^{N_d}_{j=1}{\textbf{P}(i,j)}`
+* :math:`N_z` be the number of dependency zones in the image, which is equal to :math:`\sum^{N_g}_{i=1}\sum^{N_d}_{j=1}{\textbf{P}(i,j)}`
 * :math:`\textbf{P}(i,j)` be the dependence matrix
 * :math:`p(i,j)` be the normalized dependence matrix, defined as :math:`p(i,j) = \frac{\textbf{P}(i,j)}{N_z}`
 
