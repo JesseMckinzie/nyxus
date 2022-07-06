@@ -7,7 +7,7 @@ Morphology features
 
 Let :math:`A` be a set of :math:`Np` pixels included in the ROI.
 
-AREA_PIXELS_COUNT :math:`= S = card(A)`
+| AREA_PIXELS_COUNT :math:`= S = card(A)`
 | AREA_UM2 :math:`= card(A) s^2` where :math:`s` is pixel size in micrometers 
 | CENTROID_X :math:`\gets c_X = \frac{1}{n} \sum_i ^n  A_{Xi}`
 | CENTROID_Y :math:`\gets c_Y =  \frac{1}{n} \sum_i ^n  A_{Yi}`
@@ -27,7 +27,7 @@ Features related to ROI's contour
 
 Let :math:`C` be the set of contour pixels of ROI :math:`A`. 
 
-PERIMETER :math:`\gets P = card(C)`
+| PERIMETER :math:`\gets P = card(C)`
 | CIRCULARITY = :math:`\sqrt { \frac {4 \pi S}{P^2}}` where :math:`S` and :math:`P` are ROI area and perimeter (features AREA_PIXELS_COUNT and PERIMETER)
 | EQUIVALENT_DIAMETER = :math:`\frac {P}{\pi}`
 | EDGE_MEAN_INTENSITY :math:`\gets \mu_C =\frac{1}{card(C)}\sum_i C_i`
@@ -47,7 +47,7 @@ SOLIDITY = :math:`\frac {S}{S_H}` where :math:`S` is ROI area (feature AREA_PIXE
 Features related to interpreting ROI pixels as a sampled ellipse
 ----------------------------------------------------------------
 
-MAJOR_AXIS_LENGTH :math:`= a = 4 \sqrt {\lambda_1}` where :math:`\lambda_1` is the first largest principal component 
+| MAJOR_AXIS_LENGTH :math:`= a = 4 \sqrt {\lambda_1}` where :math:`\lambda_1` is the first largest principal component 
 | MINOR_AXIS_LENGTH :math:`= b = 4 \sqrt {\lambda_2}` where :math:`\lambda_2` is the second largest principal component 
 | ECCENTRICITY :math:`=  \sqrt {1 - \frac {b^2} {a^2}}`
 | ELONGATION :math:`=  \sqrt{\frac{\lambda_2}{\lambda_1}}`
@@ -76,7 +76,7 @@ Neighbor features
 
 NUM_NEIGHBORS :math:`\gets n_N=` the number of neighbor ROIs 
 
-PERCENT_TOUCHING - the ratio of ROIs situated at Euclidean distance 0 to :math:`n_N`
+| PERCENT_TOUCHING - the ratio of ROIs situated at Euclidean distance 0 to :math:`n_N`
 | CLOSEST_NEIGHBOR1_DIST - distance to ROI's closest neighbor
 | CLOSEST_NEIGHBOR1_ANG - angle between the ROI centroid and its closest neighbor's centroid
 | CLOSEST_NEIGHBOR2_DIST - distance to ROI's 2nd closest neighbor
@@ -92,13 +92,13 @@ POLYGONALITY_AVE = :math:`5 (r_S + r_A)` where :math:`r_S = 1 - \left|1-\frac{\f
 :math:`r_A = 1 - \left| 1 - \frac{S\tan \frac{\pi}{n_N}}{\frac{1}{4} \: n_N \: P^2}\right|` - polygonal area ratio, 
 :math:`n_N` - number of ROI's neighbors, :math:`P` and :math:`S` - ROI's perimeter and area.
 
-HEXAGONALITY_AVE = :math:`\sqrt {\frac {r_{\sigma A}^2 + r_{\sigma P}^2}{2} }`
+| HEXAGONALITY_AVE = :math:`\sqrt {\frac {r_{\sigma A}^2 + r_{\sigma P}^2}{2} }`
 | HEXAGONALITY_STDDEV = :math:`5 (r_{HS} + r_{HP})`
 
 Other features
 --------------
 
-DIAMETER_MIN_ENCLOSING_CIRCLE minimum diameter of a circle which completely covers the ROI
+| DIAMETER_MIN_ENCLOSING_CIRCLE minimum diameter of a circle which completely covers the ROI
 | DIAMETER_CIRCUMSCRIBING_CIRCLE the smallest circle centered at the ROI centroid that totally encloses the profile,
 | DIAMETER_INSCRIBING_CIRCLE maximum diameter of a circle centered at the ROI centroid which fits inside the ROI
 
@@ -118,7 +118,7 @@ THICKNESS :math:`\gets t_G = \frac{P}{2} - l_G`
 
 Let :math:`O=o_X,o_Y` be the ROI centroid and :math:`OC_i` - segment connecting centroid to an edge pixel :math:`i`. Then
 
-ROI_RADIUS_MEAN :math:`\gets \mu_r =\frac{1}{card(C)}\sum_i ||OC_i||`
+| ROI_RADIUS_MEAN :math:`\gets \mu_r =\frac{1}{card(C)}\sum_i ||OC_i||`
 | ROI_RADIUS_MAX = :math:`\max OC_i`
 | ROI_RADIUS_MEDIAN - median radius :math:`OC_i`
 
@@ -139,7 +139,7 @@ Feret diameter
 
 Statistics of Feret diameter at 0-90 degree rotation angles:
 
-STAT_FERET_DIAM_MIN :math:`=\min X_{Fe}`
+| STAT_FERET_DIAM_MIN :math:`=\min X_{Fe}`
 | STAT_FERET_DIAM_MAX :math:`=\max X_{Fe}`
 | STAT_FERET_DIAM_MEAN :math:`=\operatorname {E} ( X_{Fe} )`
 | STAT_FERET_DIAM_MEDIAN 
@@ -155,7 +155,7 @@ Martin diameter
 
 Statistics of Martin diameter at 0-90 degree rotation angles:
 
-STAT_MARTIN_DIAM_MIN
+| STAT_MARTIN_DIAM_MIN
 | STAT_MARTIN_DIAM_MAX
 | STAT_MARTIN_DIAM_MEAN
 | STAT_MARTIN_DIAM_MEDIAN
@@ -171,7 +171,7 @@ Nassenstein diameter
 
 Statistics of Nassenstein diameter at 0-90 degree rotation angles:
 
-STAT_NASSENSTEIN_DIAM_MIN
+| STAT_NASSENSTEIN_DIAM_MIN
 | STAT_NASSENSTEIN_DIAM_MAX
 | STAT_NASSENSTEIN_DIAM_MEAN
 | STAT_NASSENSTEIN_DIAM_MEDIAN
