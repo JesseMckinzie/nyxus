@@ -51,7 +51,8 @@ Features related to interpreting ROI pixels as a sampled ellipse
 | MINOR_AXIS_LENGTH :math:`= b = 4 \sqrt {\lambda_2}` where :math:`\lambda_2` is the second largest principal component 
 | ECCENTRICITY :math:`=  \sqrt {1 - \frac {b^2} {a^2}}`
 | ELONGATION :math:`=  \sqrt{\frac{\lambda_2}{\lambda_1}}`
-| ORIENTATION :math:`\theta = \left{\begin{array}{cc} 0 & b=0 \:\text{and}\: a \ge c \ \frac{\pi}{2} & b=0 \:\text{and}\: a < c \ \arctan \frac{\lambda_1-a}{b} & b \ne 0 \end{array}\right.`
+.. I reformatted this part because it would not show up in rst. Let me know if it is not correct now.
+| ORIENTATION :math:`\theta = 0` if :math:`b=0` and  :math:`a \ge c \ \frac{\pi}{2}` when :math:`b=0` and  :math:`a < c \ \arctan \frac{\lambda_1-a}{b}` if  :math:`b \ne 0`
 
 where 
 
@@ -171,7 +172,7 @@ Nassenstein diameter
 
 Statistics of Nassenstein diameter at 0-90 degree rotation angles:
 
-| STAT_NASSENSTEIN_DIAM_MIN
+|STAT_NASSENSTEIN_DIAM_MIN
 | STAT_NASSENSTEIN_DIAM_MAX
 | STAT_NASSENSTEIN_DIAM_MEAN
 | STAT_NASSENSTEIN_DIAM_MEDIAN
