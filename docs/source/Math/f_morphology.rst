@@ -106,11 +106,9 @@ Other features
 Let :math:`l_G` - geodetic length, :math:`t_G` - thickness. Assuming
 
 .. math::
-   
-  \left{\begin{array}{cc} 
-  S = l_G t_G \\
-  P = 2(l_G+t_G)
-  \end{array}\right.
+
+  S &= l_G t_G \\
+  P &= 2(l_G+t_G)
 
 we can express the following features as:
 
