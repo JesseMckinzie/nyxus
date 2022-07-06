@@ -74,9 +74,7 @@ with a valid region; at least 1 neighbor). :math:`N_{v,p} \leq N_p`, where :math
 
 :math:`p_i` be the gray level probability and equal to :math:`n_i/N_v`
 
-.. math:: 
-
-    s_i = \left{ {\begin{array} {rcl} \sum^{n_i}{|i-\bar{A}_i|} & \text for & n_i \neq 0 0 \text { for } & n_i = 0 \end{array}}\right.
+:math:`s_i = \sum^{n_i}{|i-\bar{A}_i|}` when :math:`n_i \neq 0` and :math:`s_i = 0` when :math:`n_i = 0`.
 
 be the sum of absolute differences for gray level :math:`i`.
 

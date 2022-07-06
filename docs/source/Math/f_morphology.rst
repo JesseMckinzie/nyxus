@@ -169,17 +169,25 @@ Feret diameter
   :align: center
   :width: 400
 
-MIN_FERET_DIAMETER - minimum :math:`X_{Fe}`  \\
-MAX_FERET_DIAMETER - maximum :math:`X_{Fe}`  \\
-MIN_FERET_ANGLE - rotation angle delivering :math:`\min X_{Fe}`  \\
+MIN_FERET_DIAMETER - minimum :math:`X_{Fe}`
+
+MAX_FERET_DIAMETER - maximum :math:`X_{Fe}`
+
+MIN_FERET_ANGLE - rotation angle delivering :math:`\min X_{Fe}`
+
 MAX_FERET_ANGLE - rotation angle delivering :math:`\max X_{Fe}`
 
 Statistics of Feret diameter at 0-90 degree rotation angles:
-STAT_FERET_DIAM_MIN :math:`=\min X_{Fe}` \\
-STAT_FERET_DIAM_MAX :math:`=\max X_{Fe}` \\
-STAT_FERET_DIAM_MEAN :math:`=\operatorname {E} ( X_{Fe} )` \\
-STAT_FERET_DIAM_MEDIAN \\
-STAT_FERET_DIAM_STDDEV \\
+STAT_FERET_DIAM_MIN :math:`=\min X_{Fe}`
+
+STAT_FERET_DIAM_MAX :math:`=\max X_{Fe}`
+
+STAT_FERET_DIAM_MEAN :math:`=\operatorname {E} ( X_{Fe} )`
+
+STAT_FERET_DIAM_MEDIAN 
+
+STAT_FERET_DIAM_STDDEV
+
 STAT_FERET_DIAM_MODE
 
 Martin diameter
@@ -190,11 +198,17 @@ Martin diameter
   :width: 400
 
 Statistics of Martin diameter at 0-90 degree rotation angles:
-STAT_MARTIN_DIAM_MIN \\
-STAT_MARTIN_DIAM_MAX \\
-STAT_MARTIN_DIAM_MEAN \\
-STAT_MARTIN_DIAM_MEDIAN \\
-STAT_MARTIN_DIAM_STDDEV \\
+
+STAT_MARTIN_DIAM_MIN
+
+STAT_MARTIN_DIAM_MAX
+
+STAT_MARTIN_DIAM_MEAN
+
+STAT_MARTIN_DIAM_MEDIAN
+
+STAT_MARTIN_DIAM_STDDEV
+
 STAT_MARTIN_DIAM_MODE
 
 Nassenstein diameter
@@ -205,11 +219,17 @@ Nassenstein diameter
   :width: 400
 
 Statistics of Nassenstein diameter at 0-90 degree rotation angles:
-STAT_NASSENSTEIN_DIAM_MIN \\
-STAT_NASSENSTEIN_DIAM_MAX \\
-STAT_NASSENSTEIN_DIAM_MEAN \\
-STAT_NASSENSTEIN_DIAM_MEDIAN \\
-STAT_NASSENSTEIN_DIAM_STDDEV \\
+
+STAT_NASSENSTEIN_DIAM_MIN
+
+STAT_NASSENSTEIN_DIAM_MAX
+
+STAT_NASSENSTEIN_DIAM_MEAN
+
+STAT_NASSENSTEIN_DIAM_MEDIAN
+
+STAT_NASSENSTEIN_DIAM_STDDEV
+
 STAT_NASSENSTEIN_DIAM_MODE
 
 All-chords features
@@ -219,23 +239,37 @@ All-chords features
   :align: center
   :width: 400
 
-ALLCHORDS_MAX \\
-ALLCHORDS_MAX_ANG \\
-ALLCHORDS_MIN \\
-ALLCHORDS_MIN_ANG \\
-ALLCHORDS_MEDIAN \\
-ALLCHORDS_MEAN \\
-ALLCHORDS_MODE \\
+ALLCHORDS_MAX
+
+ALLCHORDS_MAX_ANG
+
+ALLCHORDS_MIN
+
+ALLCHORDS_MIN_ANG
+
+ALLCHORDS_MEDIAN
+
+ALLCHORDS_MEAN
+
+ALLCHORDS_MODE
+
 ALLCHORDS_STDDEV
 
 Max-chord features
 ^^^^^^^^^^^^^^^^^^
 
-MAXCHORDS_MAX \\
-MAXCHORDS_MAX_ANG \\
-MAXCHORDS_MIN \\
-MAXCHORDS_MIN_ANG \\
-MAXCHORDS_MEDIAN \\
-MAXCHORDS_MEAN \\
-MAXCHORDS_MODE \\
+MAXCHORDS_MAX
+
+MAXCHORDS_MAX_ANG
+
+MAXCHORDS_MIN
+
+MAXCHORDS_MIN_ANG
+
+MAXCHORDS_MEDIAN
+
+MAXCHORDS_MEAN
+
+MAXCHORDS_MODE
+
 MAXCHORDS_STDDEV
