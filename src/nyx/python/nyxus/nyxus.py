@@ -144,17 +144,18 @@ class Nested:
 	chiCnl = '0'
 	rels = nn.findrelations (segPath, fPat, cnlSig, parCnl, chiCnl)	
     """
-
-    def __init__(self):
-        pass
-
-    def findrelations(
+    
+    def __init__(self, aggregate: Optional[list] = []):
+        self.aggregate = aggregate
+    
+    def find_relations(
         self,
         label_dir: str,
         file_pattern: str, 
         channel_signature: str, 
         parent_channel: str, 
         child_channel: str):
+    
         """Finds parent-child relationships.
 
         Find parent-child relationships assuming that images ending <channel_signature><parent_channel> 
@@ -182,7 +183,7 @@ class Nested:
         if not os.path.exists(label_dir):
             raise IOError (f"Provided label image directory '{label_dir}' does not exist.")
 
-        header, string_data, numeric_data = findrelations_imp (label_dir, file_pattern, channel_signature, parent_channel, child_channel)
+        header, string_data, numeric_data = findrelations_imp (label_dir, file_pattern, channel_signature, parent_channel, child_channel) 
 
         df = pd.concat(
             [
@@ -191,10 +192,16 @@ class Nested:
             ],
             axis=1,
         )
+        
+        print(df)
 
         # Labels should always be uint.
         if "label" in df.columns:
             df["label"] = df.label.astype(np.uint32)
 
         return df
+    
+    def featurize(self, parent_child_map: pd.DataFrame, child_features: pd.DataFrame):
+        
+        joined_df = parent_child_map.join(child_features, left_on=['Child_Label'], right_on=[''])
 		
