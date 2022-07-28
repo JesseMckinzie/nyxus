@@ -5,4 +5,4 @@ Classes
     :maxdepth: 2
     :caption: Contents:
 
-    References/Classes
+    Reference/Classes
