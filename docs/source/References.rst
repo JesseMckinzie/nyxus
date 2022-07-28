@@ -2,7 +2,7 @@ Classes
 ===============
 
 .. toctre::
-    :maxdepth: 2
-    :caption: Contents:
+   :maxdepth: 2
+   :caption: Contents:
 
-    Reference/Classes
+   Reference/Classes
