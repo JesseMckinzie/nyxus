@@ -128,3 +128,28 @@ The result is
      4      13.428773  0.559532  0.000000  0.559532  12.021938  0.500914  0.008772  0.500914   9.938915  0.414121  ...  0.820175  0.945459  22.572913  0.940538  0.802632  0.940538  22.270382  0.927933  0.787281  0.927933
      5       6.535722  0.181548  0.000000  0.181548   1.833463  0.050930  0.000000  0.050930   2.083023  0.057862  ...  0.697917  0.819318  29.094328  0.808176  0.693452  0.808176  28.427727  0.789659  0.675595  0.789659
 
+The other way to utilize the Nested class is to not pass any aggregate features to the constructor. In this case, the `featurize` method with create a 
+pivot table where the rows are the ROI labels and the columns are grouped by the features. 
+
+.. code-block:: python 
+
+     nest = Nested(['sum', 'mean', 'min', ('nanmean', lambda x: np.nanmean(x))])
+
+     df = nest.find_relations(seg_path, 'p{r}_y{c}_r{z}_c1.ome.tif', 'p{r}_y{c}_r{z}_c0.ome.tif')
+
+     df = nest.featurize(df, features)
+     print(df.head())
+
+
+The result is
+
+.. code-block:: bash 
+
+               GABOR_0                                                                   ... GABOR_6                                             
+Child_Label      1.0       2.0       3.0       4.0       5.0  6.0  7.0  8.0  9.0  10.0  ...    55.0 56.0 58.0 59.0 60.0 61.0 62.0 64.0 65.0 66.0
+label                                                                                   ...                                                     
+1            0.666951       NaN       NaN       NaN       NaN  NaN  NaN  NaN  NaN  NaN  ...     NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN
+2                 NaN  0.445806       NaN       NaN       NaN  NaN  NaN  NaN  NaN  NaN  ...     NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN
+3                 NaN       NaN  0.198059       NaN       NaN  NaN  NaN  NaN  NaN  NaN  ...     NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN
+4                 NaN       NaN       NaN  0.559532       NaN  NaN  NaN  NaN  NaN  NaN  ...     NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN
+5                 NaN       NaN       NaN       NaN  0.181548  NaN  NaN  NaN  NaN  NaN  ...     NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN  NaN
