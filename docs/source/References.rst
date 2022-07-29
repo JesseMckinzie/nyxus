@@ -1,8 +1,8 @@
 Classes
 ===============
 
-.. toctre::
-   :maxdepth: 2
-   :caption: Contents:
+.. autosummary::
+   :toctree: stubs
 
-   Reference/Classes
+    nyxus.Nyxus
+    nyxus.Nested
