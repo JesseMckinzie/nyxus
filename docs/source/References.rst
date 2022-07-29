@@ -4,4 +4,4 @@ Classes
 .. autosummary::
    :toctree: stubs
 
-    nyxus.Nested
+    nyxus.Nyxus
