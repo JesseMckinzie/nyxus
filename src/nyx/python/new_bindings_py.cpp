@@ -14,7 +14,12 @@ namespace py = pybind11;
 using namespace Nyxus;
 
 // Defined in nested.cpp
-bool mine_segment_relations(bool output2python, const std::string& label_dir, const std::string& file_pattern, const std::string& channel_signature, const int parent_channel, const int child_channel, const std::string& outdir, const ChildFeatureAggregation& aggr, int verbosity_level);
+bool mine_segment_relations(bool output2python, 
+	const std::vector<std::string>& parent_files,
+	const std::vector<std::string>& child_files,
+	const std::string& outdir, 
+	const ChildFeatureAggregation& aggr, 
+	int verbosity_level);
 
 template <typename Sequence>
 inline py::array_t<typename Sequence::value_type> as_pyarray(Sequence &&seq)
@@ -102,7 +107,7 @@ py::tuple process_data(
 
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
 }
-
+/*
 py::tuple findrelations_imp(
     const std::string& label_dir, 
     const std::string& file_pattern, 
@@ -131,6 +136,44 @@ py::tuple findrelations_imp(
     if (! mineOK)
         throw std::runtime_error("Error occurred during dataset processing: mine_segment_relations() returned false");
 
+    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf())); // Column names
+    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf())); // String cells of first n columns
+    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));  // Numeric data
+    auto nRows = theResultsCache.get_num_rows();
+    pyStrData = pyStrData.reshape({ nRows, pyStrData.size() / nRows });
+    pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
+
+    return py::make_tuple(pyHeader, pyStrData, pyNumData);
+} 
+*/
+
+py::tuple findrelations_imp(
+    std::vector<std::string>& parent_files, 
+    std::vector<std::string>& child_files 
+    )
+{
+    
+    //if (! theEnvironment.check_file_pattern(file_pattern))
+    //    throw std::invalid_argument("Filepattern provided is not valid.");
+
+    // check channel numbers
+    //int n_parent_channel;
+    //if (sscanf(parent_channel.c_str(), "%d", &n_parent_channel) != 1)
+    //    throw std::runtime_error("Error parsing the parent channel number");
+
+    //int n_child_channel;
+    //if (sscanf(child_channel.c_str(), "%d", &n_child_channel) != 1)
+    //    throw std::runtime_error("Error parsing the child channel number");
+
+    theResultsCache.clear();
+
+    // Result -> headerBuf, stringColBuf, calcResultBuf
+    ChildFeatureAggregation aggr;
+    bool mineOK = mine_segment_relations (true, parent_files, child_files, ".", aggr, theEnvironment.get_verbosity_level());  // the 'outdir' parameter is not used if 'output2python' is true
+
+    if (! mineOK)
+        throw std::runtime_error("Error occurred during dataset processing: mine_segment_relations() returned false");
+    
     auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf())); // Column names
     auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf())); // String cells of first n columns
     auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));  // Numeric data
