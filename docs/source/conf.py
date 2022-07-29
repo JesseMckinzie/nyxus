@@ -41,14 +41,14 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx_autodoc_typehints',
     'sphinx.ext.autosummary',
-    'autodocsumm'
+    #'autodocsumm'
 ]
 
 install_requires = [
     'gcc>=8.0'
 ]
 
-autodoc_mock_imports = ["backend", "nyx_backend"]
+#autodoc_mock_imports = ["backend", "nyx_backend"]
 #autodoc_mock_imports = ["nyx_backend"]
 
 napoleon_use_param = True
