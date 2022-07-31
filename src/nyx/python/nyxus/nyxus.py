@@ -218,6 +218,12 @@ class Nested:
         # Labels should always be uint.
         if "label" in df.columns:
             df["label"] = df.label.astype(np.uint32)
+        
+        if "Child_Label" in df.columns:
+            df["Child_Label"] = df.Child_Label.astype(np.uint32)
+            
+        if "Parent_Label" in df.columns:
+                df["Parent_Label"] = df.Parent_Label.astype(np.uint32)
 
         return df
 
