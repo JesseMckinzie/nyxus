@@ -317,7 +317,7 @@ The `featurize` method takes in the parent-child mapping along with the features
 is provided to the constructor, this method will return a pivoted DataFrame where the rows are the ROI labels and the columns are grouped by the features.
 
 
-__Example__ Using aggregate functions
+__Example__: Using aggregate functions
 
 ``` python
 
@@ -364,7 +364,7 @@ and the aggregated DataFrame is
 
 ```
 
-__Example__ Without aggregate functions
+__Example__: Without aggregate functions
 
 ``` python
 
@@ -387,7 +387,7 @@ df2 = nest.featurize(df, features)
 
 the parent-child map remains the same but the `featurize` result becomes
 
-``` python
+``` bash
                      GABOR_0                                                                ...    
     Child_Label       1          2         3         4         5    6    7    8    9    10  ...    
     label                                                                                   ...
