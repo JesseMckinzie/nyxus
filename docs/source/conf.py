@@ -20,7 +20,7 @@ import httpolice
 import httpolice.inputs
 import httpolice.reports.html
 #sys.path.insert(0, os.path.abspath('../..'))
-sys.path.insert(0, os.path.abspath('../../src/nyx/python'))
+sys.path.insert(0, os.path.abspath('../../src/nyx/python/nyxus'))
 sys.setrecursionlimit(10000)
 
 
