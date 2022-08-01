@@ -46,7 +46,7 @@ install_requires = [
     'gcc>=8.0'
 ]
 
-autodoc_mock_imports = ["backend", "nyx_backend", "nyxus"]
+autodoc_mock_imports = ["backend", "nyx_backend"]
 
 
 napoleon_use_param = True
