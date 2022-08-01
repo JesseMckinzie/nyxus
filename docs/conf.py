@@ -19,11 +19,10 @@ import io
 import httpolice
 import httpolice.inputs
 import httpolice.reports.html
+sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../src/nyx/python/nyxus'))
-#sys.path.insert(0, str(Path(__file__).parent.parent.parent.absolute()))
 sys.setrecursionlimit(10000)
-#sys.path.insert(0, str(Path(__file__).parent.parent.parent.absolute()))
-#sys.setrecursionlimit(1500)
+
 
 
 # -- Project information -----------------------------------------------------
@@ -48,8 +47,8 @@ install_requires = [
     'gcc>=8.0'
 ]
 
-autodoc_mock_imports = ["backend"]
-autodoc_mock_imports = ["nyx_backend"]
+#autodoc_mock_imports = ["backend"]
+#autodoc_mock_imports = ["nyx_backend"]
 
 napoleon_use_param = True
 
