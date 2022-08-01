@@ -1,4 +1,4 @@
 .. autosummary::
     :toctree: stubs 
 
-    nyxus.Nyxus
+    Nyxus
