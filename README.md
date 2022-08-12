@@ -15,6 +15,8 @@ Nyxus is a feature-rich, highly optimized, Python/C++ application capable of ana
 
 Nyxus can be used via Python or command line and is available in containerized form for reproducible execution. Nyxus computes over 450 combined intensity, texture, and morphological features at the ROI or whole image level with more in development. Key features that make Nyxus unique among other image feature extraction applications is its ability to operate at any scale, its highly validated algorithms, and its modular nature that makes the addition of new features straightforward.
 
+The docs can be found at [Read the Docs](https://nyxus.readthedocs.io/en/latest/).
+
 ## Getting started 
 
 For use in python, the latest version of Nyxus can be installed via the [Pip package manager](https://pypi.org/project/pip):
