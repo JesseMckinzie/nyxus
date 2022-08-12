@@ -9,7 +9,10 @@
 #include "../src/nyx/environment.h"
 #include "../src/nyx/globals.h"
 
-
+/**
+ * @brief Test that the ImageMatrix has been properly initialized for each feature calculation.
+ * 
+ */
 void test_initialization() {
 
     int argc = 8;
@@ -70,6 +73,21 @@ void test_initialization() {
     };
 
     for(auto& feature: features) {
+        
+        // Expiciltly Reset global variables
+        theEnvironment = Environment();
+        theFeatureMgr = FeatureManager();
+
+        ImageLoader theImLoader = ImageLoader();
+
+        suniqueLabels.clear();
+        roiData.cler();
+        labelMutexes.clear();
+
+        theFeatureSet = FeatureSet();
+        theFeatureMgr = FeatureManager();
+
+        theResultsCache = ResultsCache();
 
         std::string feature_arg = "--features=" + feature;
 
