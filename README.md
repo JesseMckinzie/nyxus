@@ -1,6 +1,6 @@
 # Nyxus
 
-[![Build Status](https://img.shields.io/github/workflow/status/PolusAI/Nyxus/Build%20Wheels)](https://github.com/PolusAI/nyxus)
+[![Build Status](https://img.shields.io/github/workflow/status/PolusAI/Nyxus/Build%20Wheels)]
 [![Documentation Status](https://readthedocs.org/projects/nyxus/badge/?version=latest)](https://nyxus.readthedocs.io/en/latest/)
 [![PyPI](https://img.shields.io/pypi/v/nyxus.svg)](https://pypi.org/project/nyxus/)
 [![Downloads](https://img.shields.io/pypi/dm/nyxus)](https://pypi.org/project/nyxus/)
