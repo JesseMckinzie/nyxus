@@ -1,5 +1,9 @@
 # Nyxus
 
+|Latest Documentation Status| |Stable Documentation Status| |GitHub Discussions| |Build status|
+
+|PyPI package| |Python Versions|
+
 A scalable library for calculating features from intensity-label image data
 
 ## Overview
