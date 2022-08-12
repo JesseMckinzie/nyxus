@@ -1,8 +1,8 @@
 # Nyxus
 
-|Latest Documentation Status| |Stable Documentation Status| |GitHub Discussions| |Build status|
-
-|PyPI package| |Python Versions|
+[![Documentation Status](https://readthedocs.org/projects/nyxus/badge/?version=latest)](https://nyxus.readthedocs.io/en/latest/)
+[![PyPI](https://img.shields.io/pypi/v/nyxus.svg)](https://img.shields.io/pypi/v/nyxus.svg)
+[![Python Versions]](https://img.shields.io/pypi/pyversions/nyxus.svg)(https://pypi.org/project/nyxus/0.2.2/)
 
 A scalable library for calculating features from intensity-label image data
 
@@ -309,10 +309,3 @@ chiCnl = '0'
 rels = nyx.findrelations (segPath, fPat, cnlSig, parCnl, chiCnl)
 ```
 
-
-.. |Latest Documentation Status| image:: https://readthedocs.org/projects/nyxus/badge/?version=latest
-   :target: https://nyxus.readthedocs.io/en/latest/
-.. |PyPI package| image:: https://img.shields.io/pypi/v/nyxus.svg
-   :target: https://pypi.org/project/nyxus/0.2.2/
-.. |Python Versions| image:: https://img.shields.io/pypi/pyversions/nyxus.svg
-   :target: https://pypi.org/project/nyxus/0.2.2/
