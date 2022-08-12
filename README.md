@@ -308,3 +308,11 @@ parCnl = '1'
 chiCnl = '0'
 rels = nyx.findrelations (segPath, fPat, cnlSig, parCnl, chiCnl)
 ```
+
+
+.. |Latest Documentation Status| image:: https://readthedocs.org/projects/nyxus/badge/?version=latest
+   :target: https://nyxus.readthedocs.io/en/latest/
+.. |PyPI package| image:: https://img.shields.io/pypi/v/nyxus.svg
+   :target: https://pypi.org/project/nyxus/0.2.2/
+.. |Python Versions| image:: https://img.shields.io/pypi/pyversions/nyxus.svg
+   :target: https://pypi.org/project/nyxus/0.2.2/
