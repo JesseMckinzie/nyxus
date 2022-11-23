@@ -3,8 +3,10 @@
 #include "../src/nyx/environment.h"
 #include "../src/nyx/globals.h"
 #include "test_pixel_intensity_features.h"
-#include "test_ibsi.h"
 #include "test_initialization.h"
+#include "test_ibsi_intensity.h"
+#include "test_ibsi_glcm.h"
+#include "test_ibsi_glrlm.h"
 
 TEST(TEST_NYXUS, TEST_GABOR){
     test_gabor();
@@ -112,9 +114,135 @@ TEST(TEST_NYXUS, TEST_PIXEL_INTENSITY_UNIFORMITY_PIU)
 //==== IBSI tests
 //
 
-TEST(TEST_NYXUS, TEST_IBSI_INTENSITY1) 
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_MEAN) 
 {
 	ASSERT_NO_THROW(test_ibsi_mean_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_SKEWNESS) 
+{
+	ASSERT_NO_THROW(test_ibsi_skewness_intensity());
+}
+
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_KURTOSIS) 
+{
+	ASSERT_NO_THROW(test_ibsi_kurtosis_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_MEDIAN) 
+{
+	ASSERT_NO_THROW(test_ibsi_median_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_MINIMUM) 
+{
+	ASSERT_NO_THROW(test_ibsi_minimum_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_P10) 
+{
+	ASSERT_NO_THROW(test_ibsi_p10_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_P90) 
+{
+	ASSERT_NO_THROW(test_ibsi_p90_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_INTERQUARTILE) 
+{
+	ASSERT_NO_THROW(test_ibsi_interquartile_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_RANGE) 
+{
+	ASSERT_NO_THROW(test_ibsi_range_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_MEAN_ABSOLUTE_DEVIATION) 
+{
+	ASSERT_NO_THROW(test_ibsi_mean_absolute_deviation_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_ROBUST_MEAN_ABSOLUTE_DEVIATION) 
+{
+	ASSERT_NO_THROW(test_ibsi_robust_mean_absolute_deviation_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_ENERGY) 
+{
+	ASSERT_NO_THROW(test_ibsi_energy_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_INTENSITY_ROOT_MEAN_SQUARED) 
+{
+	ASSERT_NO_THROW(test_ibsi_root_mean_squared_intensity());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_AVERAGE) 
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_difference_average());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_VARIANCE)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_difference_variance());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_ENTROPY)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_difference_entropy());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_SUM_AVERAGE) 
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_sum_average());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_SUM_VARIANCE)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_sum_variance());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_SUM_ENTROPY)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_sum_entropy());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_ANGULAR_2D_MOMENT)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_angular_2d_moment());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_CONTRAST)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_contrast());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_INVERSED_DIFFERENCE_MOMENT)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_inversed_difference_moment());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_CORRELATION)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_correlation());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_INFOMEAS1)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_infomeas1());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLCM_INFOMEAS2)
+{
+	ASSERT_NO_THROW(test_ibsi_glcm_infomeas2());
+}
+
+TEST(TEST_NYXUS, TEST_IBSI_GLRLM_SRE)
+{
+	ASSERT_NO_THROW(test_ibsi_glrlm_sre());
 }
 
 int main(int argc, char **argv) 

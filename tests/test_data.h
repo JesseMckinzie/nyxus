@@ -162,3 +162,17 @@ const static NyxusPixel ibsi_phantom_z4_mask[] = {
 {/*x*/1, /*y*/4, 1}, {/*x*/2, /*y*/4, 1}, {/*x*/3, /*y*/4, 0}, {/*x*/4, /*y*/4, 0},
 {/*x*/1, /*y*/5, 1}, {/*x*/2, /*y*/5, 1}, {/*x*/3, /*y*/5, 0}, {/*x*/4, /*y*/5, 0},
 };
+
+const static NyxusPixel ibsi_phantom_intensity[4][20] = {
+	{*ibsi_phantom_z1_intensity},
+	{*ibsi_phantom_z2_intensity},
+	{*ibsi_phantom_z3_intensity},
+	{*ibsi_phantom_z4_intensity}
+};
+
+const static NyxusPixel ibsi_phantom_mask[4][20] = {
+	{*ibsi_phantom_z1_mask},
+	{*ibsi_phantom_z2_mask},
+	{*ibsi_phantom_z3_mask},
+	{*ibsi_phantom_z4_mask}
+};
