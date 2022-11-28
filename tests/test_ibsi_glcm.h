@@ -44,7 +44,101 @@ static std::unordered_map<std::string, float> IBSI_glcm_values {
 
 void test_ibsi_glcm_difference_average()
 {
+    double total = 0;
+    LR roidata;
+    // Calculate features
+    GLCMFeature f;
+    
+    // image 1
 
+    load_masked_test_roi_data (roidata, ibsi_phantom_z1_intensity, ibsi_phantom_z1_mask,  sizeof(ibsi_phantom_z1_mask) / sizeof(NyxusPixel));
+    ASSERT_NO_THROW(f.calculate(roidata));
+
+    // Initialize per-ROI feature value buffer with zeros
+    roidata.initialize_fvals();
+
+    // Retrieve values of the features implemented by class 'PixelIntensityFeatures' into ROI's feature buffer
+    f.save_value(roidata.fvals);
+ 
+
+    std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
+    std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
+    std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
+    std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
+
+    total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
+
+    // image 2
+    // Calculate features
+    load_masked_test_roi_data (roidata, ibsi_phantom_z2_intensity, ibsi_phantom_z2_mask,  sizeof(ibsi_phantom_z2_intensity) / sizeof(NyxusPixel));
+
+    ASSERT_NO_THROW(f.calculate(roidata));
+
+    // Initialize per-ROI feature value buffer with zeros
+    roidata.initialize_fvals();
+
+    // Retrieve values of the features implemented by class 'PixelIntensityFeatures' into ROI's feature buffer
+    f.save_value(roidata.fvals);
+
+    total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
+
+    std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
+    std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
+    std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
+    std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
+
+    // image 3
+    // Calculate features
+
+
+    load_masked_test_roi_data (roidata, ibsi_phantom_z3_intensity, ibsi_phantom_z3_mask,  sizeof(ibsi_phantom_z3_intensity) / sizeof(NyxusPixel));
+
+    ASSERT_NO_THROW(f.calculate(roidata));
+
+    // Initialize per-ROI feature value buffer with zeros
+    roidata.initialize_fvals();
+
+    // Retrieve values of the features implemented by class 'PixelIntensityFeatures' into ROI's feature buffer
+    f.save_value(roidata.fvals);
+
+    total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
+
+    std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
+    std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
+    std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
+    std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
+
+    // image 4
+    // Calculate features
+
+    load_masked_test_roi_data (roidata, ibsi_phantom_z4_intensity, ibsi_phantom_z4_mask,  sizeof(ibsi_phantom_z4_intensity) / sizeof(NyxusPixel));
+
+    ASSERT_NO_THROW(f.calculate(roidata));
+
+    // Initialize per-ROI feature value buffer with zeros
+    roidata.initialize_fvals();
+
+    // Retrieve values of the features implemented by class 'PixelIntensityFeatures' into ROI's feature buffer
+    f.save_value(roidata.fvals);
+
+
+    // Check the feature values vs ground truth
+    total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
+    std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
+    std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
+    std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
+    std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
+
+    std::cerr << "averaged glcm at [0]: " << total / 4 << std::endl;
+
+    ASSERT_TRUE(agrees_gt(total / 4, IBSI_glcm_values["GLCM_DIFFERENCEAVERAGE"], 100.));
+
+}
+
+/*
+void test_ibsi_glcm_difference_average()
+{
+    double total = 0;
     LR roidata;
     // Calculate features
     GLCMFeature f;
@@ -62,13 +156,17 @@ void test_ibsi_glcm_difference_average()
 
     // roidata.fvals[GLCM_DIFFERENCEAVERAGE][0]
 
-    std::cerr << "--------- glcm size: -----------: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE].size() << std::endl;
+    std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
+    std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
+    std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
+    std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
 
-    std::cerr << "-- glcm difference average 1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
-    std::cerr << "-- glcm difference average 2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
-    std::cerr << "-- glcm difference average 3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
-    std::cerr << "-- glcm difference average 4: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
 
+    std::cerr << "glcm difference average 1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
+    total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
+    LR roidata;
+    // Calculate features
+    GLCMFeature f;
     // image 2
     // Calculate features
     load_masked_test_roi_data (roidata, ibsi_phantom_z2_intensity, ibsi_phantom_z2_mask,  sizeof(ibsi_phantom_z2_intensity) / sizeof(NyxusPixel));
@@ -81,9 +179,13 @@ void test_ibsi_glcm_difference_average()
     // Retrieve values of the features implemented by class 'PixelIntensityFeatures' into ROI's feature buffer
     f.save_value(roidata.fvals);
     std::cerr << "glcm difference average: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
-
+    total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
     // image 3
     // Calculate features
+
+    LR roidata;
+    // Calculate features
+    GLCMFeature f;
     load_masked_test_roi_data (roidata, ibsi_phantom_z3_intensity, ibsi_phantom_z3_mask,  sizeof(ibsi_phantom_z3_intensity) / sizeof(NyxusPixel));
 
     ASSERT_NO_THROW(f.calculate(roidata));
@@ -95,8 +197,12 @@ void test_ibsi_glcm_difference_average()
     f.save_value(roidata.fvals);
 
     std::cerr << "glcm difference average: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
+    total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
     // image 4
     // Calculate features
+    LR roidata;
+    // Calculate features
+    GLCMFeature f;
     load_masked_test_roi_data (roidata, ibsi_phantom_z4_intensity, ibsi_phantom_z4_mask,  sizeof(ibsi_phantom_z4_intensity) / sizeof(NyxusPixel));
 
     ASSERT_NO_THROW(f.calculate(roidata));
@@ -109,11 +215,14 @@ void test_ibsi_glcm_difference_average()
 
 
     std::cerr << "glcm difference average: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
+    std::cerr << "averaged glcm: " << total / 4 << std::endl;
     // Check the feature values vs ground truth
-
-    ASSERT_TRUE(agrees_gt(roidata.fvals[GLCM_DIFFERENCEAVERAGE][0], IBSI_glcm_values["GLCM_DIFFERENCEAVERAGE"], 100.));
+    total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
+    ASSERT_TRUE(agrees_gt(total / 4, IBSI_glcm_values["GLCM_DIFFERENCEAVERAGE"], 100.));
 
 }
+*/
+
 
 void test_ibsi_glcm_difference_variance()
 {
