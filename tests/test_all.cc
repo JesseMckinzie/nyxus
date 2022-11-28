@@ -185,6 +185,7 @@ TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_AVERAGE)
 	ASSERT_NO_THROW(test_ibsi_glcm_difference_average());
 }
 
+/*
 TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_VARIANCE)
 {
 	ASSERT_NO_THROW(test_ibsi_glcm_difference_variance());
@@ -194,7 +195,7 @@ TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_ENTROPY)
 {
 	ASSERT_NO_THROW(test_ibsi_glcm_difference_entropy());
 }
-/*
+
 TEST(TEST_NYXUS, TEST_IBSI_GLCM_SUM_AVERAGE) 
 {
 	ASSERT_NO_THROW(test_ibsi_glcm_sum_average());
@@ -239,12 +240,12 @@ TEST(TEST_NYXUS, TEST_IBSI_GLCM_INFOMEAS2)
 {
 	ASSERT_NO_THROW(test_ibsi_glcm_infomeas2());
 }
-*/
+
 TEST(TEST_NYXUS, TEST_IBSI_GLRLM_SRE)
 {
 	ASSERT_NO_THROW(test_ibsi_glrlm_sre());
 }
-
+*/
 
 int main(int argc, char **argv) 
 {

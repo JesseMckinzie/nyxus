@@ -61,10 +61,12 @@ void test_ibsi_glcm_difference_average()
     f.save_value(roidata.fvals);
  
 
+    std::cerr << "image 1: " << std::endl;
     std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
     std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
     std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
     std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
+    std::cerr << std::endl;
 
     total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
 
@@ -82,11 +84,12 @@ void test_ibsi_glcm_difference_average()
 
     total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
 
+    std::cerr << "image 2: " << std::endl;
     std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
     std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
     std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
     std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
-
+    std::cerr << std::endl;
     // image 3
     // Calculate features
 
@@ -103,10 +106,12 @@ void test_ibsi_glcm_difference_average()
 
     total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
 
+    std::cerr << "image 3: " << std::endl;
     std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
     std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
     std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
     std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
+    std::cerr << std::endl;
 
     // image 4
     // Calculate features
@@ -124,10 +129,13 @@ void test_ibsi_glcm_difference_average()
 
     // Check the feature values vs ground truth
     total += roidata.fvals[GLCM_DIFFERENCEAVERAGE][0];
+
+    std::cerr << "image 4: " << std::endl;
     std::cerr << "0: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][0] << std::endl;
     std::cerr << "1: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][1] << std::endl;
     std::cerr << "2: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][2] << std::endl;
     std::cerr << "3: " << roidata.fvals[GLCM_DIFFERENCEAVERAGE][3] << std::endl;
+    std::cerr << std::endl;
 
     std::cerr << "averaged glcm at [0]: " << total / 4 << std::endl;
 
