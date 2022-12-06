@@ -7,6 +7,7 @@
 #include "test_ibsi_intensity.h"
 #include "test_ibsi_glcm.h"
 #include "test_ibsi_glrlm.h"
+#include "test_ibsi_ngtdm.h"
 
 TEST(TEST_NYXUS, TEST_GABOR){
     test_gabor();
@@ -185,12 +186,12 @@ TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_AVERAGE)
 	ASSERT_NO_THROW(test_ibsi_glcm_difference_average());
 }
 
-/*
+
 TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_VARIANCE)
 {
 	ASSERT_NO_THROW(test_ibsi_glcm_difference_variance());
 }
-
+/*
 TEST(TEST_NYXUS, TEST_IBSI_GLCM_DIFFERENCE_ENTROPY)
 {
 	ASSERT_NO_THROW(test_ibsi_glcm_difference_entropy());
@@ -244,6 +245,12 @@ TEST(TEST_NYXUS, TEST_IBSI_GLCM_INFOMEAS2)
 TEST(TEST_NYXUS, TEST_IBSI_GLRLM_SRE)
 {
 	ASSERT_NO_THROW(test_ibsi_glrlm_sre());
+}
+
+
+TEST(TEST_NYXUS, TEST_IBSI_NGTDM) 
+{
+	ASSERT_NO_THROW(test_ibsi_ngtdm_coarseness());
 }
 */
 
