@@ -1,11 +1,13 @@
 #include "glcm.h"
 #include "../helpers/helpers.h"
 #include "../environment.h"
+#include <set>
+#include <algorithm>
 
 #define EPSILON 0.000000001
 
 int GLCMFeature::offset = 1;
-int GLCMFeature::n_levels = 8;
+int GLCMFeature::n_levels;
 std::vector<int> GLCMFeature::angles = { 0, 45, 90, 135 };
 
 GLCMFeature::GLCMFeature() : FeatureMethod("GLCMFeature")
@@ -99,10 +101,22 @@ void GLCMFeature::parallel_process_1_batch(size_t start, size_t end, std::vector
 	}
 }
 
+
 void GLCMFeature::Extract_Texture_Features2 (int angle, const ImageMatrix & grays, PixIntens min_val, PixIntens max_val)
 {
 	int nrows = grays.height;
 	int ncols = grays.width;
+
+	auto v = grays.ReadablePixels();
+	//for(auto& p: v){
+	//	std::cerr << p << " ";
+	//}
+	//std::cerr << std::endl;
+	//n_levels = std::set<double>( v.begin(), v.end() ).size();
+
+	n_levels = *std::max_element(std::begin(v), std::end(v));
+
+	std::cerr << "n_levels: " << n_levels << std::endl;
 
 	// Allocate Px and Py vectors
 	std::vector<double> Px (n_levels * 2), 
@@ -256,12 +270,43 @@ void GLCMFeature::calculatePxpmy()
 	Pxpy.resize (2 * n_levels - 1, 0.0);
 	Pxmy.resize (n_levels, 0.0);
 
-	for (int x = 0; x < n_levels; x++) 
-		for (int y = 0; y < n_levels; y++) 
-		{
+	
+	for (int x = 0; x < n_levels; x++) {
+		for (int y = 0; y < n_levels; y++) { 
 			Pxpy[x + y] += P_matrix.xy(x,y);
 			Pxmy[std::abs(x - y)] += P_matrix.xy(x,y); 
 		}
+	}
+	
+	
+	/* alternate method 
+	for (int k = 0; k < n_levels; k++) {
+		for (int i = 1; i <= n_levels; i++) {
+			for (int j = 1; j <= n_levels; j++) {
+				if (k == abs(i - j)) {
+					Pxmy[k] += P_matrix.xy(i - 1, j - 1);
+				}
+			}
+		}
+	}
+	*/ 
+	
+	//normalization 
+	
+	double sum = 0;
+	for (auto& p : Pxmy) {
+		sum += p;
+	}
+	
+	for (auto& p : Pxmy) {
+		p /= sum;
+	}
+	
+	//std::cerr << "Pxmy: ";
+	//for (auto& p : Pxmy) {
+	//	std::cerr << p << " ";
+	//}
+	//std::cerr << std::endl;
 }
 
 /* Angular Second Moment
@@ -509,12 +554,17 @@ double GLCMFeature::f_dentropy(const SimpleMatrix<double>& P, int Ng, std::vecto
 
 double GLCMFeature::f_difference_avg (const SimpleMatrix<double>& P_matrix, int tone_count, std::vector<double>& px)
 {
-	double diffAvg = 0.0;
+	std::vector<double> diffAvg(Pxmy.size(), 0);
 
 	for (int x = 0; x < Pxmy.size(); x++)
-		diffAvg += x * Pxmy[x];
+		for (int k = 0; k < Pxmy.size(); k++)
+			diffAvg[x] += x * Pxmy[k];
 
-	return diffAvg;
+	double sum = 0;
+	for (int x = 0; x < Pxmy.size(); x++)
+		sum += diffAvg[x];
+	
+	return sum/Pxmy.size();
 }
 
 void GLCMFeature::calcH (const SimpleMatrix<double>& P, int Ng, std::vector<double>& px, std::vector<double>& py)
