@@ -298,7 +298,7 @@ void GLSZMFeature::calculate(LR& r)
 	int count = 0;
 
 	for (const auto& px: M.ReadablePixels()) {
-		if(px !=0) ++count;
+		if(px != 0) ++count;
 	}
 
 	//==== Fill the SZ-matrix
@@ -338,6 +338,8 @@ void GLSZMFeature::calculate(LR& r)
 			sum_p += P.matlab(i, j);
 		}
 	}
+
+	std::cerr << "sum_p value: " << sum_p << std::endl;
 }
 
 void GLSZMFeature::save_value (std::vector<std::vector<double>>& fvals)
