@@ -14,22 +14,22 @@
 
 // dig. phantom values for intensity based features
 static std::unordered_map<std::string, float> glszm_values {
-    {"GLSZM_SAE", 0.501157},
-    {"GLSZM_LAE", 5.95833},
-    {"GLSZM_LGLZE", 0.467303},
-    {"GLSZM_HGLZE", 4.89583},
-    {"GLSZM_SALGLE", 0.168113},
-    {"GLSZM_SAHGLE", 3.11227},
-    {"GLSZM_LALGLE", 4.34925},
-    {"GLSZM_LAHGLE", 16.1042},
-    {"GLSZM_GLN", 1.45833},
-    {"GLSZM_GLNN", 0.385417},
+    {"GLSZM_SAE", 0.501},
+    {"GLSZM_LAE", 5.96},
+    {"GLSZM_LGLZE", 0.467},
+    {"GLSZM_HGLZE", 4.90},
+    {"GLSZM_SALGLE", 0.168},
+    {"GLSZM_SAHGLE", 3.11},
+    {"GLSZM_LALGLE", 4.35},
+    {"GLSZM_LAHGLE", 16.1},
+    {"GLSZM_GLN", 1.46},
+    {"GLSZM_GLNN", 0.385},
     {"GLSZM_SZN", 2},
-    {"GLSZM_SZNN", 0.486111},
-    {"GLSZM_ZP", 0.572348},
-    {"GLSZM_GLV", 0.623264},
-    {"GLSZM_ZV", 0.895833},
-    {"GLSZM_ZE", 1.76906}
+    {"GLSZM_SZNN", 0.486},
+    {"GLSZM_ZP", 0.572},
+    {"GLSZM_GLV", 0.623},
+    {"GLSZM_ZV", 0.896},
+    {"GLSZM_ZE", 1.77}
 };
 
 void test_glszm_feature(const AvailableFeatures& feature, const std::string& feature_name) 
