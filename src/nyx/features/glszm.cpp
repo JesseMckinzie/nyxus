@@ -307,6 +307,7 @@ void GLSZMFeature::calculate(LR& r)
 	auto width = M.width;
 
 	Ng = *std::max_element(std::begin(r.aux_image_matrix.ReadablePixels()), std::end(r.aux_image_matrix.ReadablePixels()));
+	std::cerr << "Ng: " << Ng << std::endl; 
 	Ns = height*width;
 	Nz = (decltype(Nz)) Z.size();
 	Np = count;	
