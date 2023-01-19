@@ -332,6 +332,14 @@ void GLSZMFeature::calculate(LR& r)
 		k++;
 	}
 
+	for (int i = 1; i <= Ng; ++i) {
+		for (int j = 1; j <= Ns; ++j) {
+			std::cerr << P.matlab(i,j) << " ";
+		}
+		std::cerr << std::endl;
+	}
+	std::cerr << std::endl;
+
 	sum_p = 0;
 	for (int i = 1; i <= Ng; ++i) {
 		for (int j = 1; j <= Ns; ++j) {
