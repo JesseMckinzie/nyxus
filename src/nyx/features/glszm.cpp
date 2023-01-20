@@ -213,7 +213,7 @@ void GLSZMFeature::calculate(LR& r)
 	}
 
 	// Number of zones
-	const unsigned int VISITED = 0;
+	const int VISITED = -1;
 	for (int row=0; row < M.height; row++)
 		for (int col = 0; col < M.width; col++)
 		{
