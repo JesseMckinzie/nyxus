@@ -208,7 +208,6 @@ void GLSZMFeature::calculate(LR& r)
 
 	// count non-zero pixels
 	int count = 0;
-
 	for (const auto& px: M.ReadablePixels()) {
 		if(px != 0) ++count;
 	}
@@ -320,6 +319,7 @@ void GLSZMFeature::calculate(LR& r)
 	
 	// --iterate zones and fill the matrix
 	int i = 0;
+	std::cerr << "Z size: " << Z.size() << std::endl;
 	for (auto& z : Z)
 	{
 		// row
