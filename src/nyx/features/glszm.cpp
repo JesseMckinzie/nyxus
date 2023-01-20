@@ -206,8 +206,15 @@ void GLSZMFeature::calculate(LR& r)
 			D[i] = Nyxus::to_grayscale (D[i], r.aux_min, piRange, nGrays);
 	}
 
+	// count non-zero pixels
+	int count = 0;
+
+	for (const auto& px: M.ReadablePixels()) {
+		if(px != 0) ++count;
+	}
+
 	// Number of zones
-	const int VISITED = -1;
+	const unsigned int VISITED = 0;
 	for (int row=0; row < M.height; row++)
 		for (int col = 0; col < M.width; col++)
 		{
@@ -293,13 +300,6 @@ void GLSZMFeature::calculate(LR& r)
 			ACluster clu = {pi, zoneArea};
 			Z.push_back (clu);
 		}
-
-	// count non-zero pixels
-	int count = 0;
-
-	for (const auto& px: M.ReadablePixels()) {
-		if(px != 0) ++count;
-	}
 
 	//==== Fill the SZ-matrix
 
