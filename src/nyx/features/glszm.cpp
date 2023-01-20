@@ -331,7 +331,7 @@ void GLSZMFeature::calculate(LR& r)
 		// col
 		int col = z.second - 1;	// 0-based => -1
 		auto & k = P.xy(col, row);
-		k++;
+		++k;
 	}
 
 	sum_p = 0;
