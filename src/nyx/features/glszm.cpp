@@ -208,12 +208,12 @@ void GLSZMFeature::calculate(LR& r)
 
 	// Number of zones
 	const int VISITED = -1;
-	for (int row=0; row<M.height; row++)
+	for (int row=0; row < M.height; row++)
 		for (int col = 0; col < M.width; col++)
 		{
 			// Find a non-blank pixel
 			auto pi = D.yx(row, col);
-			if (pi == 0 || int(pi)==VISITED)
+			if (pi == 0 || pi==VISITED)
 				continue;
 
 			// Found a gray pixel. Find same-intensity neighbourhood of it.
@@ -325,7 +325,9 @@ void GLSZMFeature::calculate(LR& r)
 		// row
 		auto iter = std::find(I.begin(), I.end(), z.first);
 		int row = (Environment::ibsi_compliance) ?
-			z.first-1 : int (iter - I.begin());
+			z.first-1 : iter - I.begin();
+
+
 		// col
 		int col = z.second - 1;	// 0-based => -1
 		auto & k = P.xy(col, row);
