@@ -9,6 +9,8 @@
 #include "../dirs_and_files.h"  
 #include "../globals.h"
 #include "../nested_feature_aggregation.h"
+#include "pybind_vector.h"
+
 
 namespace py = pybind11;
 using namespace Nyxus;
@@ -192,9 +194,21 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
 }
 
     py::tuple featurize_memory_imp (
-    const std::vector<std::vector<int>> &intensity_image,
-    const std::vector<std::vector<int>> &labels_image)
+    const py::array_t<int> &intensity_image,
+    const py::array_t<int> &labels_image)
 {
+
+    std::cout << "In featueize memory" << std::endl;
+
+    for(const auto& vec: intensity_image) {
+        for (const auto& v: vec){
+            std::cout << v << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+
+
     theEnvironment.intensity_dir = "";
     theEnvironment.labels_dir = "";
 
@@ -202,11 +216,14 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
 
     theResultsCache.clear();
 
+    pybind_vector intens = pybind_vector(intensity_image);
+    pybind_vector labels = pybind_vector(labels_image); 
+
     // Process the image sdata
     int min_online_roi_size = 0;
     int errorCode = processDatasetInMemory(
-		intensity_image,
-		labels_image,
+		intens,
+		labels,
 		theEnvironment.n_reduce_threads,
         min_online_roi_size,
         false, // 'true' to save to csv

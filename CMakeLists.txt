@@ -166,6 +166,10 @@ if(BUILD_LIB)
 		src/nyx/python/nested_roi_py.cpp
 		src/nyx/nested_roi.cpp
 		src/nyx/image_loader1x.cpp
+		src/nyx/python/pybind_vector.cpp
+		src/nyx/scan_memory.cpp
+		src/nyx/phase1.cpp
+		src/nyx/phase2.cpp
 	)
 endif()
 

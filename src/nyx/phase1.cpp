@@ -5,6 +5,7 @@
 #include <array>
 #ifdef WITH_PYTHON_H
 #include <pybind11/pybind11.h>
+#include "python/pybind_vector.h"	
 #endif
 #include "environment.h"
 #include "globals.h"
@@ -87,16 +88,16 @@ namespace Nyxus
 		return true;
 	}
 
-
-	bool gatherRoisMetricsInMemory (const std::vector<std::vector<int>>& intens_img, const std::vector<std::vector<int>>& label_img)
+#ifdef WITH_PYTHON_H
+	bool gatherRoisMetricsInMemory (const pybind_vector& intens_img, const pybind_vector& label_img)
 	{
 
-		for (unsigned int row = 0; row < label_img.size(); row++) {
-			for (unsigned int col = 0; col < label_img[0].size(); col++)
+		for (unsigned int row = 0; row < label_img.width; row++) {
+			for (unsigned int col = 0; col < label_img.height; col++)
 			{
 
 				// Skip non-mask pixels
-				auto label = label_img[row][col];
+				auto label = label_img.xy(row, col);
 				if (!label)
 					continue;
 
@@ -108,17 +109,17 @@ namespace Nyxus
 					label = 1;
 				
 				// Update pixel's ROI metrics
-				feed_pixel_2_metrics (x, y, intens_img[row][col], label, 100); // Updates 'uniqueLabels' and 'roiData'
+				feed_pixel_2_metrics (x, y, intens_img.xy(row,col), label, 100); // Updates 'uniqueLabels' and 'roiData'
 			}
 		
 
-#ifdef WITH_PYTHON_H
-				if (PyErr_CheckSignals() != 0)
-					throw pybind11::error_already_set();
-#endif
+
+			if (PyErr_CheckSignals() != 0)
+				throw pybind11::error_already_set();
+
 		}
 
 		return true;
 	}
-
+#endif
 }

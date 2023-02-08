@@ -22,6 +22,7 @@
 #include "environment.h"
 #include "globals.h"
 #include "helpers/timing.h"
+#include "python/pybind_vector.h"
 
 // Sanity
 #ifdef _WIN32
@@ -30,7 +31,7 @@
 
 namespace Nyxus
 {
-	bool processIntSegImagePairInMemory (const std::vector<std::vector<int>>& intens, const std::vector<std::vector<int>>& label)
+	bool processIntSegImagePairInMemory (const pybind_vector& intens, const pybind_vector& label)
 	{
 		std::vector<int> trivRoiLabels, nontrivRoiLabels;
 
@@ -82,76 +83,77 @@ namespace Nyxus
 	}
 
 	int processDatasetInMemory(
-		const std::vector<std::vector<int>>& intens,
-		const std::vector<std::vector<int>>& label,
+		const pybind_vector& intens,
+		const pybind_vector& label,
 		int numReduceThreads,
 		int min_online_roi_size,
 		bool save2csv,
 		const std::string& csvOutputDir)
 	{
 		std::cout << "Processing dataset in memory---------------------------" << std::endl;
+		std::cout << "Processing dataset in memory---------------------------" << std::endl;
 		bool ok = true;
-
-		for (int i = 0; i < intens.size(); i++)
+		std::cout << "Processing dataset in memory123123123---------------------------" << std::endl;
+		for (int i = 0; i < 1; i++)
 		{
-            for (int j = 0; j < intens[i].size(); j++) {
-                #ifdef CHECKTIMING
-                Stopwatch::reset();
-                #endif
+           
+			#ifdef CHECKTIMING
+			Stopwatch::reset();
+			#endif
+			std::cout << "Processing dataset in memory2---------------------------" << std::endl;
+			// Clear ROI label list, ROI data, etc.
+			clear_feature_buffers();
 
-                // Clear ROI label list, ROI data, etc.
-                clear_feature_buffers();
+			// Cache the file names to be picked up by labels to know their file origin
+			theSegFname = "Segmentation"; 
+			theIntFname = "Intensity"; 
+			std::cout << "Processing dataset in memory3---------------------------" << std::endl;
 
-                auto& ifp = intens,
-                    & lfp = label;
+			
+			ok = processIntSegImagePairInMemory (intens, label);		// Phased processing
+			std::cout << "Processing dataset in memory4---------------------------" << std::endl;
+			if (ok == false)	
+			{
+				std::cout << "processIntSegImagePair() returned an error code while processing file pair." << std::endl;
+				return 1;
+			}
 
-                // Cache the file names to be picked up by labels to know their file origin
-                theSegFname = "Segmentation"; 
-                theIntFname = "Intensity"; 
+			// Save the result for this intensity-label file pair
+			if (save2csv)
+				ok = save_features_2_csv ("intensity", "label", csvOutputDir);
+			else
+				ok = save_features_2_buffer(theResultsCache);
+			if (ok == false)
+			{
+				std::cout << "save_features_2_csv() returned an error code" << std::endl;
+				return 2;
+			}
 
-                ok = processIntSegImagePairInMemory (intens, label);		// Phased processing
+			theImLoader.close();
 
-                if (ok == false)
-                {
-                    std::cout << "processIntSegImagePair() returned an error code while processing file pair " << ifp << " and " << lfp << std::endl;
-                    return 1;
-                }
+			#ifdef WITH_PYTHON_H
+			// Allow heyboard interrupt.
+			if (PyErr_CheckSignals() != 0)
+						throw pybind11::error_already_set();
+			#endif
 
-                // Save the result for this intensity-label file pair
-                if (save2csv)
-                    ok = save_features_2_csv ("intensity", "label", csvOutputDir);
-                else
-                    ok = save_features_2_buffer(theResultsCache);
-                if (ok == false)
-                {
-                    std::cout << "save_features_2_csv() returned an error code" << std::endl;
-                    return 2;
-                }
-
-                theImLoader.close();
-
-                #ifdef WITH_PYTHON_H
-                // Allow heyboard interrupt.
-                if (PyErr_CheckSignals() != 0)
-                            throw pybind11::error_already_set();
-                #endif
-
-                #ifdef CHECKTIMING
-                // Detailed timing - on the screen
-                VERBOSLVL1(Stopwatch::print_stats();)
-                    
-                // Details - also to a file
-                VERBOSLVL3(
-                    fs::path p(theSegFname);
-                    Stopwatch::save_stats(theEnvironment.output_dir + "/" + p.stem().string() + "_nyxustiming.csv");
-                );
-                #endif
-            }
+			#ifdef CHECKTIMING
+			// Detailed timing - on the screen
+			VERBOSLVL1(Stopwatch::print_stats();)
+				
+			// Details - also to a file
+			VERBOSLVL3(
+				fs::path p(theSegFname);
+				Stopwatch::save_stats(theEnvironment.output_dir + "/" + p.stem().string() + "_nyxustiming.csv");
+			);
+			#endif
+            
         }
 
 		return 0; // success
 	}
 
+	/*
 	void dump_roi_metrics(const std::string & label_fpath)
 	{
 		fs::path pseg (label_fpath);
@@ -189,6 +191,7 @@ namespace Nyxus
 		f.flush();
 		std::cout << "... done\n";
 	}
+	*/
 
 } 
 

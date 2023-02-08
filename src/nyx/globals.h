@@ -13,6 +13,10 @@
 #include "image_loader.h"
 #include "results_cache.h"
 #include "roi_cache.h"
+#ifdef WITH_PYTHON_H
+#include "python/pybind_vector.h"
+#endif
+
 
 namespace Nyxus
 {
@@ -27,16 +31,19 @@ namespace Nyxus
 	bool processNontrivialRois (const std::vector<int>& nontrivRoiLabels, const std::string& intens_fpath, const std::string& label_fpath, int num_FL_threads);
 	void dump_roi_metrics(const std::string & label_fpath);
 
+
+	#ifdef WITH_PYTHON_H
 	// in memory functions
-	bool gatherRoisMetricsInMemory (const std::vector<std::vector<int>>& intens_img, const std::vector<std::vector<int>>& label_img);
-	bool processTrivialRoisInMemory (const std::vector<int>& trivRoiLabels, const std::vector<std::vector<int>>& intens, const std::vector<std::vector<int>>& label, size_t memory_limit);
+	bool gatherRoisMetricsInMemory (const pybind_vector& intens_img, const pybind_vector& label_img);
+	bool processTrivialRoisInMemory (const std::vector<int>& trivRoiLabels, const pybind_vector& intens, const pybind_vector& label, size_t memory_limit);
 	int processDatasetInMemory(
-		const std::vector<std::vector<int>>& intens,
-		const std::vector<std::vector<int>>& label,
+		const pybind_vector& intens,
+		const pybind_vector& label,
 		int numReduceThreads,
 		int min_online_roi_size,
 		bool save2csv,
 		const std::string& csvOutputDir);
+	#endif
 
 
 	// 2 scenarios of saving a result of feature calculation of a label-intensity file pair: saving to a CSV-file and saving to a matrix to be later consumed by a Python endpoint

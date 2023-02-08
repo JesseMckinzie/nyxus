@@ -178,7 +178,7 @@ class Nyxus:
             Pandas DataFrame containing the requested features with one row per label
             per image.
         """
-
+        print("in featurize memory")
         if label_dir is None:
             label_dir = intensity_dir
 

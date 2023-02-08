@@ -6,10 +6,12 @@
 #include <array>
 #ifdef WITH_PYTHON_H
 #include <pybind11/pybind11.h>
+#include "python/pybind_vector.h"
 #endif
 #include "environment.h"
 #include "globals.h"
 #include "helpers/timing.h"
+
 
 namespace Nyxus
 {
@@ -168,19 +170,20 @@ namespace Nyxus
 		return true;
 	}
 
-	bool scanTrivialRoisInMemory (const std::vector<int>& batch_labels, const std::vector<std::vector<int>>& intens_img, const std::vector<std::vector<int>>& label_img)
+	#ifdef WITH_PYTHON_H
+	bool scanTrivialRoisInMemory (const std::vector<int>& batch_labels, const pybind_vector& intens_img, const pybind_vector& label_img)
 	{
 		// Sort the batch's labels to enable binary searching in it
 		std::vector<int> whiteList = batch_labels;
 		std::sort (whiteList.begin(), whiteList.end());
 
 		
-		for (unsigned int row = 0; row < intens_img.size(); row++) {
-			for (unsigned int col = 0; col < intens_img[0].size(); col++)
+		for (unsigned int row = 0; row < intens_img.width; row++) {
+			for (unsigned int col = 0; col < intens_img.height; col++)
 			{
 
 				// Skip non-mask pixels
-				auto label = label_img[row][col];
+				auto label = label_img.xy(row, col);
 				if (! label)
 					continue;
 
@@ -188,7 +191,7 @@ namespace Nyxus
 				if (! theEnvironment.singleROI && ! std::binary_search(whiteList.begin(), whiteList.end(), label))
 					continue;
 
-				auto inten =intens_img[row][col];
+				auto inten =intens_img.xy(row, col);
 
 				// Collapse all the labels to one if single-ROI mde is requested
 				if (theEnvironment.singleROI)
@@ -201,6 +204,8 @@ namespace Nyxus
 
 		return true;
 	}
+
+	#endif
 
 	PixIntens* ImageMatrixBuffer = nullptr;
 	size_t imageMatrixBufferLen = 0;
@@ -370,8 +375,8 @@ namespace Nyxus
 
 
 
-
-	bool processTrivialRoisInMemory (const std::vector<int>& trivRoiLabels, const std::vector<std::vector<int>>& intens, const std::vector<std::vector<int>>& label, size_t memory_limit)
+	#ifdef WITH_PYTHON_H
+	bool processTrivialRoisInMemory (const std::vector<int>& trivRoiLabels, const pybind_vector& intens, const pybind_vector& label, size_t memory_limit)
 	{
 		std::vector<int> Pending;
 		size_t batchDemand = 0;
@@ -479,4 +484,5 @@ namespace Nyxus
 
 		return true;
 	}
+	#endif
 }
