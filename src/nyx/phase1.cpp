@@ -87,4 +87,38 @@ namespace Nyxus
 		return true;
 	}
 
+
+	bool gatherRoisMetricsInMemory (const std::vector<std::vector<int>>& intens_img, const std::vector<std::vector<int>>& label_img)
+	{
+
+		for (unsigned int row = 0; row < label_img.size(); row++) {
+			for (unsigned int col = 0; col < label_img[0].size(); col++)
+			{
+
+				// Skip non-mask pixels
+				auto label = label_img[row][col];
+				if (!label)
+					continue;
+
+				int y = row,
+					x = col;
+
+				// Collapse all the labels to one if single-ROI mde is requested
+				if (theEnvironment.singleROI)
+					label = 1;
+				
+				// Update pixel's ROI metrics
+				feed_pixel_2_metrics (x, y, intens_img[row][col], label, 100); // Updates 'uniqueLabels' and 'roiData'
+			}
+		
+
+#ifdef WITH_PYTHON_H
+				if (PyErr_CheckSignals() != 0)
+					throw pybind11::error_already_set();
+#endif
+		}
+
+		return true;
+	}
+
 }

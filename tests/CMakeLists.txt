@@ -104,6 +104,7 @@ set(TEST_SRC
 	../src/nyx/roi_cache_basic.cpp
 	../src/nyx/scan_fastloader_way.cpp
 	../src/nyx/pixel_feed.cpp
+	../src/nyx/scan_memory.cpp
 )
 
 add_executable(runAllTests ${TEST_SRC})

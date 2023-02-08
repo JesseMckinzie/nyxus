@@ -191,6 +191,42 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
 }
 
+    py::tuple featurize_memory_imp (
+    const std::vector<std::vector<int>> &intensity_image,
+    const std::vector<std::vector<int>> &labels_image)
+{
+    theEnvironment.intensity_dir = "";
+    theEnvironment.labels_dir = "";
+
+    init_feature_buffers();
+
+    theResultsCache.clear();
+
+    // Process the image sdata
+    int min_online_roi_size = 0;
+    int errorCode = processDatasetInMemory(
+		intensity_image,
+		labels_image,
+		theEnvironment.n_reduce_threads,
+        min_online_roi_size,
+        false, // 'true' to save to csv
+        theEnvironment.output_dir);
+
+    if (errorCode)
+        throw std::runtime_error("Error occurred during dataset processing.");
+
+    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
+    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
+    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
+    auto nRows = theResultsCache.get_num_rows();
+    pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
+    pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
+
+    return py::make_tuple(pyHeader, pyStrData, pyNumData);
+}
+
+    
+
 py::tuple findrelations_imp(
         std::string& label_dir,
         std::string& parent_file_pattern,
@@ -256,6 +292,7 @@ PYBIND11_MODULE(backend, m)
     m.def("featurize_directory_imp", &featurize_directory_imp, "Calculate features of images defined by intensity and mask image collection directories");
     m.def("featurize_fname_lists_imp", &featurize_fname_lists_imp, "Calculate features of intensity-mask image pairs defined by lists of image file names");
     m.def("findrelations_imp", &findrelations_imp, "Find relations in segmentation images");
+    m.def("featurize_memory_imp", &featurize_memory_imp, "Calculate features of images defined by intensity and mask image collection in memory");
     m.def("gpu_available", &Environment::gpu_is_available, "Check if CUDA gpu is available");
     m.def("use_gpu", &use_gpu, "Enable/disable GPU features");
     m.def("get_gpu_props", &get_gpu_properties, "Get properties of CUDA gpu");

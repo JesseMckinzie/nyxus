@@ -168,6 +168,40 @@ namespace Nyxus
 		return true;
 	}
 
+	bool scanTrivialRoisInMemory (const std::vector<int>& batch_labels, const std::vector<std::vector<int>>& intens_img, const std::vector<std::vector<int>>& label_img)
+	{
+		// Sort the batch's labels to enable binary searching in it
+		std::vector<int> whiteList = batch_labels;
+		std::sort (whiteList.begin(), whiteList.end());
+
+		
+		for (unsigned int row = 0; row < intens_img.size(); row++) {
+			for (unsigned int col = 0; col < intens_img[0].size(); col++)
+			{
+
+				// Skip non-mask pixels
+				auto label = label_img[row][col];
+				if (! label)
+					continue;
+
+				// Skip this ROI if the label isn't in the pending set of a multi-ROI mode
+				if (! theEnvironment.singleROI && ! std::binary_search(whiteList.begin(), whiteList.end(), label))
+					continue;
+
+				auto inten =intens_img[row][col];
+
+				// Collapse all the labels to one if single-ROI mde is requested
+				if (theEnvironment.singleROI)
+					label = 1;
+
+				// Cache this pixel 
+				feed_pixel_2_cache (row, col, inten, label);
+			}
+		}
+
+		return true;
+	}
+
 	PixIntens* ImageMatrixBuffer = nullptr;
 	size_t imageMatrixBufferLen = 0;
 
@@ -298,6 +332,122 @@ namespace Nyxus
 					std::cout << ">>> (ROIs " << Pending[0] << " ... " << Pending[Pending.size() - 1] << ")\n";
 				)
 			scanTrivialRois(Pending, intens_fpath, label_fpath, num_FL_threads);
+
+			// Allocate memory
+			VERBOSLVL1(std::cout << "\tallocating ROI buffers\n";)
+			allocateTrivialRoisBuffers(Pending);
+
+			// Dump ROIs for use in unit testing
+#ifdef DUMP_ALL_ROI
+			dump_all_roi();
+#endif
+
+			// Reduce them
+			VERBOSLVL1(std::cout << "\treducing ROIs\n";)
+			//reduce_trivial_rois(Pending);	
+			reduce_trivial_rois_manual(Pending);
+
+			// Free memory
+			VERBOSLVL1(std::cout << "\tfreeing ROI buffers\n";)
+			freeTrivialRoisBuffers(Pending);
+
+			#ifdef WITH_PYTHON_H
+			// Allow heyboard interrupt.
+			if (PyErr_CheckSignals() != 0)
+                throw pybind11::error_already_set();
+			#endif
+		}
+
+		VERBOSLVL1(std::cout << "\treducing neighbor features and their depends for all ROIs\n")
+		reduce_neighbors_and_dependencies_manual();
+
+		return true;
+	}
+
+
+
+
+
+
+
+
+	bool processTrivialRoisInMemory (const std::vector<int>& trivRoiLabels, const std::vector<std::vector<int>>& intens, const std::vector<std::vector<int>>& label, size_t memory_limit)
+	{
+		std::vector<int> Pending;
+		size_t batchDemand = 0;
+		int roiBatchNo = 1;
+
+		for (auto lab : trivRoiLabels)
+		{
+			LR& r = roiData[lab];
+
+			size_t itemFootprint = r.get_ram_footprint_estimate();
+
+			// Sheck if we are good to accumulate this ROI in the current batch or should close the batch and reduce it
+			if (batchDemand + itemFootprint < memory_limit)
+			{
+				Pending.push_back(lab);
+				batchDemand += itemFootprint;
+			}
+			else
+			{
+				// Scan pixels of pending trivial ROIs 
+				std::sort (Pending.begin(), Pending.end());
+				VERBOSLVL1(std::cout << ">>> Scanning batch #" << roiBatchNo << " of " << Pending.size() << " pending ROIs of total " << uniqueLabels.size() << " ROIs\n";)
+				VERBOSLVL1(
+					if (Pending.size() ==1)					
+						std::cout << ">>> (single ROI label " << Pending[0] << ")\n";
+					else
+						std::cout << ">>> (ROI labels " << Pending[0] << " ... " << Pending[Pending.size() - 1] << ")\n";
+					)
+				scanTrivialRoisInMemory(Pending, intens, label);
+
+				// Allocate memory
+				VERBOSLVL1(std::cout << "\tallocating ROI buffers\n";)
+				allocateTrivialRoisBuffers (Pending);
+
+				// Reduce them
+				VERBOSLVL1(std::cout << "\treducing ROIs\n";)
+				// reduce_trivial_rois(Pending);	
+				reduce_trivial_rois_manual(Pending);
+
+				// Free memory
+				VERBOSLVL1(std::cout << "\tfreeing ROI buffers\n";)
+				freeTrivialRoisBuffers (Pending);	// frees what's allocated by feed_pixel_2_cache() and allocateTrivialRoisBuffers()
+
+				// Reset the RAM footprint accumulator
+				batchDemand = 0;
+
+				// Clear the freshly processed ROIs from pending list 
+				Pending.clear();
+
+				// Start a new pending set by adding the stopper ROI 
+				Pending.push_back(lab);
+
+				// Advance the batch counter
+				roiBatchNo++;
+			}
+
+			// Allow heyboard interrupt.
+#ifdef WITH_PYTHON_H
+			if (PyErr_CheckSignals() != 0)
+                throw pybind11::error_already_set();
+#endif
+		}
+
+		// Process what's remaining pending
+		if (Pending.size() > 0)
+		{
+			// Scan pixels of pending trivial ROIs 
+			std::sort (Pending.begin(), Pending.end());
+			VERBOSLVL1(std::cout << ">>> Scanning batch #" << roiBatchNo << " of " << Pending.size() << " pending ROIs of " << uniqueLabels.size() << " all ROIs\n";)
+			VERBOSLVL1(
+				if (Pending.size() == 1)
+					std::cout << ">>> (single ROI " << Pending[0] << ")\n";
+				else
+					std::cout << ">>> (ROIs " << Pending[0] << " ... " << Pending[Pending.size() - 1] << ")\n";
+				)
+			scanTrivialRoisInMemory(Pending, intens, label);
 
 			// Allocate memory
 			VERBOSLVL1(std::cout << "\tallocating ROI buffers\n";)

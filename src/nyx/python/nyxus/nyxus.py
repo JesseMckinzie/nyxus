@@ -1,4 +1,4 @@
-from .backend import initialize_environment, featurize_directory_imp, featurize_fname_lists_imp, findrelations_imp, use_gpu, gpu_available 
+from .backend import initialize_environment, featurize_directory_imp, featurize_fname_lists_imp, findrelations_imp, featurize_memory_imp, use_gpu, gpu_available 
 import os
 import numpy as np
 import pandas as pd
@@ -134,6 +134,55 @@ class Nyxus:
             label_dir = intensity_dir
 
         header, string_data, numeric_data = featurize_directory_imp (intensity_dir, label_dir, file_pattern)
+
+        df = pd.concat(
+            [
+                pd.DataFrame(string_data, columns=header[: string_data.shape[1]]),
+                pd.DataFrame(numeric_data, columns=header[string_data.shape[1] :]),
+            ],
+            axis=1,
+        )
+
+        # Labels should always be uint.
+        if "label" in df.columns:
+            df["label"] = df.label.astype(np.uint32)
+
+        return df
+    
+    
+    def featurize_memory(
+        self,
+        intensity_dir: np.array,
+        label_dir: np.array,
+    ):
+        """Extract features from all the images satisfying the file pattern of provided image directories.
+
+        Extracts all the requested features _at the image level_ from the images
+        present in `intensity_dir`. If `label_dir` is specified, features will be
+        extracted for each unique label present in the label images. The file names
+        of the label images are expected to match those of the intensity images.
+
+        Parameters
+        ----------
+        intensity_dir : str
+            Path to directory containing intensity images.
+        label_dir : str (optional, default None)
+            Path to directory containing label images.
+        file_pattern: str (optional, default ".*")
+            Regular expression used to filter the images present in both
+            `intensity_dir` and `label_dir`
+
+        Returns
+        -------
+        df : pd.DataFrame
+            Pandas DataFrame containing the requested features with one row per label
+            per image.
+        """
+
+        if label_dir is None:
+            label_dir = intensity_dir
+
+        header, string_data, numeric_data = featurize_memory_imp (intensity_dir, label_dir)
 
         df = pd.concat(
             [

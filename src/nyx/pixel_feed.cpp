@@ -49,4 +49,32 @@ namespace Nyxus
 		r.raw_pixels.push_back(Pixel2(x, y, intensity));
 	}
 
+
+
+	/// @brief Feeds a pixel to image measurement object to gauge the image RAM footprint without caching the pixel. Updates 'uniqueLabels' and 'roiData'.
+	/// @param x -- x-coordinate of the pixel in the image
+	/// @param y -- y-coordinate of the pixel in the image
+	/// @param label -- label of pixel's segment 
+	/// @param intensity -- pixel's intensity
+	/// @param tile_index -- index of pixel's tile in the image
+	void feed_pixel_2_metrics_in_memory(int x, int y, PixIntens intensity, int label, unsigned int tile_index)
+	{
+		if (uniqueLabels.find(label) == uniqueLabels.end())
+		{
+			// Remember this label
+			uniqueLabels.insert(label);
+
+			// Initialize the ROI label record
+			LR newData;
+			init_label_record_2(newData, theSegFname, theIntFname, x, y, label, intensity, tile_index);
+			roiData[label] = newData;
+		}
+		else
+		{
+			// Update basic ROI info (info that doesn't require costly calculations)
+			LR& existingData = roiData[label];
+			update_label_record_2(existingData, x, y, label, intensity, tile_index);
+		}
+	}
+
 }
