@@ -34,7 +34,7 @@ namespace Nyxus
 	bool processIntSegImagePairInMemory (const pybind_vector& intens, const pybind_vector& label)
 	{
 		std::vector<int> trivRoiLabels, nontrivRoiLabels;
-
+		
 		// Timing block (image scanning)
 		{
 			//______	STOPWATCH("Image scan/ImgScan/Scan/lightsteelblue", "\t=");
@@ -43,7 +43,17 @@ namespace Nyxus
 
 				// Phase 1: gather ROI metrics
 				VERBOSLVL1(std::cout << "Gathering ROI metrics\n");
+				std::cout << "before gather metrics" << std::endl;
 				bool okGather = gatherRoisMetricsInMemory(intens, label);	// Output - set of ROI labels, label-ROI cache mappings
+
+				LR& data = roiData[1];
+
+				//std::cout << "----------- intensity data ---------:" << std::endl;
+				//for (auto& px : data.raw_pixels)
+				//{
+				//	std::cout << px.inten << " ";
+				//} std::cout << std::endl;
+
 				if (!okGather)
 					return false;
 			}
@@ -51,6 +61,7 @@ namespace Nyxus
 			{ STOPWATCH("Image scan2b/ImgScan2b/Scan2b/lightsteelblue", "\t=");
 
 					// Allocate each ROI's feature value buffer
+				std::cout << "before initializing f vals" << std::endl;
 				for (auto lab : uniqueLabels)
 				{
 					LR& r = roiData[lab];
@@ -76,9 +87,10 @@ namespace Nyxus
 		if (trivRoiLabels.size())
 		{
 			VERBOSLVL1(std::cout << "Processing trivial ROIs\n";)
+			std::cout << "before processing trivial rois" << std::endl;
 			processTrivialRoisInMemory (trivRoiLabels, intens, label, theEnvironment.get_ram_limit());
 		}
-
+		std::cout << "here" << std::endl;
 		return true;
 	}
 
@@ -119,6 +131,7 @@ namespace Nyxus
 			}
 
 			// Save the result for this intensity-label file pair
+			std::cout << "save 2 csv: " << save2csv << std::endl;
 			if (save2csv)
 				ok = save_features_2_csv ("intensity", "label", csvOutputDir);
 			else
@@ -129,7 +142,7 @@ namespace Nyxus
 				return 2;
 			}
 
-			theImLoader.close();
+			//theImLoader.close();
 
 			#ifdef WITH_PYTHON_H
 			// Allow heyboard interrupt.

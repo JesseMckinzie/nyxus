@@ -118,11 +118,12 @@ namespace Nyxus
 
 	void init_label_record_2 (LR& r, const std::string& segFile, const std::string& intFile, int x, int y, int label, PixIntens intensity, unsigned int tile_index)
 	{
+		std::cout << "label init: " << label << std::endl;
 		// Initialize basic counters
 		r.aux_area = 1;
 		r.aux_min = r.aux_max = intensity;
 		r.init_aabb (x,y);
-
+		r.raw_pixels.push_back({x,y,intensity});
 		// Cache the ROI label
 		r.label = label;
 
@@ -134,6 +135,7 @@ namespace Nyxus
 	// This function 'digests' the 2nd and the following pixel of a label and updates the label's feature calculation state - the instance of structure 'LR'
 	void update_label_record(LR& lr, int x, int y, int label, PixIntens intensity)
 	{
+		std::cout << "label: " << label << std::endl;
 		// Save the pixel
 		if (lr.caching_permitted())
 			lr.raw_pixels.push_back(Pixel2(x, y, intensity));
@@ -155,6 +157,7 @@ namespace Nyxus
 		lr.aux_min = std::min(lr.aux_min, intensity);
 		lr.aux_max = std::max(lr.aux_max, intensity);
 		lr.update_aabb (x,y);
+		lr.raw_pixels.push_back({x,y,intensity});
 	}
 
 }

@@ -28,21 +28,27 @@ namespace Nyxus
 	/// @brief Copies ROIs' feature values into a ResultsCache structure that will then shape them as a table
 	bool save_features_2_buffer (ResultsCache& rescache)
 	{
+		std::cout << "0" << std::endl;
 		std::vector<int> L{ uniqueLabels.begin(), uniqueLabels.end() };
+		std::cout << "0.1" << std::endl;
 		std::sort(L.begin(), L.end());
+		std::cout << "0.2" << std::endl;
 		std::vector<std::tuple<std::string, AvailableFeatures>> F = theFeatureSet.getEnabledFeatures();
-
+		std::cout << "0.3" << std::endl;
 		// We only fill in the header once.
 		// We depend on the caller to manage headerBuf contents and clear it appropriately...
 		bool fill_header = rescache.get_calcResultBuf().size() == 0;
 
+		std::cout << "1" << std::endl;
 		// -- Header
 		if (fill_header)
 		{
 			rescache.add_to_header({"mask_image", "intensity_image", "label"});
 
+			std::cout << "2" << std::endl;
 			for (auto& enabdF : F)
 			{
+				std::cout << "3" << std::endl;
 				auto fn = std::get<0>(enabdF);	// feature name
 				auto fc = std::get<1>(enabdF);	// feature code
 

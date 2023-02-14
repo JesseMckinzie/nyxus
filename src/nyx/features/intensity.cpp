@@ -48,14 +48,17 @@ void PixelIntensityFeatures::calculate(LR& r)
 	double cen_x = 0.0,
 		cen_y = 0.0,
 		integInten = 0.0;
+	std::cout << "----------- intensity in calculation ---------:" << std::endl;
 	for (auto& px : r.raw_pixels)
 	{
+		std::cout << px.inten << " ";
 		mean_ += px.inten;
 		energy += px.inten * px.inten;
 		cen_x += px.x;
 		cen_y += px.y;
 		integInten += px.inten;
 	}
+	std::cout << std::endl;
 	mean_ /= n;
 	val_MEAN = mean_;
 	val_ENERGY = energy;
@@ -290,11 +293,20 @@ void PixelIntensityFeatures::reduce(size_t start, size_t end, std::vector<int>* 
 {
 	for (auto i = start; i < end; i++)
 	{
+		std::cout << "here1" << std::endl;
 		int lab = (*ptrLabels)[i];
 		LR& r = (*ptrLabelData)[lab];
+		std::cout << "here2" << std::endl;
+		std::cout << "raw pixels" << std::endl;
+		for (auto& p: r.raw_pixels) {
+			std::cout << p.inten << " " << std::endl;
+		}
+		std::cout << "here3" << std::endl;
 		PixelIntensityFeatures f;
 		f.calculate(r);
+		std::cout << "here4" << std::endl;
 		f.save_value(r.fvals);
+		std::cout << "here5" << std::endl;
 	}
 }
 

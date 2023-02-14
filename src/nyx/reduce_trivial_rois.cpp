@@ -56,6 +56,7 @@ namespace Nyxus
 	// Calculating features in parallel with hard-coded feature order. This function should be called once after a file pair processing is finished.
 	void reduce_trivial_rois_manual (std::vector<int> & PendingRoisLabels)
 	{
+		std::cout << "reduce" << std::endl;
 		//==== Parallel execution parameters 
 		int n_reduce_threads = theEnvironment.n_reduce_threads;		
 		size_t jobSize = PendingRoisLabels.size(),
@@ -64,10 +65,11 @@ namespace Nyxus
 		//==== Pixel intensity stats
 		if (PixelIntensityFeatures::required(theFeatureSet))
 		{
+			std::cout << "before run" << std::endl;
 			STOPWATCH("Intensity/Intensity/Int/#FFFF00", "\t=");
 			runParallel(PixelIntensityFeatures::reduce, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
 		}
-
+		std::cout << "intensity after" << std::endl;
 		//==== Basic morphology
 		if (BasicMorphologyFeatures::required(theFeatureSet))
 		{
@@ -105,7 +107,7 @@ namespace Nyxus
 			STOPWATCH("Morphology/Hull/H/#4aaaea", "\t=");
 			runParallel(parallelReduceConvHull, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
 		}
-
+		std::cout << "intensity after2" << std::endl;
 		//==== Extrema 
 		if (ExtremaFeature::required(theFeatureSet))
 		{
@@ -126,7 +128,7 @@ namespace Nyxus
 			STOPWATCH("Morphology/Feret/F/#4aaaea", "\t=");
 			runParallel(CaliperFeretFeature::parallel_process_1_batch, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
 		}
-
+		std::cout << "intensity after3" << std::endl;
 		//==== Martin diameters
 		if (CaliperMartinFeature::required(theFeatureSet))
 		{
@@ -233,7 +235,7 @@ namespace Nyxus
 				}
 			#endif
 		}
-
+		std::cout << "intensity after5" << std::endl;
 		//==== Gabor features
 		if (GaborFeature::required(theFeatureSet))
 		{

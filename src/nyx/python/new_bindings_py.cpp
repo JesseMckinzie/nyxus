@@ -194,12 +194,13 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
 }
 
     py::tuple featurize_memory_imp (
-    const py::array_t<int> &intensity_image,
-    const py::array_t<int> &labels_image)
+    const py::array_t<unsigned int> &intensity_image,
+    const py::array_t<unsigned int> &labels_image)
 {
 
     std::cout << "In featueize memory" << std::endl;
 
+    /*
     for(const auto& vec: intensity_image) {
         for (const auto& v: vec){
             std::cout << v << " ";
@@ -207,7 +208,7 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
         std::cout << std::endl;
     }
     std::cout << std::endl;
-
+    */
 
     theEnvironment.intensity_dir = "";
     theEnvironment.labels_dir = "";
@@ -219,6 +220,14 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
     pybind_vector intens = pybind_vector(intensity_image);
     pybind_vector labels = pybind_vector(labels_image); 
 
+    std::cout << "pybind vector: " << std::endl;
+    for(int i = 0; i < intens.width; ++i) {
+        for (int j = 0; j < intens.height; ++j) {
+            std::cout << intens.xy(i,j) << " ";
+        }
+        std::cout << std::endl;
+    }
+
     // Process the image sdata
     int min_online_roi_size = 0;
     int errorCode = processDatasetInMemory(
@@ -229,6 +238,8 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
         false, // 'true' to save to csv
         theEnvironment.output_dir);
 
+    std::cout << "here" << std::endl;
+
     if (errorCode)
         throw std::runtime_error("Error occurred during dataset processing.");
 
@@ -238,6 +249,8 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
     auto nRows = theResultsCache.get_num_rows();
     pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
+
+    std::cout << "here2" << std::endl;
 
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
 }

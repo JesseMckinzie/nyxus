@@ -247,17 +247,22 @@ namespace Nyxus
 		// Dispose memory of ROIs having their feature calculation finished 
 		// in order to give memory ROIs of the next ROI batch. 
 		// (Vector 'Pending' is the set of ROIs of the finished batch.)
-		for (auto lab : Pending)
+		std::cout << "start" << std::endl;
+		for (auto lab : Pending) 
 		{
+			std::cout << "start1" << std::endl;
 			LR& r = roiData[lab];
+			std::cout << "start2" << std::endl;
 			std::vector<Pixel2>().swap(r.raw_pixels);
+			std::cout << "start3" << std::endl;
 			std::vector<PixIntens>().swap(r.aux_image_matrix._pix_plane);
+			std::cout << "start4" << std::endl;
 			std::vector<Pixel2>().swap(r.convHull_CH);	// convex hull is not a large object but there's no point to keep it beyond the batch, unlike contour
 		}
 
 		// Dispose the buffer of batches' ROIs' image matrices. (We allocate the 
 		// image matrix buffer externally to minimize host-GPU transfers.)
-		delete ImageMatrixBuffer;
+		//delete ImageMatrixBuffer;
 	}
 
 	bool processTrivialRois (const std::vector<int>& trivRoiLabels, const std::string& intens_fpath, const std::string& label_fpath, int num_FL_threads, size_t memory_limit)
@@ -378,60 +383,82 @@ namespace Nyxus
 	#ifdef WITH_PYTHON_H
 	bool processTrivialRoisInMemory (const std::vector<int>& trivRoiLabels, const pybind_vector& intens, const pybind_vector& label, size_t memory_limit)
 	{
+		std::cout << std::endl;
+		std::cout << "trivial rois" << std::endl; 
 		std::vector<int> Pending;
 		size_t batchDemand = 0;
 		int roiBatchNo = 1;
 
+		std::cout << "before loop" << std::endl;
+
 		for (auto lab : trivRoiLabels)
 		{
+			std::cout << "in loop" << std::endl;
 			LR& r = roiData[lab];
 
-			size_t itemFootprint = r.get_ram_footprint_estimate();
+			std::cout << "----------- intensity ---------:" << std::endl;
+			for (auto& px : r.raw_pixels)
+			{
+				std::cout << px.inten << " ";
+			}
+			std::cout << std::endl;
 
+			size_t itemFootprint = r.get_ram_footprint_estimate();
+			/*
+			std::cout << "after footprint" << std::endl;
 			// Sheck if we are good to accumulate this ROI in the current batch or should close the batch and reduce it
 			if (batchDemand + itemFootprint < memory_limit)
 			{
+				std::cout << "in push_back" << std::endl;
 				Pending.push_back(lab);
 				batchDemand += itemFootprint;
+				std::cout << "after push_back" << std::endl;
 			}
 			else
 			{
-				// Scan pixels of pending trivial ROIs 
-				std::sort (Pending.begin(), Pending.end());
-				VERBOSLVL1(std::cout << ">>> Scanning batch #" << roiBatchNo << " of " << Pending.size() << " pending ROIs of total " << uniqueLabels.size() << " ROIs\n";)
-				VERBOSLVL1(
-					if (Pending.size() ==1)					
-						std::cout << ">>> (single ROI label " << Pending[0] << ")\n";
-					else
-						std::cout << ">>> (ROI labels " << Pending[0] << " ... " << Pending[Pending.size() - 1] << ")\n";
-					)
-				scanTrivialRoisInMemory(Pending, intens, label);
+				*/
+			std::cout << "in else" << std::endl;
+			// Scan pixels of pending trivial ROIs 
+			std::sort (Pending.begin(), Pending.end());
+			VERBOSLVL1(std::cout << ">>> Scanning batch #" << roiBatchNo << " of " << Pending.size() << " pending ROIs of total " << uniqueLabels.size() << " ROIs\n";)
+			VERBOSLVL1(
+				if (Pending.size() ==1)					
+					std::cout << ">>> (single ROI label " << Pending[0] << ")\n";
+				else
+					std::cout << ">>> (ROI labels " << Pending[0] << " ... " << Pending[Pending.size() - 1] << ")\n";
+				)
 
-				// Allocate memory
-				VERBOSLVL1(std::cout << "\tallocating ROI buffers\n";)
-				allocateTrivialRoisBuffers (Pending);
+			std::cout << "scan" << std::endl;
+			scanTrivialRoisInMemory(Pending, intens, label);
 
-				// Reduce them
-				VERBOSLVL1(std::cout << "\treducing ROIs\n";)
-				// reduce_trivial_rois(Pending);	
-				reduce_trivial_rois_manual(Pending);
+			// Allocate memory
+			VERBOSLVL1(std::cout << "\tallocating ROI buffers\n";)
+			std::cout << "trivial buffers" << std::endl;
+			allocateTrivialRoisBuffers (Pending);
 
-				// Free memory
-				VERBOSLVL1(std::cout << "\tfreeing ROI buffers\n";)
-				freeTrivialRoisBuffers (Pending);	// frees what's allocated by feed_pixel_2_cache() and allocateTrivialRoisBuffers()
+			// Reduce them
+			VERBOSLVL1(std::cout << "\treducing ROIs\n";)
+			// reduce_trivial_rois(Pending);	
+			std::cout << "trivials manual" << std::endl;
+			reduce_trivial_rois_manual(Pending);
 
-				// Reset the RAM footprint accumulator
-				batchDemand = 0;
+			// Free memory
+			VERBOSLVL1(std::cout << "\tfreeing ROI buffers\n";)
+			std::cout << "free trivial buffers" << std::endl;
+			//freeTrivialRoisBuffers (Pending);	// frees what's allocated by feed_pixel_2_cache() and allocateTrivialRoisBuffers()
 
-				// Clear the freshly processed ROIs from pending list 
-				Pending.clear();
+			// Reset the RAM footprint accumulator
+			batchDemand = 0;
 
-				// Start a new pending set by adding the stopper ROI 
-				Pending.push_back(lab);
+			// Clear the freshly processed ROIs from pending list 
+			Pending.clear();
 
-				// Advance the batch counter
-				roiBatchNo++;
-			}
+			// Start a new pending set by adding the stopper ROI 
+			Pending.push_back(lab);
+
+			// Advance the batch counter
+			roiBatchNo++;
+			//}
 
 			// Allow heyboard interrupt.
 #ifdef WITH_PYTHON_H
@@ -443,6 +470,7 @@ namespace Nyxus
 		// Process what's remaining pending
 		if (Pending.size() > 0)
 		{
+			std::cout << "pending size" << std::endl;
 			// Scan pixels of pending trivial ROIs 
 			std::sort (Pending.begin(), Pending.end());
 			VERBOSLVL1(std::cout << ">>> Scanning batch #" << roiBatchNo << " of " << Pending.size() << " pending ROIs of " << uniqueLabels.size() << " all ROIs\n";)
@@ -452,13 +480,16 @@ namespace Nyxus
 				else
 					std::cout << ">>> (ROIs " << Pending[0] << " ... " << Pending[Pending.size() - 1] << ")\n";
 				)
+			std::cout << "scan trivial again" << std::endl;
 			scanTrivialRoisInMemory(Pending, intens, label);
 
 			// Allocate memory
 			VERBOSLVL1(std::cout << "\tallocating ROI buffers\n";)
+			std::cout << "allocate" << std::endl;
 			allocateTrivialRoisBuffers(Pending);
 
 			// Dump ROIs for use in unit testing
+			std::cout << "dump" << std::endl;
 #ifdef DUMP_ALL_ROI
 			dump_all_roi();
 #endif
@@ -466,11 +497,13 @@ namespace Nyxus
 			// Reduce them
 			VERBOSLVL1(std::cout << "\treducing ROIs\n";)
 			//reduce_trivial_rois(Pending);	
+			std::cout << "reduce trial again" << std::endl;
 			reduce_trivial_rois_manual(Pending);
 
-			// Free memory
+			// Free memory 
 			VERBOSLVL1(std::cout << "\tfreeing ROI buffers\n";)
-			freeTrivialRoisBuffers(Pending);
+			std::cout << "free trial again" << std::endl;
+			//freeTrivialRoisBuffers(Pending);
 
 			#ifdef WITH_PYTHON_H
 			// Allow heyboard interrupt.
@@ -480,7 +513,8 @@ namespace Nyxus
 		}
 
 		VERBOSLVL1(std::cout << "\treducing neighbor features and their depends for all ROIs\n")
-		reduce_neighbors_and_dependencies_manual();
+		std::cout << "reduce manual" << std::endl;
+		//reduce_neighbors_and_dependencies_manual();
 
 		return true;
 	}

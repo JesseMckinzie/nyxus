@@ -17,4 +17,9 @@ class pybind_vector {
         pybind_vector(const py::array_t<unsigned int>& vec);
         unsigned int xy(int i, int j) const; 
 
+
+        ~pybind_vector() {
+            delete data;
+        }
+
 };

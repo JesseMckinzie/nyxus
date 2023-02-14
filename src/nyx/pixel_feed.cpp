@@ -34,6 +34,7 @@ namespace Nyxus
 			// Update basic ROI info (info that doesn't require costly calculations)
 			LR& existingData = roiData[label];
 			update_label_record_2(existingData, x, y, label, intensity, tile_index);
+			
 		}
 	}
 

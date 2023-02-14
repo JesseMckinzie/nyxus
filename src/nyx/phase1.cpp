@@ -91,7 +91,7 @@ namespace Nyxus
 #ifdef WITH_PYTHON_H
 	bool gatherRoisMetricsInMemory (const pybind_vector& intens_img, const pybind_vector& label_img)
 	{
-
+		std::cout << "---- initialize values ----" << std::endl;
 		for (unsigned int row = 0; row < label_img.width; row++) {
 			for (unsigned int col = 0; col < label_img.height; col++)
 			{
@@ -107,17 +107,19 @@ namespace Nyxus
 				// Collapse all the labels to one if single-ROI mde is requested
 				if (theEnvironment.singleROI)
 					label = 1;
-				
+				//std::cout << intens_img.xy(row,col) << " ";
 				// Update pixel's ROI metrics
-				feed_pixel_2_metrics (x, y, intens_img.xy(row,col), label, 100); // Updates 'uniqueLabels' and 'roiData'
+				auto intens = intens_img.xy(row,col);
+				std::cout << intens << std::endl;
+				feed_pixel_2_metrics (x, y, intens, label, 100); // Updates 'uniqueLabels' and 'roiData'
 			}
-		
-
+	
 
 			if (PyErr_CheckSignals() != 0)
 				throw pybind11::error_already_set();
 
 		}
+		std::cout << std::endl;
 
 		return true;
 	}
