@@ -3,7 +3,7 @@ project(AxleNyxus)
 
 # this is a workaround for GitHub Action for wheelbuiling
 if(DEFINED ENV{NYXUS_DEP_DIR})
-	set(CMAKE_PREFIX_PATH $ENV{NYXUS_DEP_DIR})
+	set(CMAKE_PREFIX_PATH $ENV{NYXUS_DEP_DIR}) 
 endif()
 
 find_package(CUDA)
@@ -29,6 +29,54 @@ elseif((NOT CUDA_FOUND) AND USEGPU)
 else()
 	set(USEGPU OFF) # probably redundant fail-safe
 endif()
+
+
+include(ExternalProject)
+include(FindPkgConfig)
+include(GNUInstallDirs)
+
+
+option(PARQUET_LINK_SHARED "Link to the Parquet shared library" ON)
+
+# Look for installed packages the system
+find_package(Parquet REQUIRED)
+
+# First search the packages in the system. If they are not found, use CMake's
+# ExternalProject mechanism to build them locally.
+find_package(Arrow)
+if (NOT ARROW_FOUND)
+  # set compile output directory
+  if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+  endif(NOT CMAKE_BUILD_TYPE)
+  string (TOLOWER ${CMAKE_BUILD_TYPE} BUILD_SUBDIR_NAME)
+  # If build in-source, create the latest symlink. If build out-of-source, which is
+  # preferred, simply output the binaries in the build folder
+  if (${CMAKE_SOURCE_DIR} STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+    set(BUILD_OUTPUT_ROOT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/build/${BUILD_SUBDIR_NAME}")
+    # Link build/latest to the current build directory, to avoid developers
+    # accidentally running the latest debug build when in fact they're building
+    # release builds.
+    FILE(MAKE_DIRECTORY ${BUILD_OUTPUT_ROOT_DIRECTORY})
+    if (NOT APPLE)
+      set(MORE_ARGS "-T")
+    endif()
+  EXECUTE_PROCESS(COMMAND ln ${MORE_ARGS} -sf ${BUILD_OUTPUT_ROOT_DIRECTORY}
+    ${CMAKE_CURRENT_BINARY_DIR}/build/latest)
+  else()
+    set(BUILD_OUTPUT_ROOT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${BUILD_SUBDIR_NAME}")
+  endif()
+
+  set(ARROW_VENDORED 1)
+else()
+  set(ARROW_VENDORED 0)
+endif()
+find_package(Parquet)
+
+include_directories(SYSTEM ${ARROW_INCLUDE_DIR} ${PARQUET_INCLUDE_DIR})
+
+include(CMakePrintHelpers)
+
 
 
 #==== Compiler Options
@@ -177,19 +225,20 @@ if (TIFF_FOUND)
 	include_directories (${TIFF_INCLUDE_DIR})
 endif (TIFF_FOUND)
 
+
 #== Required for OMEZarr 
 if(OMEZARR)
 	find_package(BLOSC REQUIRED)
 	if(BLOSC_FOUND)
 		if(BUILD_LIB)
 			target_compile_definitions(backend PRIVATE -DWITH_BLOSC)
-			target_link_libraries(backend PRIVATE ${BLOSC_LIBRARIES})
+			target_link_libraries(backend PRIVATE ${BLOSC_LIBRARIES} ${PARQUET_SHARED_LIB} ${ARROW_SHARED_LIB})
 		endif()
 		if(BUILD_CLI)
 			target_compile_definitions(nyxus PRIVATE -DWITH_BLOSC)
 			target_compile_definitions(nyxushie PRIVATE -DWITH_BLOSC) 	
-			target_link_libraries(nyxus PRIVATE ${BLOSC_LIBRARIES})	
-			target_link_libraries(nyxushie PRIVATE ${BLOSC_LIBRARIES})	
+			target_link_libraries(nyxus PRIVATE ${BLOSC_LIBRARIES} ${PARQUET_SHARED_LIB} ${ARROW_SHARED_LIB})	
+			target_link_libraries(nyxushie PRIVATE ${BLOSC_LIBRARIES} ${PARQUET_SHARED_LIB} ${ARROW_SHARED_LIB})	
 		endif()
 	endif()
 
@@ -206,6 +255,15 @@ if(OMEZARR)
 	find_file(Z5 "z5/z5.hxx" REQUIRED)
 endif()
 
+if(PARQUET_LINK_SHARED) 
+  target_link_libraries(nyxus PUBLIC Parquet::parquet_shared)
+  target_link_libraries(nyxushie PUBLIC Parquet::parquet_shared)
+else()
+  target_link_libraries(nyxus PUBLIC Parquet::parquet_static)
+  target_link_libraries(nyxushie PUBLIC Parquet::parquet_static)
+endif()
+
+cmake_print_variables(PARQUET_HOME)
 
 find_package(Threads QUIET)
 if (Threads_FOUND)

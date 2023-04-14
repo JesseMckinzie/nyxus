@@ -9,6 +9,7 @@
 #include "../dirs_and_files.h"  
 #include "../globals.h"
 #include "../nested_feature_aggregation.h"
+#include "../output_writers.h"
 
 namespace py = pybind11;
 using namespace Nyxus;
@@ -123,6 +124,13 @@ py::tuple featurize_directory_imp (
     auto nRows = theResultsCache.get_num_rows();
     pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
+
+    OutputWriter out_writer = OutputWriter();
+
+    out_writer.write_to_parquet(theResultsCache.get_headerBuf(),
+                        theResultsCache.get_stringColBuf(),
+                        theResultsCache.get_calcResultBuf(),
+                        theResultsCache.get_num_rows());
 
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
 }
