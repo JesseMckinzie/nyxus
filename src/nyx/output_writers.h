@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 
+#include <iostream>
+
 class OutputWriter {
 private:
 
@@ -22,17 +24,20 @@ public:
 
         fields.push_back(arrow::field(header[0], arrow::utf8()));
         fields.push_back(arrow::field(header[1], arrow::utf8()));
+        fields.push_back(arrow::field(header[2], arrow::int32()));
 
-        for (int i = 2; i < header.size(); ++i) {
-            fields.push_back(arrow::field(header[i], arrow::float32()));
+        for (int i = 3; i < header.size(); ++i) {
+            fields.push_back(arrow::field(header[i], arrow::float64()));
         }
+
+        std::cout << "number of schema fields: " << fields.size() << std::endl;
 
         auto schema = arrow::schema(fields);
 
         arrow::StringBuilder string_builder_0;
 
         PARQUET_THROW_NOT_OK(string_builder_0.AppendValues(
-            std::vector<std::string>(string_columns.begin(), string_columns.begin() + number_of_rows - 1)
+            std::vector<std::string>(string_columns.begin(), string_columns.begin() + number_of_rows)
         ));
         
         arrow::StringBuilder string_builder_1;
@@ -52,13 +57,48 @@ public:
         arrays.push_back(array_0);
         arrays.push_back(array_1);
 
+
+        // add labels 
+        arrow::Int32Builder labels_builder;
+
+        std::vector<int> temp_vec;
         int num_columns = numeric_columns.size() / number_of_rows;
+        for (int i = 0; i < numeric_columns.size(); i+= num_columns ) {
+            temp_vec.push_back(numeric_columns[i]);
+        }
+
+        for (auto& v: temp_vec) {
+            std::cout << v << ", ";
+        }
+        std::cout << std::endl;
+        std::cout << std::endl;
+
+        PARQUET_THROW_NOT_OK(labels_builder.AppendValues(
+            temp_vec
+        ));
+
+        //PARQUET_THROW_NOT_OK(labels_builder.AppendValues(
+        //    std::vector<int> (numeric_columns.begin() , numeric_columns.begin() + number_of_rows)
+        //));
+        
+        std::shared_ptr<arrow::Array> array_2;
+
+        PARQUET_THROW_NOT_OK(labels_builder.Finish(&array_2));
+        arrays.push_back(array_2);
+
+        
         int idx;
-        for (int i = 0; i < num_columns-1; ++i) {
+        for (int i = 1; i < num_columns; ++i) {
             arrow::DoubleBuilder builder;
 
+            std::vector<double> temp;
+        
+            for (int j = 0; j < number_of_rows; ++j ) {
+                temp.push_back(numeric_columns[i + (j*num_columns)]);
+            }
+        
             PARQUET_THROW_NOT_OK(builder.AppendValues(
-                std::vector<double> (numeric_columns.begin() + number_of_rows * i, numeric_columns.begin() + (number_of_rows * (i+1)) -1 )
+                temp
             ));
             
             std::shared_ptr<arrow::Array> temp_array;
@@ -67,6 +107,7 @@ public:
             arrays.push_back(temp_array);
         }
 
+        std::cout << "number of fields in array: " << arrays.size() << std::endl;
         return arrow::Table::Make(schema, arrays);
     }
 

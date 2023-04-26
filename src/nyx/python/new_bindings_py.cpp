@@ -118,6 +118,13 @@ py::tuple featurize_directory_imp (
     if (errorCode)
         throw std::runtime_error("Error occurred during dataset processing.");
 
+    OutputWriter out_writer = OutputWriter();
+
+    out_writer.write_to_parquet(theResultsCache.get_headerBuf(),
+                        theResultsCache.get_stringColBuf(),
+                        theResultsCache.get_calcResultBuf(),
+                        theResultsCache.get_num_rows());
+
     auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
     auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
     auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
@@ -125,12 +132,7 @@ py::tuple featurize_directory_imp (
     pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
 
-    OutputWriter out_writer = OutputWriter();
-
-    out_writer.write_to_parquet(theResultsCache.get_headerBuf(),
-                        theResultsCache.get_stringColBuf(),
-                        theResultsCache.get_calcResultBuf(),
-                        theResultsCache.get_num_rows());
+    
 
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
 }
