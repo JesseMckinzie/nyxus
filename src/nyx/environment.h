@@ -5,6 +5,7 @@
 #include <vector>
 #include "environment_basic.h"
 #include "roi_blacklist.h"
+#include "output_writers.h"
 
 #ifdef USE_GPU
 	#include <cuda_runtime.h>
@@ -84,6 +85,10 @@ public:
 				intSegMapFile = "";
 
 	bool singleROI = false; // is set to 'true' parse_cmdline() if labels_dir==intensity_dir
+
+	std::string arrow_file_path = "";
+	std::string parquet_file_path = "";
+	std::shared_ptr<Writer> writer;
 
 	std::string embedded_pixel_size = "";
 

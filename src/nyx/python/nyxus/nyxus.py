@@ -1,8 +1,11 @@
-from .backend import initialize_environment, featurize_directory_imp, featurize_montage_imp, featurize_fname_lists_imp, findrelations_imp, use_gpu, gpu_available, blacklist_roi_imp, clear_roi_blacklist_imp, roi_blacklist_get_summary_imp  
+from .backend import initialize_environment, featurize_directory_imp, featurize_montage_imp, featurize_fname_lists_imp, findrelations_imp, use_gpu, gpu_available, blacklist_roi_imp, clear_roi_blacklist_imp, roi_blacklist_get_summary_imp, create_arrow_file_imp, get_arrow_file_imp, get_parquet_file_imp, create_parquet_file_imp, get_arrow_table_imp
 import os
 import numpy as np
 import pandas as pd
+import pyarrow as pa
 from typing import Optional, List
+
+#pa.import_pyarrow()
 
 class Nyxus:
     """Nyxus image feature extraction library
@@ -60,6 +63,7 @@ class Nyxus:
         using_gpu: int = -1,
         ibsi: bool = False
     ):
+
         if neighbor_distance <= 0:
             raise ValueError("Neighbor distance must be greater than zero.")
 
@@ -346,6 +350,50 @@ class Nyxus:
         if len(s) == 0:
             return None
         return s
+    
+    def create_arrow_file(self, path: str="out.arrow"):
+        print('create')
+        create_arrow_file_imp(path)
+        print('end create')
+    
+    def get_arrow_ipc_file(self):
+        return get_arrow_file_imp()
+    
+    def create_parquet_file(self, path: str=""):
+        create_parquet_file_imp(path)
+    
+    def get_parquet_file(self):
+        return get_parquet_file_imp()
+    
+    def get_arrow_memory_mapping(self):
+        
+        arrow_file_path = self.get_arrow_ipc_file()
+        
+        if (arrow_file_path is ""):
+            self.create_arrow_file()
+            arrow_file_path = self.get_arrow_ipc_file()
+        
+        with pa.memory_map(arrow_file_path, 'rb') as source:
+            array = pa.ipc.open_file(source).read_all()
+        
+        return array
+    
+    def get_arrow_array(self):
+        
+        arrow_file_path = self.get_arrow_ipc_file()
+        
+        if (arrow_file_path is ""):
+            self.create_arrow_file()
+            arrow_file_path = self.get_arrow_ipc_file()
+        
+        with pa.OSFile(arrow_file_path, 'rb') as source:
+            array = pa.ipc.open_file(source).read_all()
+        
+        return array
+    
+    def get_arrow_table(self):
+
+        return get_arrow_file_imp()
 
 
 class Nested:

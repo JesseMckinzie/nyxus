@@ -3,6 +3,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
+#include <arrow/api.h>
 #include "../version.h"
 #include "../environment.h"
 #include "../feature_mgr.h"
@@ -117,13 +118,6 @@ py::tuple featurize_directory_imp (
 
     if (errorCode)
         throw std::runtime_error("Error occurred during dataset processing.");
-
-    OutputWriter out_writer = OutputWriter();
-
-    out_writer.write_to_parquet(theResultsCache.get_headerBuf(),
-                        theResultsCache.get_stringColBuf(),
-                        theResultsCache.get_calcResultBuf(),
-                        theResultsCache.get_num_rows());
 
     auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
     auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
@@ -280,16 +274,88 @@ py::tuple findrelations_imp(
 
     if (! mineOK)
         throw std::runtime_error("Error occurred during dataset processing: mine_segment_relations() returned false");
+
+    auto temp_header = theResultsCache.get_headerBuf();
+    auto temp_str_data = theResultsCache.get_stringColBuf();
+    auto temp_num_data = theResultsCache.get_calcResultBuf();
     
-    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf())); // Column names
-    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf())); // String cells of first n columns
-    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));  // Numeric data
+    auto pyHeader = py::array(py::cast(temp_header)); // Column names
+    auto pyStrData = py::array(py::cast(temp_str_data)); // String cells of first n columns
+    auto pyNumData = as_pyarray(std::move(temp_num_data));  // Numeric data
     auto nRows = theResultsCache.get_num_rows();
     pyStrData = pyStrData.reshape({ nRows, pyStrData.size() / nRows });
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
 
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
 }
+
+void create_arrow_file_imp(const std::string& arrow_file_path="") {
+
+    if(arrow_file_path != "" && !ends_with_substr(arrow_file_path, ".arrow")) {
+        throw std::invalid_argument("The arrow file path must end in \".arrow\"");
+    }
+
+    if (arrow_file_path == "") {
+        theEnvironment.arrow_file_path = "out.arrow"; // set default path
+    } else {
+        theEnvironment.arrow_file_path = arrow_file_path;
+    }
+    theEnvironment.writer = WriterFactory::create_writer(theEnvironment.arrow_file_path);
+        
+    theEnvironment.writer->write(theResultsCache.get_headerBuf(),
+                theResultsCache.get_stringColBuf(),
+                theResultsCache.get_calcResultBuf(),
+                theResultsCache.get_num_rows());
+
+}
+
+std::string get_arrow_file_imp() {
+    return theEnvironment.arrow_file_path;
+}
+
+void create_parquet_file_imp(std::string& parquet_file_path) {
+
+    if (parquet_file_path == "") {
+        parquet_file_path = "out/out.parquet"; // set default path
+    }
+
+    if(!ends_with_substr(parquet_file_path, ".parquet")) {
+        throw std::invalid_argument("The parquet file path must end in \".parquet\"");
+    }
+
+    theEnvironment.parquet_file_path = parquet_file_path;
+
+    theEnvironment.writer = WriterFactory::create_writer(theEnvironment.parquet_file_path);
+        
+    theEnvironment.writer->write(theResultsCache.get_headerBuf(),
+                  theResultsCache.get_stringColBuf(),
+                  theResultsCache.get_calcResultBuf(),
+                  theResultsCache.get_num_rows());
+
+}
+
+std::string get_parquet_file_imp() {
+    return theEnvironment.parquet_file_path;
+}
+
+
+PyObject * get_arrow_table_imp() {
+    if (theEnvironment.writer == nullptr) {
+        ParquetWriter temp_writer = ParquetWriter("");
+
+        temp_writer.generate_arrow_table(theResultsCache.get_headerBuf(),
+                                                theResultsCache.get_stringColBuf(),
+                                                theResultsCache.get_calcResultBuf(),
+                                                theResultsCache.get_num_rows());
+
+        return pyarrow::wrap_table(temp_writer.get_arrow_table());
+    }
+
+
+    return pyarrow::wrap_table(theEnvironment.writer->get_arrow_table());
+}
+
+
 
 
 /**
@@ -360,7 +426,11 @@ PYBIND11_MODULE(backend, m)
     m.def("blacklist_roi_imp", &blacklist_roi_imp, "Set up a global or per-mask file blacklist definition");
     m.def("clear_roi_blacklist_imp", &clear_roi_blacklist_imp, "Clear the ROI black list");
     m.def("roi_blacklist_get_summary_imp", &roi_blacklist_get_summary_imp, "Returns a summary of the ROI blacklist");
-
+    m.def("create_arrow_file_imp", &create_arrow_file_imp, "Creates an arrow file for the feature calculations");
+    m.def("get_arrow_file_imp", &get_arrow_file_imp, "Get path to arrow file");
+    m.def("get_parquet_file_imp", &get_parquet_file_imp, "Returns path to parquet file");
+    m.def("create_parquet_file_imp", &create_parquet_file_imp, "Create parquet file for the features calculations");
+    m.def("get_arrow_table_imp", &get_arrow_table_imp, "Get arrow table of feature calculations.");
 }
 
 ///
