@@ -45,6 +45,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Look for installed packages the system
 find_package(Parquet REQUIRED)
 
+# Look for installed packages the system
+find_package(Arrow REQUIRED)
+
 if(USEGPU)
     enable_language("CUDA")
 	SET(CMAKE_CUDA_ARCHITECTURES ${CUDA_ARCH_LIST})
@@ -168,6 +171,7 @@ if(BUILD_CLI)
 	add_executable(nyxushie src/nyx/dirs_and_files.cpp src/nyx/environment_basic.cpp src/nyx/image_loader1x.cpp src/nyx/main_nyxushie.cpp src/nyx/nested_roi.cpp src/nyx/python/nested_roi_py.cpp src/nyx/roi_cache_basic.cpp)
 endif()
 
+
 if(PARQUET_LINK_SHARED)
   target_link_libraries(nyxus PRIVATE Parquet::parquet_shared)
 else()
@@ -258,7 +262,17 @@ if(USEGPU)
 	endif()
 endif()
 
+find_library(ARROW_LIB arrow)
+
 if(BUILD_LIB)
+
+	if(ARROW_LIB)
+		target_link_libraries(backend PRIVATE ${ARROW_LIB})
+	else()
+		message(FATAL_ERROR "libarrow.so not found.")
+	endif()
+
+	target_link_libraries(backend PRIVATE arrow_shared)
 
 	if(PARQUET_LINK_SHARED)
 		target_link_libraries(backend PRIVATE Parquet::parquet_shared)
