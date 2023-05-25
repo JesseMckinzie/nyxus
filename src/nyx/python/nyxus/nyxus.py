@@ -607,7 +607,7 @@ class Nyxus:
     def get_arrow_ipc_file(self):
         return get_arrow_file_imp()
     
-    def create_parquet_file(self, path: str=""):
+    def create_parquet_file(self, path: str="out.parquet"):
         create_parquet_file_imp(path)
     
     def get_parquet_file(self):
