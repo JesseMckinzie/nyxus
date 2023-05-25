@@ -306,6 +306,7 @@ void create_arrow_file_imp(const std::string& arrow_file_path="") {
                 theResultsCache.get_stringColBuf(),
                 theResultsCache.get_calcResultBuf(),
                 theResultsCache.get_num_rows());
+    
 
 }
 
@@ -348,11 +349,11 @@ PyObject * get_arrow_table_imp() {
                                                 theResultsCache.get_calcResultBuf(),
                                                 theResultsCache.get_num_rows());
 
-        return pyarrow::wrap_table(temp_writer.get_arrow_table());
+        return nullptr; //pyarrow::wrap_table(temp_writer.get_arrow_table());
     }
 
 
-    return pyarrow::wrap_table(theEnvironment.writer->get_arrow_table());
+    return nullptr; // pyarrow::wrap_table(theEnvironment.writer->get_arrow_table());
 }
 
 
