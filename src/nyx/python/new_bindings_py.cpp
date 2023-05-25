@@ -523,10 +523,6 @@ std::string get_arrow_file_imp() {
 
 void create_parquet_file_imp(std::string& parquet_file_path) {
 
-    if (parquet_file_path == "") {
-        parquet_file_path = "out/out.parquet"; // set default path
-    }
-
     if(!ends_with_substr(parquet_file_path, ".parquet")) {
         throw std::invalid_argument("The parquet file path must end in \".parquet\"");
     }
@@ -567,7 +563,7 @@ PYBIND11_MODULE(backend, m)
 {
     m.doc() = "Nyxus";
 
-        m.def("initialize_environment", &initialize_environment, "Environment initialization");
+    m.def("initialize_environment", &initialize_environment, "Environment initialization");
     m.def("featurize_directory_imp", &featurize_directory_imp, "Calculate features of images defined by intensity and mask image collection directories");
     m.def("featurize_montage_imp", &featurize_montage_imp, "Calculate features of images defined by intensity and mask image collection directories");
     m.def("featurize_fname_lists_imp", &featurize_fname_lists_imp, "Calculate features of intensity-mask image pairs defined by lists of image file names");
