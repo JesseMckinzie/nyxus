@@ -5,7 +5,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
-#include <arrow/api.h>
 #include "../version.h"
 #include "../environment.h"
 #include "../feature_mgr.h"
@@ -169,8 +168,6 @@ py::tuple featurize_directory_imp (
     pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
 
-    
-
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
 }
 
@@ -317,89 +314,16 @@ py::tuple findrelations_imp(
 
     if (! mineOK)
         throw std::runtime_error("Error occurred during dataset processing: mine_segment_relations() returned false");
-
-    auto temp_header = theResultsCache.get_headerBuf();
-    auto temp_str_data = theResultsCache.get_stringColBuf();
-    auto temp_num_data = theResultsCache.get_calcResultBuf();
     
-    auto pyHeader = py::array(py::cast(temp_header)); // Column names
-    auto pyStrData = py::array(py::cast(temp_str_data)); // String cells of first n columns
-    auto pyNumData = as_pyarray(std::move(temp_num_data));  // Numeric data
+    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf())); // Column names
+    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf())); // String cells of first n columns
+    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));  // Numeric data
     auto nRows = theResultsCache.get_num_rows();
     pyStrData = pyStrData.reshape({ nRows, pyStrData.size() / nRows });
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
 
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
 }
-
-void create_arrow_file_imp(const std::string& arrow_file_path="") {
-
-    if(arrow_file_path != "" && !ends_with_substr(arrow_file_path, ".arrow")) {
-        throw std::invalid_argument("The arrow file path must end in \".arrow\"");
-    }
-
-    if (arrow_file_path == "") {
-        theEnvironment.arrow_file_path = "out.arrow"; // set default path
-    } else {
-        theEnvironment.arrow_file_path = arrow_file_path;
-    }
-    theEnvironment.writer = WriterFactory::create_writer(theEnvironment.arrow_file_path);
-        
-    theEnvironment.writer->write(theResultsCache.get_headerBuf(),
-                theResultsCache.get_stringColBuf(),
-                theResultsCache.get_calcResultBuf(),
-                theResultsCache.get_num_rows());
-    
-
-}
-
-std::string get_arrow_file_imp() {
-    return theEnvironment.arrow_file_path;
-}
-
-void create_parquet_file_imp(std::string& parquet_file_path) {
-
-    if (parquet_file_path == "") {
-        parquet_file_path = "out/out.parquet"; // set default path
-    }
-
-    if(!ends_with_substr(parquet_file_path, ".parquet")) {
-        throw std::invalid_argument("The parquet file path must end in \".parquet\"");
-    }
-
-    theEnvironment.parquet_file_path = parquet_file_path;
-
-    theEnvironment.writer = WriterFactory::create_writer(theEnvironment.parquet_file_path);
-        
-    theEnvironment.writer->write(theResultsCache.get_headerBuf(),
-                  theResultsCache.get_stringColBuf(),
-                  theResultsCache.get_calcResultBuf(),
-                  theResultsCache.get_num_rows());
-
-}
-
-std::string get_parquet_file_imp() {
-    return theEnvironment.parquet_file_path;
-}
-
-
-PyObject * get_arrow_table_imp() {
-    if (theEnvironment.writer == nullptr) {
-        ParquetWriter temp_writer = ParquetWriter("");
-
-        temp_writer.generate_arrow_table(theResultsCache.get_headerBuf(),
-                                                theResultsCache.get_stringColBuf(),
-                                                theResultsCache.get_calcResultBuf(),
-                                                theResultsCache.get_num_rows());
-
-        return nullptr; //pyarrow::wrap_table(temp_writer.get_arrow_table());
-    }
-
-
-    return nullptr; // pyarrow::wrap_table(theEnvironment.writer->get_arrow_table());
-}
-
-
 
 
 /**
@@ -519,11 +443,131 @@ std::map<std::string, ParameterTypes> get_params_imp(const std::vector<std::stri
 
 }
 
+///
+/// The following code block is a quick & simple manual test of the Python interface 
+/// invokable from from the command line. It lets you bypass building and installing the Python library.
+/// To use it, 
+///     #define TESTING_PY_INTERFACE, 
+///     exclude file main_nyxus.cpp from build, and 
+///     rebuild the CLI target.
+/// 
+#ifdef TESTING_PY_INTERFACE
+//
+// Testing Python interface
+//
+void initialize_environment(
+    const std::vector<std::string>& features,
+    int neighbor_distance,
+    float pixels_per_micron,
+    uint32_t coarse_gray_depth,
+    uint32_t n_reduce_threads,
+    uint32_t n_loader_threads);
+
+py::tuple featurize_directory_imp(
+    const std::string& intensity_dir,
+    const std::string& labels_dir,
+    const std::string& file_pattern);
+
+int main(int argc, char** argv)
+{
+    std::cout << "main() \n";
+
+    // Test feature extraction
+    
+    //  initialize_environment({ "*ALL*" }, 5, 120, 1, 1);
+    //
+    //  py::tuple result = featurize_directory_imp(
+    //      "C:\\WORK\\AXLE\\data\\mini\\int", // intensity_dir,
+    //      "C:\\WORK\\AXLE\\data\\mini\\seg", // const std::string & labels_dir,
+    //      "p0_y1_r1_c0\\.ome\\.tif"); // const std::string & file_pattern
+
+    // Test nested segments functionality
+
+    py::tuple result = findrelations_imp(
+        "C:\\WORK\\AXLE\\data\\mini\\seg",  // label_dir, 
+        ".*", // file_pattern,
+        "_c", // channel_signature, 
+        "1", // parent_channel, 
+        "0"); // child_channel
+
+    std::cout << "finishing \n";
+}
+
+#endif
+
+
+void create_arrow_file_imp(const std::string& arrow_file_path="") {
+
+    if(arrow_file_path != "" && !ends_with_substr(arrow_file_path, ".arrow")) {
+        throw std::invalid_argument("The arrow file path must end in \".arrow\"");
+    }
+
+    if (arrow_file_path == "") {
+        theEnvironment.arrow_file_path = "out.arrow"; // set default path
+    } else {
+        theEnvironment.arrow_file_path = arrow_file_path;
+    }
+    theEnvironment.writer = WriterFactory::create_writer(theEnvironment.arrow_file_path);
+        
+    theEnvironment.writer->write(theResultsCache.get_headerBuf(),
+                theResultsCache.get_stringColBuf(),
+                theResultsCache.get_calcResultBuf(),
+                theResultsCache.get_num_rows());
+    
+
+}
+
+std::string get_arrow_file_imp() {
+    return theEnvironment.arrow_file_path;
+}
+
+void create_parquet_file_imp(std::string& parquet_file_path) {
+
+    if (parquet_file_path == "") {
+        parquet_file_path = "out/out.parquet"; // set default path
+    }
+
+    if(!ends_with_substr(parquet_file_path, ".parquet")) {
+        throw std::invalid_argument("The parquet file path must end in \".parquet\"");
+    }
+
+    theEnvironment.parquet_file_path = parquet_file_path;
+
+    theEnvironment.writer = WriterFactory::create_writer(theEnvironment.parquet_file_path);
+        
+    theEnvironment.writer->write(theResultsCache.get_headerBuf(),
+                  theResultsCache.get_stringColBuf(),
+                  theResultsCache.get_calcResultBuf(),
+                  theResultsCache.get_num_rows());
+
+}
+
+std::string get_parquet_file_imp() {
+    return theEnvironment.parquet_file_path;
+}
+
+
+PyObject * get_arrow_table_imp() {
+    if (theEnvironment.writer == nullptr) {
+        ParquetWriter temp_writer = ParquetWriter("");
+
+        temp_writer.generate_arrow_table(theResultsCache.get_headerBuf(),
+                                                theResultsCache.get_stringColBuf(),
+                                                theResultsCache.get_calcResultBuf(),
+                                                theResultsCache.get_num_rows());
+
+        return nullptr; //pyarrow::wrap_table(temp_writer.get_arrow_table());
+    }
+
+
+    return nullptr; // pyarrow::wrap_table(theEnvironment.writer->get_arrow_table());
+}
+
 PYBIND11_MODULE(backend, m)
 {
     m.doc() = "Nyxus";
 
-    m.def("initialize_environment", &initialize_environment, "Environment initialization");
+        m.def("initialize_environment", &initialize_environment, "Environment initialization");
     m.def("featurize_directory_imp", &featurize_directory_imp, "Calculate features of images defined by intensity and mask image collection directories");
     m.def("featurize_montage_imp", &featurize_montage_imp, "Calculate features of images defined by intensity and mask image collection directories");
     m.def("featurize_fname_lists_imp", &featurize_fname_lists_imp, "Calculate features of intensity-mask image pairs defined by lists of image file names");
@@ -534,7 +578,15 @@ PYBIND11_MODULE(backend, m)
     m.def("blacklist_roi_imp", &blacklist_roi_imp, "Set up a global or per-mask file blacklist definition");
     m.def("clear_roi_blacklist_imp", &clear_roi_blacklist_imp, "Clear the ROI black list");
     m.def("roi_blacklist_get_summary_imp", &roi_blacklist_get_summary_imp, "Returns a summary of the ROI blacklist");
-
+    m.def("customize_gabor_feature_imp", &customize_gabor_feature_imp, "Sets custom GABOR feature's parameters");
+    m.def("set_if_ibsi_imp", &set_if_ibsi_imp, "Set if the features will be ibsi compliant");
+    m.def("set_environment_params_imp", &set_environment_params_imp, "Set the environment variables of Nyxus");
+    m.def("get_params_imp", &get_params_imp, "Get parameters of Nyxus");
+    m.def("create_arrow_file_imp", &create_arrow_file_imp, "Creates an arrow file for the feature calculations");
+    m.def("get_arrow_file_imp", &get_arrow_file_imp, "Get path to arrow file");
+    m.def("get_parquet_file_imp", &get_parquet_file_imp, "Returns path to parquet file");
+    m.def("create_parquet_file_imp", &create_parquet_file_imp, "Create parquet file for the features calculations");
+    m.def("get_arrow_table_imp", &get_arrow_table_imp, "Get arrow table of feature calculations.");
 }
 
 ///
@@ -551,7 +603,7 @@ PYBIND11_MODULE(backend, m)
 //
 void initialize_environment(
     const std::vector<std::string>& features,
-    int neighbor_distance,
+    float neighbor_distance,
     float pixels_per_micron,
     uint32_t coarse_gray_depth,
     uint32_t n_reduce_threads,
