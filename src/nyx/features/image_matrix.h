@@ -82,11 +82,20 @@ public:
 		return val;
 	}
 
-	// y - strided index, x - nonstrided; 1-based x and y
-	T matlab (int y, int x) const
+	inline T yx (int y, int x) const
 	{
-		T t = xy(x-1,y-1);		//--formerly--> operator() (x-1,y-1);
-		return t;
+		return xy (x,y);
+	}
+
+	inline T& yx (int y, int x)
+	{
+		return xy (x,y);
+	}
+
+	// y - strided index, x - nonstrided; 1-based x and y
+	inline T matlab (int y, int x) const
+	{
+		return xy(x - 1, y - 1);
 	}
 
 	bool safe(int x, int y) const
@@ -185,8 +194,8 @@ public:
 			return true;
 	}
 
-	int width() const { return W; }
-	int height() const { return H; }
+	int get_width() const { return W; }
+	int get_height() const { return H; }
 
 private:
 	int W, H;

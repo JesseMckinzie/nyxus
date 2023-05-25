@@ -199,6 +199,21 @@ void Environment::show_cmdline_help()
 			<< "\t\t\tUse " << EXCLUSIVETIMING << "=false to measure time of the whole image collection, " << EXCLUSIVETIMING << "=true to measure time per image pair \n";
 	#endif
 
+	std::cout << "\t\t" << OPT << GABOR_FREQS << "=<comma separated denominators of \\pi> \n"
+		<< "\t\t\tDefault: 1,2,4,8,16,32,64 \n"
+		<< "\t\t" << OPT << GABOR_GAMMA << "=<anisotropy of the Gaussian> \n"
+		<< "\t\t\tDefault: 0.1 \n"
+		<< "\t\t" << OPT << GABOR_SIG2LAM << "=<spatial frequency bandwidth (sigma over lambda)> \n"
+		<< "\t\t\tDefault: 0.8 \n"
+		<< "\t\t" << OPT << GABOR_KERSIZE << "=<dimension of the 2D kernel> \n"
+		<< "\t\t\tDefault: 16 \n"
+		<< "\t\t" << OPT << GABOR_F0 << "=<frequency of the baseline lowpass filter as denominator of \\pi> \n"
+		<< "\t\t\tDefault: 0.1 \n"
+		<< "\t\t" << OPT << GABOR_THETA << "=<orientation of the Gaussian in degrees 0-180> \n"
+		<< "\t\t\tDefault: 45 \n"
+		<< "\t\t" << OPT << GABOR_THRESHOLD << "=<lower threshold of the filtered image to baseline ratio> \n"
+		<< "\t\t\tDefault: 0.025 \n";
+
 	std::cout << "\n"
 		<< "\tnyxus -h\tDisplay help info\n"
 		<< "\tnyxus --help\tDisplay help info\n";
@@ -271,6 +286,9 @@ void Environment::show_summary(const std::string &head, const std::string &tail)
 	#if CHECKTIMING
 		std::cout << "\t#CHECKTIMING / exclusive mode of timing " << (Stopwatch::exclusive() ? "TRUE" : "FALSE") << "\n";
 	#endif
+
+	if (! gaborOptions.empty())
+		std::cout << "\tGabor feature options: " << gaborOptions.get_summary_text() << "\n";
 
 	std::cout << tail;
 }
@@ -355,19 +373,37 @@ void Environment::process_feature_list()
 		{
 			theFeatureSet.enableAll();
 			auto F = {
-				GLCM_ANGULAR2NDMOMENT,
+				GLCM_ASM,
+				GLCM_ACOR,
+				GLCM_CLUPROM,
+				GLCM_CLUSHADE,
+				GLCM_CLUTEND,
 				GLCM_CONTRAST,
 				GLCM_CORRELATION,
-				GLCM_VARIANCE,
-				GLCM_INVERSEDIFFERENCEMOMENT,
-				GLCM_SUMAVERAGE,
-				GLCM_SUMVARIANCE,
-				GLCM_SUMENTROPY,
+				GLCM_DIFAVE,
+				GLCM_DIFENTRO,
+				GLCM_DIFVAR,
+				GLCM_DIS,
+				GLCM_ENERGY,
 				GLCM_ENTROPY,
-				GLCM_DIFFERENCEVARIANCE,
-				GLCM_DIFFERENCEENTROPY,
+				GLCM_HOM1,
+				GLCM_HOM2,
+				GLCM_IDM,
+				GLCM_IDMN,
+				GLCM_ID,
+				GLCM_IDN,
 				GLCM_INFOMEAS1,
-				GLCM_INFOMEAS2};
+				GLCM_INFOMEAS2,
+				GLCM_IV,
+				GLCM_JAVE,
+				GLCM_JE,
+				GLCM_JMAX,
+				GLCM_JVAR,
+				GLCM_SUMAVERAGE,
+				GLCM_SUMENTROPY,
+				GLCM_SUMVARIANCE,
+				GLCM_VARIANCE
+			};
 			theFeatureSet.disableFeatures(F);
 			break; // No need to bother of others
 		}
@@ -452,18 +488,32 @@ void Environment::process_feature_list()
 		if (s == FEA_NICK_ALL_GLCM)
 		{
 			auto F = {
-				GLCM_ANGULAR2NDMOMENT,
+				GLCM_ASM,
+				GLCM_ACOR,
+				GLCM_CLUPROM,
+				GLCM_CLUSHADE,
+				GLCM_CLUTEND,
 				GLCM_CONTRAST,
 				GLCM_CORRELATION,
-				GLCM_DIFFERENCEAVERAGE,
-				GLCM_DIFFERENCEENTROPY,
-				GLCM_DIFFERENCEVARIANCE,
+				GLCM_DIFAVE,
+				GLCM_DIFENTRO,
+				GLCM_DIFVAR,
+				GLCM_DIS,
 				GLCM_ENERGY,
 				GLCM_ENTROPY,
-				GLCM_HOMOGENEITY,
+				GLCM_HOM1,
+				GLCM_HOM2,
+				GLCM_IDM,				
+				GLCM_IDMN,
+				GLCM_ID,
+				GLCM_IDN,
 				GLCM_INFOMEAS1,
 				GLCM_INFOMEAS2,
-				GLCM_INVERSEDIFFERENCEMOMENT,
+				GLCM_IV,
+				GLCM_JAVE,
+				GLCM_JE,
+				GLCM_JMAX,
+				GLCM_JVAR,
 				GLCM_SUMAVERAGE,
 				GLCM_SUMENTROPY,
 				GLCM_SUMVARIANCE,
@@ -555,17 +605,17 @@ void Environment::process_feature_list()
 				GABOR,
 
 				//=== GLCM
-				GLCM_ANGULAR2NDMOMENT,
+				GLCM_ASM,
 				GLCM_CONTRAST,
 				GLCM_CORRELATION,
 				GLCM_VARIANCE,
-				GLCM_INVERSEDIFFERENCEMOMENT,
+				GLCM_IDM,
 				GLCM_SUMAVERAGE,
 				GLCM_SUMVARIANCE,
 				GLCM_SUMENTROPY,
 				GLCM_ENTROPY,
-				GLCM_DIFFERENCEVARIANCE,
-				GLCM_DIFFERENCEENTROPY,
+				GLCM_DIFVAR,
+				GLCM_DIFENTRO,
 				GLCM_INFOMEAS1,
 				GLCM_INFOMEAS2,
 
@@ -728,7 +778,14 @@ bool Environment::parse_cmdline(int argc, char **argv)
 				find_string_argument(i, IBSICOMPLIANCE, raw_ibsi_compliance) ||
 				find_string_argument(i, RAMLIMIT, rawRamLimit) ||
 				find_string_argument(i, TEMPDIR, rawTempDir) ||
-				find_string_argument(i, SKIPROI, rawBlacklistedRois)
+				find_string_argument(i, SKIPROI, rawBlacklistedRois) ||
+				find_string_argument(i, GABOR_FREQS, gaborOptions.rawFreqs) ||
+				find_string_argument(i, GABOR_GAMMA, gaborOptions.rawGamma) ||
+				find_string_argument(i, GABOR_SIG2LAM, gaborOptions.rawSig2lam) ||
+				find_string_argument(i, GABOR_KERSIZE, gaborOptions.rawKerSize) ||
+				find_string_argument(i, GABOR_F0, gaborOptions.rawF0) ||
+				find_string_argument(i, GABOR_THETA, gaborOptions.rawTheta) ||
+				find_string_argument(i, GABOR_THRESHOLD, gaborOptions.rawGrayThreshold)
 
 				#ifdef CHECKTIMING
 					|| find_string_argument(i, EXCLUSIVETIMING, rawExclusiveTiming)
@@ -757,9 +814,10 @@ bool Environment::parse_cmdline(int argc, char **argv)
 	// --what's not recognized?
 	if (unrecognizedArgs.size() > 0)
 	{
-		std::cout << "Ignoring unrecognized arguments:\n";
+		std::cout << "\nError - unrecognized arguments:\n";
 		for (auto &u : unrecognizedArgs)
 			std::cout << "\t" << u << "\n";
+		return false;
 	}
 
 	//==== Check mandatory parameters
@@ -940,6 +998,17 @@ bool Environment::parse_cmdline(int argc, char **argv)
 		}
 	}
 
+	//==== Parse Gabor options
+	if (! gaborOptions.empty())
+	{
+		std::string ermsg;
+		if (!this->parse_gabor_options_raw_inputs (ermsg))
+		{
+			std::cerr << ermsg << "\n";
+			return 1;
+		}
+	}
+
 	//==== Parse exclusive-inclusive timing
 	#ifdef CHECKTIMING
 	if (!rawExclusiveTiming.empty())
@@ -957,7 +1026,7 @@ bool Environment::parse_cmdline(int argc, char **argv)
 	auto rawUseGpuUC = Nyxus::toupper(rawUseGpu);
 	if (rawUseGpuUC.length() == 0)
 	{
-		use_gpu_ = false;
+		set_use_gpu (false);
 		std::cout << "\n!\n! Not using GPU. To involve GPU, use command line option " << USEGPU << "=true\n!\n\n";
 	}
 	else
@@ -1176,6 +1245,16 @@ bool Environment::roi_is_blacklisted (const std::string& fname, int label)
 void Environment::get_roi_blacklist_summary(std::string& response)
 {
 	response = roiBlacklist.get_summary_text();
+}
+
+bool Environment::parse_gabor_options_raw_inputs (std::string& error_message)
+{
+	if (!gaborOptions.parse_input())
+	{
+		error_message = gaborOptions.get_last_er_msg();
+		return false;
+	}
+	return true;
 }
 
 #ifdef USE_GPU

@@ -53,8 +53,43 @@ should adhere to columns "WIPP I/O role" and "WIPP type".
      - integer
      - input
      - integer
+   * - --gaborfreqs
+     - (Optional) Feature GABOR: custom denominators of :math:`\pi` as frequencies of Gabor filter's harmonic factor. Default: '--gaborfreqs=1,2,4,8,16,32,64'
+     - list of integer constants
+     - input
+     - collection
+   * - --gaborf0
+     - (Optional) Feature GABOR: frequency of the baseline lowpass filter as denominator of :math:`\pi`. Default: '--gaborf0=0.1'
+     - real
+     - input
+     - number
+   * - --gaborgamma
+     - (Optional) Feature GABOR: aspect ratio of Gabor filter's Gaussian factor. Default: '--gaborgamma=0.1'
+     - real
+     - input
+     - number
+   * - --gaborkersize
+     - (Optional) Feature GABOR: dimension of the 2D Gabor filter kernel. Default: '--gaborkersize=16'
+     - integer
+     - input
+     - integer
+   * - --gaborsig2lam
+     - (Optional) Feature GABOR: spatial frequency bandwidth of Gabor filter. Default: '--gaborsig2lam=0.8'
+     - real
+     - input
+     - number
+   * - --gabortheta
+     - (Optional) Feature GABOR: orientation of the Gaussian in degrees 0-180. Default: '--gabortheta=45'
+     - real
+     - input
+     - number
+   * - --gaborthold
+     - (Optional) Feature GABOR: lower threshold of the filtered image to baseline ratio. Default: '--gaborthold=0.025'
+     - real
+     - input
+     - number
    * - --glcmAngles
-     - (Optional) Enabled direction angles of the GLCM feature. Superset of values: 0, 45, 90, and 135. Default: '--glcmAngles=0,45,90,135'
+     - (Optional) Feature GLCM: enabled direction angles. Superset of values: 0, 45, 90, and 135. Default: '--glcmAngles=0,45,90,135'
      - list of integer constants
      - input
      - collection
@@ -213,19 +248,167 @@ and the file is passed to Nyxus via parameter --intSegMapFile, the mapping will 
 
 Alternatively, Nyxus can process explicitly defined pairs of intensity-mask images, for example image "i1" with mask "m1" and image "i2" with mask "m2":
 
-```python 
-from nyxus import Nyxus
-nyx = Nyxus(["*ALL*"])
-features = nyx.featurize(
-    [
-        "/path/to/images/intensities/i1.ome.tif", 
-        "/path/to/images/intensities/i2.ome.tif"
-    ], 
-    [
-        "/path/to/images/labels/m1.ome.tif", 
-        "/path/to/images/labels/m2.ome.tif"
-    ])
-```
+.. code-block:: python
+
+   from nyxus import Nyxus
+   nyx = Nyxus(["*ALL*"])
+   features = nyx.featurize_files(
+      [
+         "/path/to/images/intensities/i1.ome.tif", 
+         "/path/to/images/intensities/i2.ome.tif"
+      ], 
+      [
+         "/path/to/images/labels/m1.ome.tif", 
+         "/path/to/images/labels/m2.ome.tif"
+      ])
+
+
+Nyxus can also process intensity-mask pairs that are stored as Numpy arrays using the `featurize` method. This method takes in either a single pair of 2D intensity-mask pairs
+or a pair of 3D arrays containing 2D intensity and mask images. There is also two optional parameters to supply names to the resulting dataframe, . 
+
+.. code-block:: python
+
+   from nyxus import Nyxus
+   import numpy as np
+
+   nyx = Nyxus(["*ALL*"])
+
+   intens = [
+      [[1, 4, 4, 1, 1],
+      [1, 4, 6, 1, 1],
+      [4, 1, 6, 4, 1],
+      [4, 4, 6, 4, 1]],
+                     
+      [[1, 4, 4, 1, 1],
+      [1, 1, 6, 1, 1],
+      [1, 1, 3, 1, 1],
+      [4, 4, 6, 1, 1]]
+   ]
+
+   seg = [
+      [[1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1]],
+                  
+      [[1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1],
+      [0, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1]]
+   ]
+
+
+   features = nyx.featurize(intens, seg)
+
+
+The `features` variable is a Pandas dataframe similar to what is shown below.
+
+.. code-block:: bash
+
+        mask_image     intensity_image  label  MEAN       MEDIAN   ...  GABOR_6 
+  
+   0   Segmentation1   Intensity1         1    45366.9    46887    ...  0.873016 
+   1   Segmentation1   Intensity1         2    27122.8    27124.5  ...  1.000000 
+   2   Segmentation1   Intensity1         3    34777.4    33659    ...  0.942857 
+   3   Segmentation1   Intensity1         4    35808.2    36924    ...  0.824074 
+   ...    ...             ...            ...     ...      ...      ...    ...      
+   14  Segmentation2   Intensity2         6    54573.3    54573.3  ...  0.980769
+
+Note that in this case, default names were provided for the `mask_image` and `intensity_image` columns. To supply names 
+for these columns, the optional arguments `intensity_names` and `label_names` are used by passing lists of names in. 
+The length of the lists must be the same as the length of the mask and intensity arrays. To name the images, use
+
+.. code-block:: python
+
+   intens_names = ['custom_intens_name1', 'custom_intens_name2']
+   seg_names = ['custom_seg_name1', 'custom_seg_name2']
+
+   features = nyx.featurize(intens, seg, intens_name, seg_name)
+
+
+The `features` variable will now use the custom names, as shown below
+
+.. code-block:: bash
+
+       mask_image        intensity_image             label  MEAN       MEDIAN   ...  GABOR_6 
+  
+   0   custom_seg_name1   custom_intens_name1          1    45366.9    46887    ...  0.873016 
+   1   custom_seg_name1   custom_intens_name1          2    27122.8    27124.5  ...  1.000000 
+   2   custom_seg_name1   custom_intens_name1          3    34777.4    33659    ...  0.942857 
+   3   custom_seg_name1   custom_intens_name1          4    35808.2    36924    ...  0.824074 
+   ...    ...             ...            ...     ...      ...      ...    ...      
+   14  custom_seg_name2   Intensity2         6    54573.3    54573.3  ...  0.980769
+
+All parameters to configure Nyxus are available to set within the constructor. These parameters can also be updated after the object is created using the `set_params`
+method. This method takes in keyword arguments where the key is a valid parameter in Nyxus and the value is the updated value for the paramter. For example, 
+to update the `coarse_gray_depth` to 256 and the `gabor_f0` parameter to 0.1, the following can be done:
+
+.. code-block:: python
+
+   from nyxus import Nyxus
+   nyx = Nyxus(["*ALL*"])
+   intensityDir = "/path/to/images/intensities/"
+   maskDir = "/path/to/images/labels/"
+   features = nyx.featurize_directory (intensityDir, maskDir)
+
+   nyx.set_params(coarse_gray_depth=256, gabor_f0=0.1)
+
+
+A list of valid parameters is included in the documentation for this method.
+
+To get the values of the parameters in Nyxus, the `get_params` method is used. If no arguments are passed to this function, then a dictionary mapping all of the variable names to the respective value is returned. For example,
+
+.. code-block:: python
+
+   from nyxus import Nyxus
+   nyx = Nyxus(["*ALL*"])
+   intensityDir = "/path/to/images/intensities/"
+   maskDir = "/path/to/images/labels/"
+   features = nyx.featurize_directory (intensityDir, maskDir)
+
+   print(nyx.get_params())
+
+
+will print the dictionary
+
+.. code-block:: bash
+
+   {'coarse_gray_depth': 256, 
+   'features': ['*ALL*'], 
+   'gabor_f0': 0.1, 
+   'gabor_freqs': [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0], 
+   'gabor_gamma': 0.1, 
+   'gabor_kersize': 16, 
+   'gabor_sig2lam': 0.8, 
+   'gabor_theta': 45.0, 
+   'gabor_thold': 0.025, 
+   'ibsi': 0, 
+   'n_loader_threads': 1, 
+   'n_feature_calc_threads': 4, 
+   'neighbor_distance': 5, 
+   'pixels_per_micron': 1.0}
+
+There is also the option to pass arguments to this function to only receive a subset of parameter values. The arguments should be 
+valid parameter names as string, separated by commas. For example,
+
+.. code-block:: python
+
+   from nyxus import Nyxus
+   nyx = Nyxus(["*ALL*"])
+   intensityDir = "/path/to/images/intensities/"
+   maskDir = "/path/to/images/labels/"
+   features = nyx.featurize_directory (intensityDir, maskDir)
+
+   print(nyx.get_params('coarse_gray_depth', 'features', 'gabor_f0'))
+
+will print the dictionary
+
+.. code-block:: bash
+
+   {'coarse_gray_depth': 256, 
+   'features': ['*ALL*'], 
+   'gabor_f0': 0.1}
+
 
 8. Nested Features Examples
 -----------------------------------------------------------------------------

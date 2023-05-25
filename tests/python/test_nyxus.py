@@ -32,10 +32,280 @@ class TestNyxus():
             else:
                 print("Gpu not available")
                 assert True
-                        
-        def test_in_memory(self):
+
+        def test_gabor_customization (self):
+            nyx = nyxus.Nyxus (["GABOR"])
+            assert nyx is not None
+
+            # test ability to digest valid parameters
+            try:
+                nyx.set_gabor_feature_params(kersize=16)
+                nyx.set_gabor_feature_params(gamma=0.1)
+                nyx.set_gabor_feature_params(sig2lam=0.8)
+                nyx.set_gabor_feature_params(f0=0.1)
+                nyx.set_gabor_feature_params(theta=1.5708)
+                nyx.set_gabor_feature_params(thold=0.025)
+                nyx.set_gabor_feature_params(freqs=[1])
+                nyx.set_gabor_feature_params(freqs=[1,2,4,8,16,32,64])
+            except Exception as exc:
+                assert False, f"set_gabor_feature_params(valid argument) raised an exception {exc}"
+
+            # test ability to intercept invalid values
+            with pytest.raises (Exception):
+                nyx.set_gabor_feature_params(kersize=16.789)
+            with pytest.raises (Exception):
+                nyx.set_gabor_feature_params(gamma="notAnumber")
+            with pytest.raises (Exception):
+                nyx.set_gabor_feature_params(sig2lam="notAnumber")
+                nyx.set_gabor_feature_params(f0="notAnumber")
+                nyx.set_gabor_feature_params(theta="notAnumber")
+                nyx.set_gabor_feature_params(thold="notAnumber")
+            with pytest.raises (Exception):
+                nyx.set_gabor_feature_params(freqs=["notAnumber"])
+            with pytest.raises (Exception):
+                nyx.set_gabor_feature_params(freqs="notAList")
+        
+        def test_get_default_params(self):
             
+            nyx = nyxus.Nyxus (["*ALL*"])
+            assert nyx is not None
+            
+            params = nyx.get_params()
+            
+            result = {'coarse_gray_depth': 256, 
+                      'features': ['*ALL*'], 
+                      'gabor_f0': 0.1, 
+                      'gabor_freqs': [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0], 
+                      'gabor_gamma': 0.1, 
+                      'gabor_kersize': 16, 
+                      'gabor_sig2lam': 0.8, 
+                      'gabor_theta': 45.0, 
+                      'gabor_thold': 0.025, 
+                      'ibsi': 0, 
+                      'n_loader_threads': 1, 
+                      'n_feature_calc_threads': 4, 
+                      'neighbor_distance': 5, 
+                      'pixels_per_micron': 1.0}
+            
+            for key in params:
+                
+                if (isinstance(params[key], float)):
+                    assert params[key] == pytest.approx(result[key])
+                else:
+                    assert params[key] == pytest.approx(result[key])                
+
+        def test_get_params(self):
+            
+            nyx = nyxus.Nyxus (["*ALL*"])
+            assert nyx is not None
+            
+            params = nyx.get_params('coarse_gray_depth', 'features', 'gabor_f0')
+            
+            result = {'coarse_gray_depth': 256, 
+                      'features': ['*ALL*'], 
+                      'gabor_f0': 0.1}
+            
+            assert len(params) == 3
+            
+            for key in params:
+                
+                if (isinstance(params[key], float)):
+                    assert params[key] == pytest.approx(result[key])
+                else:
+                    assert params[key] == pytest.approx(result[key])
+
+        def test_set_params(self):
+            
+            nyx = nyxus.Nyxus (["*ALL*"])
+            assert nyx is not None
+
+            new_values ={'coarse_gray_depth': 512, 
+                        'features': ['*ALL*'], 
+                        'gabor_f0': 0.1, 
+                        'gabor_freqs': [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0], 
+                        'gabor_gamma': 0.1, 
+                        'gabor_kersize': 16, 
+                        'gabor_sig2lam': 0.8, 
+                        'gabor_theta': 45.0, 
+                        'gabor_thold': 0.025, 
+                        'ibsi': 0, 
+                        'n_loader_threads': 1, 
+                        'n_feature_calc_threads': 4, 
+                        'neighbor_distance': 5, 
+                        'pixels_per_micron': 1.0}
+            
+            nyx.set_params(
+                **new_values
+            )
+            
+            params = nyx.get_params()
+            
+            for key in params:
+                    
+                if (isinstance(params[key], float)):
+                    assert params[key] == pytest.approx(new_values[key])
+                else:
+                    assert params[key] == pytest.approx(new_values[key])   
+
+        def test_set_single_param(self):
+            
+            nyx = nyxus.Nyxus (["*ALL*"])
+            assert nyx is not None
+            
+            nyx.set_params(coarse_gray_depth = 125)
+            
+            params = nyx.get_params()
+            
+            result = {'coarse_gray_depth': 125, 
+                      'features': ['*ALL*'], 
+                      'gabor_f0': 0.1, 
+                      'gabor_freqs': [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0], 
+                      'gabor_gamma': 0.1, 
+                      'gabor_kersize': 16, 
+                      'gabor_sig2lam': 0.8, 
+                      'gabor_theta': 45.0, 
+                      'gabor_thold': 0.025, 
+                      'ibsi': 0, 
+                      'n_loader_threads': 1, 
+                      'n_feature_calc_threads': 4, 
+                      'neighbor_distance': 5, 
+                      'pixels_per_micron': 1.0}
+            
+            for key in params:
+                
+                if (isinstance(params[key], float)):
+                    assert params[key] == pytest.approx(result[key])
+                else:
+                    assert params[key] == pytest.approx(result[key])
+            
+        
+        def test_set_environment_all(self):
+            
+            nyx = nyxus.Nyxus (["*ALL*"])
+            assert nyx is not None
+            
+            nyx.set_environment_params(
+                features = ["GABOR"],
+                neighbor_distance = 2,
+                pixels_per_micron = 2,
+                coarse_gray_depth = 2,
+                n_feature_calc_threads = 2,
+                n_loader_threads = 2,
+                using_gpu = 0
+            )
+            
+            params = nyx.get_params()
+            
+            result = {'coarse_gray_depth': 2, 
+                      'features': ['GABOR'], 
+                      'gabor_f0': 0.1, 
+                      'gabor_freqs': [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0], 
+                      'gabor_gamma': 0.1, 
+                      'gabor_kersize': 16, 
+                      'gabor_sig2lam': 0.8, 
+                      'gabor_theta': 45.0, 
+                      'gabor_thold': 0.025, 
+                      'ibsi': 0, 
+                      'n_loader_threads': 2, 
+                      'n_feature_calc_threads': 2, 
+                      'neighbor_distance': 2, 
+                      'pixels_per_micron': 2}
+            
+            for key in params:
+                
+                if (isinstance(params[key], float)):
+                    assert params[key] == pytest.approx(result[key])
+                else:
+                    assert params[key] == pytest.approx(result[key])     
+            
+        def test_set_environment_all(self):
+            
+            nyx = nyxus.Nyxus (["*ALL*"])
+            assert nyx is not None
+            
+            nyx.set_environment_params(features = ["GABOR"])
+            
+            params = nyx.get_params()
+            
+            result = {'coarse_gray_depth': 256, 
+                      'features': ['GABOR'], 
+                      'gabor_f0': 0.1, 
+                      'gabor_freqs': [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0], 
+                      'gabor_gamma': 0.1, 
+                      'gabor_kersize': 16, 
+                      'gabor_sig2lam': 0.8, 
+                      'gabor_theta': 45.0, 
+                      'gabor_thold': 0.025, 
+                      'ibsi': 0, 
+                      'n_loader_threads': 1, 
+                      'n_feature_calc_threads': 4, 
+                      'neighbor_distance': 5, 
+                      'pixels_per_micron': 1.0}
+            
+            for key in params:
+                
+                if (isinstance(params[key], float)):
+                    assert params[key] == pytest.approx(result[key])
+                else:
+                    assert params[key] == pytest.approx(result[key]) 
+                    
+        def test_constructor_with_gabor(self):
+            
+            nyx = nyxus.Nyxus (
+                ["*ALL*"],
+                gabor_kersize = 1,
+                gabor_gamma = 1,
+                gabor_sig2lam = 1,
+                gabor_f0 = 1,
+                gabor_theta = 1,
+                gabor_thold = 1,
+                gabor_freqs = [1,1,1,1,1])
+            
+            assert nyx is not None
+            
+            params = nyx.get_params()
+            
+            result = {'coarse_gray_depth': 256, 
+                      'features': ['*ALL*'], 
+                      'gabor_f0': 1, 
+                      'gabor_freqs': [1, 1, 1, 1, 1], 
+                      'gabor_gamma': 1, 
+                      'gabor_kersize': 1, 
+                      'gabor_sig2lam': 1, 
+                      'gabor_theta': 1, 
+                      'gabor_thold': 1, 
+                      'ibsi': 0, 
+                      'n_loader_threads': 1, 
+                      'n_feature_calc_threads': 4, 
+                      'neighbor_distance': 5, 
+                      'pixels_per_micron': 1.0}
+            
+            for key in params:
+                
+                if (isinstance(params[key], float)):
+                    assert params[key] == pytest.approx(result[key])
+                else:
+                    assert params[key] == pytest.approx(result[key])    
+            
+                
+        def test_in_memory_2d(self):
+                
             cpu_nyx = nyxus.Nyxus(["*ALL_GLCM*"], ibsi=True)
+            
+            names = ["test_name_1"]
+
+            cpu_features = cpu_nyx.featurize(intens[0], seg[0], names, names)
+            
+            assert cpu_nyx.error_message == ''
+            
+        def test_in_memory_3d(self):
+            
+            cpu_nyx = nyxus.Nyxus([
+                "GLCM_ASM", "GLCM_CONTRAST", "GLCM_CORRELATION", "GLCM_DIFAVE", 
+                "GLCM_DIFENTRO", "GLCM_DIFVAR", "GLCM_ENERGY", "GLCM_ENTROPY",
+                "GLCM_HOM1", "GLCM_INFOMEAS1", "GLCM_INFOMEAS2", "GLCM_IDM", 
+                "GLCM_SUMAVERAGE", "GLCM_SUMENTROPY", "GLCM_SUMVARIANCE", "GLCM_VARIANCE"], 
+            ibsi=True)
             
             names = ["test_name_1", "test_name_2", "test_name_3", "test_name_4"]
 
@@ -64,8 +334,8 @@ class TestNyxus():
             assert pytest.approx(averaged_results[0], 0.01) == 0.368 # angular2ndmoment
             assert pytest.approx(averaged_results[1], 0.01) == 5.28 # contrast 
             assert pytest.approx(averaged_results[2], 0.01) == -0.0121 # correlation
-            assert pytest.approx(averaged_results[9], 0.01) == 1.40 # difference entropy
-            assert pytest.approx(averaged_results[11], 0.1) == 2.90 # difference variance#
+            assert pytest.approx(averaged_results[4], 0.01) == 1.40 # difference entropy
+            assert pytest.approx(averaged_results[5], 0.1) == 2.90 # difference variance#
 
                 
         

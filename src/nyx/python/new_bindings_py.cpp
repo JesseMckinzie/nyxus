@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <exception>
+#include <variant>
+#include <map>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
@@ -7,13 +9,16 @@
 #include "../version.h"
 #include "../environment.h"
 #include "../feature_mgr.h"
-#include "../dirs_and_files.h"  
+#include "../dirs_and_files.h"   
 #include "../globals.h"
 #include "../nested_feature_aggregation.h"
+#include "../features/gabor.h"
 #include "../output_writers.h"
 
 namespace py = pybind11;
 using namespace Nyxus;
+
+using ParameterTypes = std::variant<int, float, double, unsigned int, std::vector<double>, std::vector<std::string>>;
 
 // Defined in nested.cpp
 bool mine_segment_relations (
@@ -39,7 +44,7 @@ inline py::array_t<typename Sequence::value_type> as_pyarray(Sequence &&seq)
 
 void initialize_environment(
     const std::vector<std::string> &features,
-    float neighbor_distance,
+    int neighbor_distance,
     float pixels_per_micron,
     uint32_t coarse_gray_depth, 
     uint32_t n_reduce_threads,
@@ -48,7 +53,7 @@ void initialize_environment(
     bool ibsi)
 {
     theEnvironment.recognizedFeatureNames = features;
-    theEnvironment.set_pixel_distance(static_cast<int>(neighbor_distance));
+    theEnvironment.set_pixel_distance(neighbor_distance);
     theEnvironment.set_verbosity_level (0);
     theEnvironment.xyRes = theEnvironment.pixelSizeUm = pixels_per_micron;
     theEnvironment.set_coarse_gray_depth(coarse_gray_depth);
@@ -72,6 +77,44 @@ void initialize_environment(
             std::cout << "No gpu available." << std::endl;
         }
     #endif
+}
+
+void set_if_ibsi_imp(bool ibsi) {
+    theEnvironment.set_ibsi_compliance(ibsi);
+}
+
+void set_environment_params_imp (
+    const std::vector<std::string> &features = {},
+    int neighbor_distance = -1,
+    float pixels_per_micron = -1,
+    uint32_t coarse_gray_depth = 0, 
+    uint32_t n_reduce_threads = 0,
+    uint32_t n_loader_threads = 0,
+    int using_gpu = -2
+) {
+    if (features.size() > 0) {
+        theEnvironment.recognizedFeatureNames = features;
+    }
+     
+    if (neighbor_distance > -1) {
+        theEnvironment.set_pixel_distance(neighbor_distance);
+    }
+
+    if (pixels_per_micron > -1) {
+        theEnvironment.xyRes = theEnvironment.pixelSizeUm = pixels_per_micron;
+    }
+
+    if (coarse_gray_depth != 0) {
+        theEnvironment.set_coarse_gray_depth(coarse_gray_depth);
+    }
+
+    if (n_reduce_threads != 0) {
+        theEnvironment.n_reduce_threads = n_reduce_threads;
+    }
+    
+    if (n_loader_threads != 0) {
+        theEnvironment.n_loader_threads = n_loader_threads;
+    }
 }
 
 py::tuple featurize_directory_imp (
@@ -412,6 +455,70 @@ py::str roi_blacklist_get_summary_imp()
     return py::str(response);
 }
 
+void customize_gabor_feature_imp(
+    const std::string& kersize,
+    const std::string& gamma,
+    const std::string& sig2lam,
+    const std::string& f0,
+    const std::string& theta,
+    const std::string& thold,
+    const std::string& freqs)
+{
+
+    // Step 1 - set raw strings of parameter values
+    theEnvironment.gaborOptions.rawKerSize = kersize;
+    theEnvironment.gaborOptions.rawGamma = gamma;
+    theEnvironment.gaborOptions.rawSig2lam = sig2lam;
+    theEnvironment.gaborOptions.rawF0 = f0;
+    theEnvironment.gaborOptions.rawTheta = theta;
+    theEnvironment.gaborOptions.rawGrayThreshold = thold;
+    theEnvironment.gaborOptions.rawFreqs = freqs;
+
+    // Step 2 - validate them and consume if all are valid
+    std::string ermsg;
+    if (!theEnvironment.parse_gabor_options_raw_inputs(ermsg))
+        throw std::invalid_argument("Invalid GABOR parameter value: " + ermsg);
+}
+
+
+std::map<std::string, ParameterTypes> get_params_imp(const std::vector<std::string>& vars ) {
+    std::map<std::string, ParameterTypes> params;
+
+
+    params["features"] = theEnvironment.recognizedFeatureNames;
+    params["neighbor_distance"] = theEnvironment.n_pixel_distance;
+    params["pixels_per_micron"] = theEnvironment.xyRes;
+    params["coarse_gray_depth"] = theEnvironment.get_coarse_gray_depth();
+    params["n_feature_calc_threads"] = theEnvironment.n_reduce_threads;
+    params["n_loader_threads"] = theEnvironment.n_loader_threads;
+    params["ibsi"] = theEnvironment.ibsi_compliance;
+
+    params["gabor_kersize"] = GaborFeature::n;
+    params["gabor_gamma"] = GaborFeature::gamma;
+    params["gabor_sig2lam"] = GaborFeature::sig2lam;
+    params["gabor_f0"] = GaborFeature::f0LP;
+    params["gabor_theta"] = GaborFeature::get_theta_in_degrees(); // convert theta back from radians
+    params["gabor_thold"] = GaborFeature::GRAYthr;
+    params["gabor_freqs"] = GaborFeature::f0;
+
+    if (vars.size() == 0) 
+        return params;
+
+    std::map<std::string, ParameterTypes> params_subset;
+
+    for (const auto& var: vars) {
+
+        auto it = params.find(var);
+
+        if (it != params.end()) {
+            params_subset.insert(*it);
+        }
+    }
+
+    return params_subset;
+
+}
+
 PYBIND11_MODULE(backend, m)
 {
     m.doc() = "Nyxus";
@@ -427,11 +534,7 @@ PYBIND11_MODULE(backend, m)
     m.def("blacklist_roi_imp", &blacklist_roi_imp, "Set up a global or per-mask file blacklist definition");
     m.def("clear_roi_blacklist_imp", &clear_roi_blacklist_imp, "Clear the ROI black list");
     m.def("roi_blacklist_get_summary_imp", &roi_blacklist_get_summary_imp, "Returns a summary of the ROI blacklist");
-    m.def("create_arrow_file_imp", &create_arrow_file_imp, "Creates an arrow file for the feature calculations");
-    m.def("get_arrow_file_imp", &get_arrow_file_imp, "Get path to arrow file");
-    m.def("get_parquet_file_imp", &get_parquet_file_imp, "Returns path to parquet file");
-    m.def("create_parquet_file_imp", &create_parquet_file_imp, "Create parquet file for the features calculations");
-    m.def("get_arrow_table_imp", &get_arrow_table_imp, "Get arrow table of feature calculations.");
+
 }
 
 ///
@@ -448,7 +551,7 @@ PYBIND11_MODULE(backend, m)
 //
 void initialize_environment(
     const std::vector<std::string>& features,
-    float neighbor_distance,
+    int neighbor_distance,
     float pixels_per_micron,
     uint32_t coarse_gray_depth,
     uint32_t n_reduce_threads,

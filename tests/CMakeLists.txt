@@ -63,6 +63,7 @@ set(TEST_SRC
 	../src/nyx/features/glcm.cpp
 	../src/nyx/features/glcm_nontriv.cpp
 	../src/nyx/features/gldm.cpp
+	../src/nyx/features/gldzm.cpp
 	../src/nyx/features/glrlm.cpp
 	../src/nyx/features/glszm.cpp
 	../src/nyx/features/hexagonality_polygonality.cpp
@@ -72,6 +73,7 @@ set(TEST_SRC
 	../src/nyx/features/image_moments_nontriv.cpp
 	../src/nyx/features/intensity.cpp
 	../src/nyx/features/neighbors.cpp
+	../src/nyx/features/ngldm.cpp
 	../src/nyx/features/ngtdm.cpp
 	../src/nyx/features/pixel.cpp
 	../src/nyx/features/radial_distribution.cpp
@@ -81,6 +83,7 @@ set(TEST_SRC
 	../src/nyx/features/specfunc.cpp
 	../src/nyx/features/zernike.cpp
 	../src/nyx/features/zernike_nontriv.cpp
+	../src/nyx/cli_gabor_options.cpp
 	../src/nyx/common_stats.cpp
 	../src/nyx/dirs_and_files.cpp
 	../src/nyx/environment.cpp
@@ -137,6 +140,31 @@ if (TIFF_FOUND)
 else ()
 	message(FATAL_ERROR "libtiff library has not been found, please install it.")
 endif (TIFF_FOUND)
+
+find_package(DCMTK)
+if(DCMTK_FOUND)
+	include_directories(${DCMTK_INCLUDE_DIRS})
+	add_definitions(-DDICOM_SUPPORT)
+	foreach(LIB ${DCMTK_LIBRARIES})
+		FIND_LIBRARY(FOUND_LIB_${LIB} ${LIB})
+		LIST(APPEND runAllTests_LIBRARIES ${FOUND_LIB_${LIB}})
+	endforeach(LIB)
+endif()
+
+find_package(fmjpeg2k)
+if(fmjpeg2k_FOUND)
+	add_definitions(-DJPEG2K_SUPPORT)
+	foreach(LIB ${FMJPEG2K_LIBRARIES})
+		FIND_LIBRARY(FOUND_LIB_${LIB} ${LIB})
+		LIST(APPEND runAllTests_LIBRARIES ${FOUND_LIB_${LIB}})
+	endforeach(LIB)
+endif()
+
+find_package(ZLIB REQUIRED)
+if (ZLIB_FOUND)
+	list(APPEND runAllTests_LIBRARIES ${ZLIB_LIBRARIES} )
+	include_directories (${ZLIB_INCLUDE_DIR})
+endif (ZLIB_FOUND)
 
 target_include_directories (runAllTests PUBLIC ${GTEST_INCLUDE_DIRS})
 target_link_directories (runAllTests PUBLIC ${GTEST_LIBRARY_PATH})

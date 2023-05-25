@@ -5,6 +5,7 @@
 #include <vector>
 #include "environment_basic.h"
 #include "roi_blacklist.h"
+#include "cli_gabor_options.h"
 #include "output_writers.h"
 
 #ifdef USE_GPU
@@ -29,7 +30,7 @@
 #define ONLINESTATSTHRESH "--onlineStatsThresh" // Environment :: onlineStatsThreshold	-- Example: --onlineStatsThresh=150
 #define XYRESOLUTION "--pixelsPerCentimeter"	// pixels per centimeter
 #define PXLDIST "--pixelDistance"				// used in neighbor features
-#define COARSEGRAYDEPTH "--coarseGrayDepth"		// Default - 8
+#define COARSEGRAYDEPTH "--coarseGrayDepth"		// Environment :: raw_coarse_grayscale_depth
 #define RAMLIMIT "--ramLimit"					// Optional. Limit for treating ROIs as non-trivial and for setting the batch size of trivial ROIs. Default - amount of available system RAM
 #define TEMPDIR "--tempDir"						// Optional. Used in processing non-trivial features. Default - system temp directory
 #define IBSICOMPLIANCE "--ibsi" // skip binning for grey level and grey tone features
@@ -43,6 +44,15 @@
 	#define USEGPU "--useGpu"					// Environment::rawUseGpu, "true" or "false"
 	#define GPUDEVICEID "--gpuDeviceID"		// Environment::rawGpuDeviceID
 #endif
+
+// Gabor feature CLI arguments
+#define GABOR_FREQS "--gaborfreqs"		// Example: "2,4,8,72"
+#define GABOR_GAMMA "--gaborgamma"		// Example: "0.1"
+#define GABOR_SIG2LAM "--gaborsig2lam"	// Example: "0.8"
+#define GABOR_KERSIZE "--gaborkersize"	// Example: "20"
+#define GABOR_F0 "--gaborf0"			// Example: "0.1"
+#define GABOR_THETA "--gabortheta"		// Example: "60"
+#define GABOR_THRESHOLD "--gaborthold"	// Example: "0.025"
 
 // Feature group nicknames
 #define FEA_NICK_ALL "*ALL*"
@@ -75,7 +85,7 @@ public:
 	Environment();
 	bool parse_cmdline(int argc, char **argv);
 	void show_cmdline_help();
-	void show_featureset_help();
+	void show_featureset_help(); 
 	void show_summary(const std::string &head, const std::string &tail);
 
 	std::string labels_dir = "",
@@ -156,10 +166,15 @@ public:
 	void clear_roi_blacklist ();
 	void get_roi_blacklist_summary(std::string& response);
 
+	// implementation of Gabor feature options
+	bool parse_gabor_options_raw_inputs (std::string& error_message);
+	GaborOptions gaborOptions;
+
 private:
+
 	std::vector<std::tuple<std::string, std::string>> recognizedArgs;	// Accepted command line arguments
 
-	bool find_string_argument(std::vector<std::string>::iterator &i, const char *arg, std::string &arg_value);
+	bool find_string_argument (std::vector<std::string>::iterator &i, const char *arg, std::string &arg_value);
 	bool find_int_argument(std::vector<std::string>::iterator &i, const char *arg, int &arg_value);
 
 	std::string rawTempDirPath = "";

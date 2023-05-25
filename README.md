@@ -15,6 +15,8 @@ Nyxus is a feature-rich, highly optimized, Python/C++ application capable of ana
 
 Nyxus can be used via Python or command line and is available in containerized form for reproducible execution. Nyxus computes over 450 combined intensity, texture, and morphological features at the ROI or whole image level with more in development. Key features that make Nyxus unique among other image feature extraction applications is its ability to operate at any scale, its highly validated algorithms, and its modular nature that makes the addition of new features straightforward.
 
+Currently, Nyxus can read image data from OME-TIFF, OME-Zarr and DICOM 2D Grayscale images. It also has a Python API to support in-memory image data via Numpy array. 
+
 The docs can be found at [Read the Docs](https://nyxus.readthedocs.io/en/latest/).
 
 ## Getting started 
@@ -68,7 +70,7 @@ The `features` variable is a Pandas dataframe similar to what is shown below.
 | ... | ...                  | ...                  |     ... | ...     |  ...     |...|   ...      |
 | 734 | p5_y0_r51_c0.ome.tif | p5_y0_r51_c0.ome.tif |     223 | 54573.3 |  54573.3 |...|   0.980769 |
 
-Nyxus can also process intensity-mask pairs that are already loaded in memory as Numpy arrays using the `featurize` method. This method takes in either a single pair of 2D intensity-mask pairs
+Nyxus can also process intensity-mask pairs that are loaded as Numpy arrays using the `featurize` method. This method takes in either a single pair of 2D intensity-mask pairs
 or a pair of 3D arrays containing 2D intensity and mask images. There is also two optional parameters to supply names to the resulting dataframe, . 
 
 ```python 
@@ -103,7 +105,7 @@ seg = [
 ]
 
 
-features = nyx.featurize(intes, seg)
+features = nyx.featurize(intens, seg)
 ```
 
 The `features` variable is a Pandas dataframe similar to what is shown below.
@@ -126,7 +128,7 @@ The length of the lists must be the same as the length of the mask and intensity
 intens_names = ['custom_intens_name1', 'custom_intens_name2']
 seg_names = ['custom_seg_name1', 'custom_seg_name2']
 
-features = nyx.featurize(intes, seg, intens_name, seg_name)
+features = nyx.featurize(intens, seg, intens_name, seg_name)
 ```
 
 The `features` variable will now use the custom names, as shown below
@@ -134,7 +136,7 @@ The `features` variable will now use the custom names, as shown below
 |     | mask_image       | intensity_image          | label | MEAN    |   MEDIAN |...|    GABOR_6 |
 |----:|:-----------------|:-------------------------|------:|--------:|---------:|--:|-----------:|
 |   0 | custom_seg_name1 | custom_intens_name1      |     1 | 45366.9 |  46887   |...|   0.873016 |
-|   1 |custom_seg_name1  | custom_intens_name1      |     2 | 27122.8 |  27124.5 |...|   1.000000 |
+|   1 | custom_seg_name1 | custom_intens_name1      |     2 | 27122.8 |  27124.5 |...|   1.000000 |
 |   2 | custom_seg_name1 | custom_intens_name1      |     3 | 34777.4 |  33659   |...|   0.942857 |
 |   3 | custom_seg_name1 | custom_intens_name1      |     4 | 35808.2 |  36924   |...|   0.824074 |
 | ... | ...              | ...                      |   ... | ...     |  ...     |...|   ...      |
@@ -144,6 +146,75 @@ The `features` variable will now use the custom names, as shown below
 For more information on all of the available options and features, check out [the documentation](#).
 
 Nyxus can also be [built from source](#building-from-source) and used from the command line, or via a pre-built Docker container. 
+
+## Getting and setting parameters of Nyxus
+
+All parameters to configure Nyxus are available to set within the constructor. These parameters can also be updated after the object is created using the `set_params`
+method. This method takes in keyword arguments where the key is a valid parameter in Nyxus and the value is the updated value for the paramter. For example, 
+to update the `coarse_gray_depth` to 256 and the `gabor_f0` parameter to 0.1, the following can be done:
+
+```python 
+from nyxus import Nyxus
+nyx = Nyxus(["*ALL*"])
+intensityDir = "/path/to/images/intensities/"
+maskDir = "/path/to/images/labels/"
+features = nyx.featurize_directory (intensityDir, maskDir)
+
+nyx.set_params(coarse_gray_depth=256, gabor_f0=0.1)
+```
+
+A list of valid parameters is included in the documentation for this method.
+
+To get the values of the parameters in Nyxus, the `get_params` method is used. If no arguments are passed to this function, then a dictionary mapping all of the variable names to the respective value is returned. For example,
+
+```python 
+from nyxus import Nyxus
+nyx = Nyxus(["*ALL*"])
+intensityDir = "/path/to/images/intensities/"
+maskDir = "/path/to/images/labels/"
+features = nyx.featurize_directory (intensityDir, maskDir)
+
+print(nyx.get_params())
+```
+
+will print the dictionary
+
+```bash
+{'coarse_gray_depth': 256, 
+'features': ['*ALL*'], 
+'gabor_f0': 0.1, 
+'gabor_freqs': [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0], 
+'gabor_gamma': 0.1, 
+'gabor_kersize': 16, 
+'gabor_sig2lam': 0.8, 
+'gabor_theta': 45.0, 
+'gabor_thold': 0.025, 
+'ibsi': 0, 
+'n_loader_threads': 1, 
+'n_feature_calc_threads': 4, 
+'neighbor_distance': 5, 
+'pixels_per_micron': 1.0}
+```
+
+There is also the option to pass arguments to this function to only receive a subset of parameter values. The arguments should be 
+valid parameter names as string, separated by commas. For example,
+
+```python 
+from nyxus import Nyxus
+nyx = Nyxus(["*ALL*"])
+intensityDir = "/path/to/images/intensities/"
+maskDir = "/path/to/images/labels/"
+features = nyx.featurize_directory (intensityDir, maskDir)
+
+print(nyx.get_params('coarse_gray_depth', 'features', 'gabor_f0'))
+```
+will print the dictionary
+
+```bash
+{'coarse_gray_depth': 256, 
+'features': ['*ALL*'], 
+'gabor_f0': 0.1}
+```
 
 ## Available features 
 The feature extraction plugin extracts morphology and intensity based features from pairs of intensity/binary mask images and produces a csv file output. The input image should be in tiled [OME TIFF format](https://docs.openmicroscopy.org/ome-model/6.2.0/ome-tiff/specification.html).  The plugin extracts the following features:
@@ -184,12 +255,13 @@ Nyxus provides a set of pixel intensity, morphology, texture, intensity distribu
 | EROSIONS_2_VANISH | Number of erosion operations for a ROI to vanish in its axis aligned bounding box |
 | EROSIONS_2_VANISH_COMPLEMENT | Number of erosion operations for a ROI to vanish in its convex hull |
 | FRACT_DIM_BOXCOUNT, FRACT_DIM_PERIMETER | Fractal dimension features |
-| GLCM | Gray level co-occurrence Matrix features |
-| GLRLM | Gray level run-length matrix based features
-| GLSZM | Gray level size zone matrix based features
-| GLDM | Gray level dependency matrix based features
-| NGTDM | Neighbouring gray tone difference matrix features
-| ZERNIKE2D, FRAC_AT_D, RADIAL_CV, MEAN_FRAC | Radial distribution features
+| GLCM | Grey level co-occurrence Matrix features |
+| GLRLM | Grey level run-length matrix based features |
+| GLDZM | Grey level distance zone matrix based features |
+| GLSZM | Grey level size zone matrix based features |
+| GLDM | Grey level dependency matrix based features |
+| NGTDM | Neighbouring grey tone difference matrix features |
+| ZERNIKE2D, FRAC_AT_D, RADIAL_CV, MEAN_FRAC | Radial distribution features |
 | GABOR | A set of Gabor filters of varying frequencies and orientations |
 
 For the complete list of features see [Nyxus provided features](docs/featurelist.md)
@@ -204,7 +276,7 @@ Apart from defining your feature set by explicitly specifying comma-separated fe
 | \*all_intensity\* | integrated_intensity, mean, median, min, max, range, standard_deviation, standard_error, uniformity, skewness, kurtosis, hyperskewness, hyperflatness, mean_absolute_deviation, energy, root_mean_squared, entropy, mode, uniformity, p01, p10, p25, p75, p90, p99, interquartile_range, robust_mean_absolute_deviation, mass_displacement
 | \*all_morphology\* | area_pixels_count, area_um2, centroid_x, centroid_y, weighted_centroid_y, weighted_centroid_x, compactness, bbox_ymin, bbox_xmin, bbox_height, bbox_width, major_axis_length, minor_axis_length, eccentricity, orientation, num_neighbors, extent, aspect_ratio, equivalent_diameter, convex_hull_area, solidity, perimeter, edge_mean_intensity, edge_stddev_intensity, edge_max_intensity, edge_min_intensity, circularity
 | \*basic_morphology\* | area_pixels_count, area_um2, centroid_x, centroid_y, bbox_ymin, bbox_xmin, bbox_height, bbox_width
-| \*all_glcm\* | glcm_angular2ndmoment, glcm_contrast, glcm_correlation, glcm_variance, glcm_inversedifferencemoment, glcm_sumaverage, glcm_sumvariance, glcm_sumentropy, glcm_entropy, glcm_differencevariance, glcm_differenceentropy, glcm_infomeas1, glcm_infomeas2
+| \*all_glcm\* | glcm_asm, glcm_acor, glcm_cluprom, glcm_clushade, glcm_clutend, glcm_contrast, glcm_correlation, glcm_difave, glcm_difentro, glcm_difvar, glcm_dis, glcm_energy, glcm_entropy, glcm_hom1, glcm_hom2, glcm_id, glcm_idn, glcm_idm, glcm_idmn, glcm_infomeas1, glcm_infomeas2, glcm_iv, glcm_jave, glcm_je, glcm_jmax, glcm_jvar, glcm_sumaverage, glcm_sumentropy, glcm_sumvariance, glcm_variance
 | \*all_glrlm\* | glrlm_sre, glrlm_lre, glrlm_gln, glrlm_glnn, glrlm_rln, glrlm_rlnn, glrlm_rp, glrlm_glv, glrlm_rv, glrlm_re, glrlm_lglre, glrlm_hglre, glrlm_srlgle, glrlm_srhgle, glrlm_lrlgle, glrlm_lrhgle
 | \*all_glszm\* | glszm_sae, glszm_lae, glszm_gln, glszm_glnn, glszm_szn, glszm_sznn, glszm_zp, glszm_glv, glszm_zv, glszm_ze, glszm_lglze, glszm_hglze, glszm_salgle, glszm_sahgle, glszm_lalgle, glszm_lahgle
 | \*all_gldm\* | gldm_sde, gldm_lde, gldm_gln, gldm_dn, gldm_dnn, gldm_glv, gldm_dv, gldm_de, gldm_lgle, gldm_hgle, gldm_sdlgle, gldm_sdhgle, gldm_ldlgle, gldm_ldhgle
@@ -224,7 +296,7 @@ Assuming you [built the Nyxus binary](#building-from-source) as outlined below, 
 --intDir | Directory of intensity image collection | path
 --outDir | Output directory | path
 --segDir | Directory of labeled image collection | path
---coarseGrayDepth | (optional) Custom number of grayscale level bins used in texture features. Default: '--coarseGrayDepth=256' | integer
+--coarseGrayDepth | (optional) Custom number of greyscale level bins used in texture features. Default: '--coarseGrayDepth=256' | integer
 --glcmAngles | (optional) Enabled direction angles of the GLCM feature. Superset of values: 0, 45, 90, and 135. Default: '--glcmAngles=0,45,90,135' | list of integer constants
 --intSegMapDir | (optional) Data collection of the ad-hoc intensity-to-mask file mapping. Must be used in combination with parameter '--intSegMapFile' | path
 --intSegMapFile | (optional) Name of the text file containing an ad-hoc intensity-to-mask file mapping. The files are assumed to reside in corresponding intensity and label collections. Must be used in combination with parameter '--intSegMapDir' | string

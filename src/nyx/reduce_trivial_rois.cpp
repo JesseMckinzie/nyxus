@@ -26,9 +26,11 @@
 #include "features/geodetic_len_thickness.h"
 #include "features/glcm.h"
 #include "features/glrlm.h"
+#include "features/gldzm.h"
 #include "features/glszm.h"
 #include "features/gldm.h"
 #include "features/hexagonality_polygonality.h"
+#include "features/ngldm.h"
 #include "features/ngtdm.h"
 #include "features/image_moments.h"
 #include "features/intensity.h"
@@ -190,6 +192,13 @@ namespace Nyxus
 			runParallel(GLRLMFeature::parallel_process_1_batch, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
 		}
 
+		//==== GLDZM
+		if (GLDZMFeature::required(theFeatureSet))
+		{
+			STOPWATCH("Texture/GLDZM/DZ/#bbbbbb", "\t=");
+			runParallel(GLDZMFeature::parallel_process_1_batch, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
+		}
+
 		//==== GLSZM
 		if (GLSZMFeature::required(theFeatureSet))
 		{
@@ -202,6 +211,13 @@ namespace Nyxus
 		{
 			STOPWATCH("Texture/GLDM/D/#bbbbbb", "\t=");
 			runParallel(GLDMFeature::parallel_process_1_batch, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
+		}
+
+		//==== NGLDM
+		if (NGLDMfeature::required(theFeatureSet))
+		{
+			STOPWATCH("Texture/NGLDM/NG/#bbbbbb", "\t=");
+			runParallel(NGLDMfeature::parallel_process_1_batch, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
 		}
 
 		//==== NGTDM
