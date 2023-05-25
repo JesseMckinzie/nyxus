@@ -47,13 +47,24 @@ public:
 
         arrow::StringBuilder string_builder_0;
 
-        PARQUET_THROW_NOT_OK(string_builder_0.AppendValues(
-            std::vector<std::string>(string_columns.begin(), string_columns.begin() + number_of_rows)));
+        std::vector<std::string> temp_string_vec1(string_columns.size()/2);
+        std::vector<std::string> temp_string_vec2(string_columns.size()/2);
+
+        for (int i = 0; i < string_columns.size(); i+=2) {
+            temp_string_vec1[i/2] = string_columns[i];
+            temp_string_vec2[i/2] = string_columns[i+1];
+        }
+        
+        PARQUET_THROW_NOT_OK(string_builder_0.AppendValues(temp_string_vec1));
+
+        //PARQUET_THROW_NOT_OK(string_builder_0.AppendValues(
+        //    std::vector<std::string>(string_columns.begin(), string_columns.begin() + number_of_rows)));
 
         arrow::StringBuilder string_builder_1;
-
-        PARQUET_THROW_NOT_OK(string_builder_1.AppendValues(
-            std::vector<std::string>(string_columns.begin() + number_of_rows, string_columns.end())));
+        
+        PARQUET_THROW_NOT_OK(string_builder_1.AppendValues(temp_string_vec2));
+        //PARQUET_THROW_NOT_OK(string_builder_1.AppendValues(
+        //    std::vector<std::string>(string_columns.begin() + number_of_rows, string_columns.end())));
 
         // std::shared_ptr<arrow::Array> array0, array1;
         std::shared_ptr<arrow::Array> array_0, array_1;
