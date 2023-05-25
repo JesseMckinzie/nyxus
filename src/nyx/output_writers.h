@@ -231,16 +231,16 @@ class WriterFactory {
 
     public:
 
-        static std::unique_ptr<Writer> create_writer(const std::string &output_file) {
+        static std::shared_ptr<Writer> create_writer(const std::string &output_file) {
             
             if (Nyxus::ends_with_substr(output_file, ".parquet")) {
 
 
-                return std::make_unique<ParquetWriter>(output_file);
+                return std::make_shared<ParquetWriter>(output_file);
 
             } else if (Nyxus::ends_with_substr(output_file, ".arrow") || Nyxus::ends_with_substr(output_file, ".feather")) {
 
-                return std::make_unique<ArrowIPCWriter>(output_file);
+                return std::make_shared<ArrowIPCWriter>(output_file);
 
             } else {
 
