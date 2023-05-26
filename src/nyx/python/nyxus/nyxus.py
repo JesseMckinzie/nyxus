@@ -600,20 +600,84 @@ class Nyxus:
         
         
     def create_arrow_file(self, path: str="out.arrow"):
-        print('create')
+        """Creates an Arrow IPC file containing the features.
+        
+        This method must be called after calling one of the featurize methods.
+
+        Parameters
+        ----------
+        path: Path to write the arrow file to. (Optional, default "out.arrow")
+
+        Returns
+        -------
+        None
+
+        """
         create_arrow_file_imp(path)
-        print('end create')
+
     
     def get_arrow_ipc_file(self):
+        """Returns the path to the Arrow IPC file.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        Path to the Arrow IPC file (string)
+
+        """
+        
         return get_arrow_file_imp()
     
     def create_parquet_file(self, path: str="out.parquet"):
+        """Creates a Parquet file containing the features.
+        
+        This method must be called after calling one of the featurize methods.
+
+        Parameters
+        ----------
+        path: Path to write the parquet file to. (Optional, default "out.parquet")
+
+        Returns
+        -------
+        None
+
+        """
+        
         create_parquet_file_imp(path)
     
     def get_parquet_file(self):
+        """Returns the path to the Arrow IPC file.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        Path to the Parquet file (string)
+
+        """
+        
         return get_parquet_file_imp()
     
     def get_arrow_memory_mapping(self):
+        """Returns a memory mapping to the Arrow IPC file.
+        
+        This method creates a memory mapping between the Arrow IPC file on disk to allow
+        for random access. This method does not consume addition RAM.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        MemoryMappedFile 
+
+        """
         
         arrow_file_path = self.get_arrow_ipc_file()
         
@@ -626,23 +690,11 @@ class Nyxus:
         
         return array
     
-    def get_arrow_array(self):
-        
-        arrow_file_path = self.get_arrow_ipc_file()
-        
-        if (arrow_file_path is ""):
-            self.create_arrow_file()
-            arrow_file_path = self.get_arrow_ipc_file()
-        
-        with pa.OSFile(arrow_file_path, 'rb') as source:
-            array = pa.ipc.open_file(source).read_all()
-        
-        return array
-    
+    ''' Todo: Zero copy arrow table from C++
     def get_arrow_table(self):
 
         return get_arrow_file_imp()
-
+    '''
 
 class Nested:
     """Nyxus image feature extraction library / ROI hierarchy analyzer
