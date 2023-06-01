@@ -16,7 +16,7 @@ option(PARQUET_LINK_SHARED "Link to the Parquet shared library" ON)
 
 find_package(CUDA)
 option(USEGPU "Use GPU" ON)
-if(CUDA_FOUND AND USEGPU)
+if(CUDA_FOUND AND USEGPU) 
 	set(USEGPU ON)
 	if (CUDA_VERSION_MAJOR STREQUAL "10")
 		set(CUDA_ARCH_LIST "35;37;50;72;75")
@@ -48,6 +48,7 @@ find_package(Parquet REQUIRED)
 
 # Look for installed packages the system
 find_package(Arrow REQUIRED)
+
 
 if(USEGPU)
     enable_language("CUDA")
@@ -293,16 +294,58 @@ if(USEGPU)
 endif()
 
 find_library(ARROW_LIB arrow)
+find_library(ARROW_PYTHON_LIB arrow_python)
+#find_library(ARROW_LIB_python pyarrow)
+
+# Find Python
+find_package(Python REQUIRED COMPONENTS Interpreter Development)
 
 if(BUILD_LIB)
-
+	message(STATUS "Arrow include directories: ${ARROW_INCLUDE_DIRS}")
 	if(ARROW_LIB)
-		target_link_libraries(backend PRIVATE ${ARROW_LIB})
+
+		# Find Python
+		find_package(Python REQUIRED)
+
+		# Execute the Python script
+		execute_process(
+			COMMAND ${Python_EXECUTABLE} -c "import pyarrow as pa; print(pa.get_include())"
+			OUTPUT_VARIABLE PATH_OUTPUT
+			OUTPUT_STRIP_TRAILING_WHITESPACE
+		)
+
+		# Store the path in a CMake variable
+		set(PYARROW_INCLUDE_PATH "${PATH_OUTPUT}" CACHE INTERNAL "Path to pyarrow include directory")
+
+		# Execute the Python script
+		execute_process(
+			COMMAND ${Python_EXECUTABLE} -c "import pyarrow as pa; path=pa.get_library_dirs()[0] + '/libarrow_python.dylib'; print(path)"
+			OUTPUT_VARIABLE LIB_PATH_OUTPUT
+			OUTPUT_STRIP_TRAILING_WHITESPACE
+		)
+
+		# Store the path in a CMake variable
+		set(PYARROW_LIB_PATH "${LIB_PATH_OUTPUT}" CACHE INTERNAL "Path to pyarrow library directory")
+
+		# Print the path
+		message(STATUS "PyArrow Include Path: ${PYARROW_INCLUDE_PATH}")
+		message(STATUS "PyArrow Include Path: ${PYARROW_LIB_PATH}")
+
+		# Use PYARROW_INCLUDE_PATH in your CMake targets as needed
+		MESSAGE(ARROW_PYTHON_LIB="${ARROW_PYTHON_LIB}")
+		message(STATUS "PyArrow lib:${ARROW_PYTHON_LIB}")
+		target_link_libraries(backend PRIVATE ${ARROW_LIB} )
+		#target_link_libraries(backend PRIVATE ${ARROW_PYTHON_LIB} )
+		target_link_libraries(backend PRIVATE ${PYARROW_LIB_PATH} )
+		target_include_directories(backend PRIVATE ${ARROW_INCLUDE_DIRS})
+		include_directories(${PYARROW_INCLUDE_PATH})
 	else()
 		message(FATAL_ERROR "libarrow.so not found.")
 	endif()
 
-	target_link_libraries(backend PRIVATE arrow_shared)
+	target_link_libraries(backend PRIVATE arrow_shared )#Python::Python)
+	target_include_directories(backend PRIVATE ${Arrow_INCLUDE_DIRS} ${Python_INCLUDE_DIRS})
+
 
 	if(PARQUET_LINK_SHARED)
 		target_link_libraries(backend PRIVATE Parquet::parquet_shared)
