@@ -23,6 +23,8 @@
 #include <arrow/python/init.h>
 #include <arrow/python/pyarrow.h>
 
+#include "table_caster.h"
+
 namespace py = pybind11;
 using namespace Nyxus;
 
@@ -577,17 +579,8 @@ PyObject * get_arrow_table_imp() {
 }
 */
 
-PyObject * get_arrow_table_imp() {
-    Py_Initialize();
-    std::cout << "1" << std::endl;
-    int success = arrow::py::import_pyarrow();
-    //int ret = arrow_init_numpy();
-    //::arrow::py::internal::InitDatetime();
-    //std::cout << "2" << std::endl;
-    //if (success != 0) {
-    //    throw std::runtime_error("Error initializing pyarrow.");
-    //}
-    //std::cout << "3" << std::endl;
+std::shared_ptr<arrow::Table> get_arrow_table_imp() {
+    
     if (theEnvironment.writer == nullptr) {
         ParquetWriter temp_writer = ParquetWriter("");
 
@@ -597,20 +590,27 @@ PyObject * get_arrow_table_imp() {
                                                 theResultsCache.get_num_rows());
 
         auto table = temp_writer.get_arrow_table();
-        return arrow::py::wrap_table(table);
+        return table;
     }
-    std::cout << "4" << std::endl;
+
     auto table = theEnvironment.writer->get_arrow_table();
-    std::cout << "5" << std::endl;
-    //Py_Finalize();
-    return arrow::py::wrap_table(table);
+
+    return table;
 }
 
 
 PYBIND11_MODULE(backend, m)
 {
-    m.doc() = "Nyxus";
+    Py_Initialize();
 
+    int success = arrow::py::import_pyarrow();
+
+    if (success != 0) {
+        throw std::runtime_error("Error initializing pyarrow.");
+    } 
+
+    m.doc() = "Nyxus";
+    
     m.def("initialize_environment", &initialize_environment, "Environment initialization");
     m.def("featurize_directory_imp", &featurize_directory_imp, "Calculate features of images defined by intensity and mask image collection directories");
     m.def("featurize_montage_imp", &featurize_montage_imp, "Calculate features of images defined by intensity and mask image collection directories");
