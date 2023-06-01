@@ -12,7 +12,16 @@
 #include "../globals.h"
 #include "../nested_feature_aggregation.h"
 #include "../features/gabor.h"
-#include "../output_writers.h"
+#include "../output_writers.h" 
+
+#include <arrow/python/pyarrow.h>
+#include <arrow/table.h>
+
+#include <arrow/python/platform.h>
+
+#include <arrow/python/datetime.h>
+#include <arrow/python/init.h>
+#include <arrow/python/pyarrow.h>
 
 namespace py = pybind11;
 using namespace Nyxus;
@@ -542,8 +551,15 @@ std::string get_parquet_file_imp() {
     return theEnvironment.parquet_file_path;
 }
 
-
+/*
 PyObject * get_arrow_table_imp() {
+
+    //int success = arrow::py::import_pyarrow();
+
+    //if (success != 0) {
+    //    throw std::runtime_error("Error initializing pyarrow.");
+    //}
+
     if (theEnvironment.writer == nullptr) {
         ParquetWriter temp_writer = ParquetWriter("");
 
@@ -552,12 +568,44 @@ PyObject * get_arrow_table_imp() {
                                                 theResultsCache.get_calcResultBuf(),
                                                 theResultsCache.get_num_rows());
 
-        return nullptr; //pyarrow::wrap_table(temp_writer.get_arrow_table());
+        auto table = temp_writer.get_arrow_table();
+        return nullptr;// arrow::py::wrap_table(table);
     }
 
-
-    return nullptr; // pyarrow::wrap_table(theEnvironment.writer->get_arrow_table());
+    auto table = theEnvironment.writer->get_arrow_table();
+    return nullptr;// arrow::py::wrap_table(table);
 }
+*/
+
+PyObject * get_arrow_table_imp() {
+    Py_Initialize();
+    std::cout << "1" << std::endl;
+    int success = arrow::py::import_pyarrow();
+    //int ret = arrow_init_numpy();
+    //::arrow::py::internal::InitDatetime();
+    //std::cout << "2" << std::endl;
+    //if (success != 0) {
+    //    throw std::runtime_error("Error initializing pyarrow.");
+    //}
+    //std::cout << "3" << std::endl;
+    if (theEnvironment.writer == nullptr) {
+        ParquetWriter temp_writer = ParquetWriter("");
+
+        temp_writer.generate_arrow_table(theResultsCache.get_headerBuf(),
+                                                theResultsCache.get_stringColBuf(),
+                                                theResultsCache.get_calcResultBuf(),
+                                                theResultsCache.get_num_rows());
+
+        auto table = temp_writer.get_arrow_table();
+        return arrow::py::wrap_table(table);
+    }
+    std::cout << "4" << std::endl;
+    auto table = theEnvironment.writer->get_arrow_table();
+    std::cout << "5" << std::endl;
+    //Py_Finalize();
+    return arrow::py::wrap_table(table);
+}
+
 
 PYBIND11_MODULE(backend, m)
 {
@@ -582,7 +630,7 @@ PYBIND11_MODULE(backend, m)
     m.def("get_arrow_file_imp", &get_arrow_file_imp, "Get path to arrow file");
     m.def("get_parquet_file_imp", &get_parquet_file_imp, "Returns path to parquet file");
     m.def("create_parquet_file_imp", &create_parquet_file_imp, "Create parquet file for the features calculations");
-    m.def("get_arrow_table_imp", &get_arrow_table_imp, "Get arrow table of feature calculations.");
+    m.def("get_arrow_table_imp", &get_arrow_table_imp, py::call_guard<py::gil_scoped_release>());
 }
 
 ///
