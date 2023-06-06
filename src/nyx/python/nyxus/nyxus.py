@@ -18,6 +18,7 @@ from .backend import (
     get_parquet_file_imp, 
     create_parquet_file_imp, 
     get_arrow_table_imp,
+    arrow_is_enabled_imp,
     )
 
 import os
@@ -690,11 +691,37 @@ class Nyxus:
         
         return array
     
-    ''' Todo: Zero copy arrow table from C++
+    
     def get_arrow_table(self):
+        """Returns an arrow table containing the feature calculations.
 
-        return get_arrow_file_imp()
-    '''
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        pyarrow.Table 
+
+        """
+        
+        return get_arrow_table_imp()
+    
+    def arrow_is_enabled(self):
+        """Returns true if arrow support is enabled.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        bool: If arrow support is enabled 
+        """
+        
+        return arrow_is_enabled_imp()
+    
+
 
 class Nested:
     """Nyxus image feature extraction library / ROI hierarchy analyzer
