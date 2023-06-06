@@ -1,5 +1,6 @@
 #pragma once
 
+#ifdef USE_ARROW
 #include <arrow/api.h>
 #include <arrow/io/api.h>
 #include <parquet/arrow/reader.h>
@@ -57,16 +58,10 @@ public:
         
         PARQUET_THROW_NOT_OK(string_builder_0.AppendValues(temp_string_vec1));
 
-        //PARQUET_THROW_NOT_OK(string_builder_0.AppendValues(
-        //    std::vector<std::string>(string_columns.begin(), string_columns.begin() + number_of_rows)));
-
         arrow::StringBuilder string_builder_1;
         
         PARQUET_THROW_NOT_OK(string_builder_1.AppendValues(temp_string_vec2));
-        //PARQUET_THROW_NOT_OK(string_builder_1.AppendValues(
-        //    std::vector<std::string>(string_columns.begin() + number_of_rows, string_columns.end())));
 
-        // std::shared_ptr<arrow::Array> array0, array1;
         std::shared_ptr<arrow::Array> array_0, array_1;
 
         PARQUET_THROW_NOT_OK(string_builder_0.Finish(&array_0));
@@ -127,53 +122,6 @@ public:
                 const std::vector<double> &numeric_columns,
                 int number_of_rows) = 0;
 
-    /*
-    int write_to_parquet(const std::vector<std::string> &header,
-                         const std::vector<std::string> &string_columns,
-                         const std::vector<double> &numeric_columns,
-                         int number_of_rows,
-                         const std::string &output_file = "out.parquet")
-    {
-
-        auto table = generate_arrow_table(header, string_columns, numeric_columns, number_of_rows);
-
-        std::shared_ptr<arrow::io::FileOutputStream> outfile;
-
-        PARQUET_ASSIGN_OR_THROW(
-            outfile, arrow::io::FileOutputStream::Open(output_file));
-
-        PARQUET_THROW_NOT_OK(
-            parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outfile, 3));
-
-        return 0;
-    }
-
-    arrow::Status write_to_feather(const std::vector<std::string> &header,
-                         const std::vector<std::string> &string_columns,
-                         const std::vector<double> &numeric_columns,
-                         int number_of_rows,
-                         const std::string &output_file = "out.arrow")
-    {
-
-        //
-        auto table = generate_arrow_table(header, string_columns, numeric_columns, number_of_rows);
-
-        // Step 5: Create the Arrow file writer
-        std::shared_ptr<arrow::io::FileOutputStream> output_stream;
-
-        ARROW_ASSIGN_OR_RAISE(
-            output_stream, arrow::io::FileOutputStream::Open(output_file)
-        );
-        
-        auto writer = arrow::ipc::MakeFileWriter(output_stream, table->schema());
-
-        // Step 6: Write the Arrow table to file
-        writer->get()->WriteTable(*table);
-        writer->get()->Close();
-
-        return arrow::Status::OK();
-    }
-    */
 };
 
 
@@ -270,3 +218,4 @@ class WriterFactory {
             }
         }
 };
+#endif
