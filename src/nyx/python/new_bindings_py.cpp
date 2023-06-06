@@ -12,18 +12,23 @@
 #include "../globals.h"
 #include "../nested_feature_aggregation.h"
 #include "../features/gabor.h"
-#include "../output_writers.h" 
 
-#include <arrow/python/pyarrow.h>
-#include <arrow/table.h>
+#ifdef USE_ARROW
+    #include "../output_writers.h" 
 
-#include <arrow/python/platform.h>
+    #include "../arrow_output.h"
 
-#include <arrow/python/datetime.h>
-#include <arrow/python/init.h>
-#include <arrow/python/pyarrow.h>
+    #include <arrow/python/pyarrow.h>
+    #include <arrow/table.h>
 
-#include "table_caster.h"
+    #include <arrow/python/platform.h>
+
+    #include <arrow/python/datetime.h>
+    #include <arrow/python/init.h>
+    #include <arrow/python/pyarrow.h>
+
+    #include "table_caster.h"
+#endif
 
 namespace py = pybind11;
 using namespace Nyxus;
@@ -172,15 +177,15 @@ py::tuple featurize_directory_imp (
     if (errorCode)
         throw std::runtime_error("Error occurred during dataset processing.");
 
-    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
-    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
-    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
+    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBufByVal()));
+    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBufByVal()));
+    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBufByVal()));
     auto nRows = theResultsCache.get_num_rows();
     pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
 
     return py::make_tuple(pyHeader, pyStrData, pyNumData);
-}
+} 
 
 py::tuple featurize_montage_imp (
     const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& intensity_images,
@@ -231,10 +236,16 @@ py::tuple featurize_montage_imp (
     if (errorCode)
         throw std::runtime_error("Error #" + std::to_string(errorCode) + " " + error_message + " occurred during dataset processing.");
 
-    
+#ifdef USE_ARROW
+    // Get by value to preserve buffers for writing to arrow
+    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBufByVal()));
+    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBufByVal()));
+    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBufByVal()));
+#else 
     auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
     auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
     auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
+#endif
     auto nRows = theResultsCache.get_num_rows();
     pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
@@ -298,9 +309,16 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
     if (errorCode)
         throw std::runtime_error("Error occurred during dataset processing.");
 
+#ifdef USE_ARROW
+    // Get by value to preserve buffers for writing to arrow
+    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBufByVal()));
+    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBufByVal()));
+    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBufByVal()));
+#else 
     auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
     auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
     auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
+#endif
     auto nRows = theResultsCache.get_num_rows();
     pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
@@ -326,9 +344,16 @@ py::tuple findrelations_imp(
     if (! mineOK)
         throw std::runtime_error("Error occurred during dataset processing: mine_segment_relations() returned false");
     
-    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf())); // Column names
-    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf())); // String cells of first n columns
-    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));  // Numeric data
+#ifdef USE_ARROW
+    // Get by value to preserve buffers for writing to arrow
+    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBufByVal()));
+    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBufByVal()));
+    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBufByVal()));
+#else 
+    auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
+    auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
+    auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
+#endif
     auto nRows = theResultsCache.get_num_rows();
     pyStrData = pyStrData.reshape({ nRows, pyStrData.size() / nRows });
     pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
@@ -509,98 +534,90 @@ int main(int argc, char** argv)
 
 void create_arrow_file_imp(const std::string& arrow_file_path="") {
 
-    if(arrow_file_path != "" && !ends_with_substr(arrow_file_path, ".arrow")) {
-        throw std::invalid_argument("The arrow file path must end in \".arrow\"");
-    }
+#ifdef USE_ARROW
 
-    if (arrow_file_path == "") {
-        theEnvironment.arrow_file_path = "out.arrow"; // set default path
-    } else {
-        theEnvironment.arrow_file_path = arrow_file_path;
-    }
-    theEnvironment.writer = WriterFactory::create_writer(theEnvironment.arrow_file_path);
-        
-    theEnvironment.writer->write(theResultsCache.get_headerBuf(),
-                theResultsCache.get_stringColBuf(),
-                theResultsCache.get_calcResultBuf(),
-                theResultsCache.get_num_rows());
+    return theEnvironment.arrow_output.create_arrow_file(theResultsCache.get_headerBuf(),
+                                          theResultsCache.get_stringColBuf(),
+                                          theResultsCache.get_calcResultBuf(),
+                                          theResultsCache.get_num_rows(),
+                                          arrow_file_path);
+
+#else
     
+    throw std::runtime_error("Arrow functionality is not available. Rebuild Nyxus with Arrow enabled.");
+
+#endif
 
 }
 
 std::string get_arrow_file_imp() {
-    return theEnvironment.arrow_file_path;
+#ifdef USE_ARROW
+
+    return theEnvironment.arrow_output.get_arrow_file();
+
+#else
+    
+    throw std::runtime_error("Arrow functionality is not available. Rebuild Nyxus with Arrow enabled.");
+
+#endif
 }
 
 void create_parquet_file_imp(std::string& parquet_file_path) {
 
-    if(!ends_with_substr(parquet_file_path, ".parquet")) {
-        throw std::invalid_argument("The parquet file path must end in \".parquet\"");
-    }
+#ifdef USE_ARROW
 
-    theEnvironment.parquet_file_path = parquet_file_path;
+    return theEnvironment.arrow_output.create_parquet_file(theResultsCache.get_headerBuf(),
+                                            theResultsCache.get_stringColBuf(),
+                                            theResultsCache.get_calcResultBuf(),
+                                            theResultsCache.get_num_rows(),
+                                            parquet_file_path);
 
-    theEnvironment.writer = WriterFactory::create_writer(theEnvironment.parquet_file_path);
-        
-    theEnvironment.writer->write(theResultsCache.get_headerBuf(),
-                  theResultsCache.get_stringColBuf(),
-                  theResultsCache.get_calcResultBuf(),
-                  theResultsCache.get_num_rows());
+#else
+    
+    throw std::runtime_error("Arrow functionality is not available. Rebuild Nyxus with Arrow enabled.");
 
+#endif
 }
 
 std::string get_parquet_file_imp() {
-    return theEnvironment.parquet_file_path;
+
+#ifdef USE_ARROW
+
+    return theEnvironment.arrow_output.get_parquet_file();
+
+#else
+    
+    throw std::runtime_error("Arrow functionality is not available. Rebuild Nyxus with Arrow enabled.");
+
+#endif
 }
 
-/*
-PyObject * get_arrow_table_imp() {
-
-    //int success = arrow::py::import_pyarrow();
-
-    //if (success != 0) {
-    //    throw std::runtime_error("Error initializing pyarrow.");
-    //}
-
-    if (theEnvironment.writer == nullptr) {
-        ParquetWriter temp_writer = ParquetWriter("");
-
-        temp_writer.generate_arrow_table(theResultsCache.get_headerBuf(),
-                                                theResultsCache.get_stringColBuf(),
-                                                theResultsCache.get_calcResultBuf(),
-                                                theResultsCache.get_num_rows());
-
-        auto table = temp_writer.get_arrow_table();
-        return nullptr;// arrow::py::wrap_table(table);
-    }
-
-    auto table = theEnvironment.writer->get_arrow_table();
-    return nullptr;// arrow::py::wrap_table(table);
-}
-*/
+#ifdef USEARROW
 
 std::shared_ptr<arrow::Table> get_arrow_table_imp() {
-    
-    if (theEnvironment.writer == nullptr) {
-        ParquetWriter temp_writer = ParquetWriter("");
 
-        temp_writer.generate_arrow_table(theResultsCache.get_headerBuf(),
-                                                theResultsCache.get_stringColBuf(),
-                                                theResultsCache.get_calcResultBuf(),
-                                                theResultsCache.get_num_rows());
-
-        auto table = temp_writer.get_arrow_table();
-        return table;
-    }
-
-    auto table = theEnvironment.writer->get_arrow_table();
-
-    return table;
+    return theEnvironment.arrow_output.get_arrow_table(theResultsCache.get_headerBuf(),
+                                                       theResultsCache.get_stringColBuf(),
+                                                       theResultsCache.get_calcResultBuf(),
+                                                       theResultsCache.get_num_rows());
 }
 
+#else
+
+void get_arrow_table_imp() {
+    throw std::runtime_error("Arrow functionality is not available. Rebuild Nyxus with Arrow enabled.");
+}
+
+#endif
+
+bool arrow_is_enabled_imp() {
+    return theEnvironment.arrow_is_enabled();
+}
 
 PYBIND11_MODULE(backend, m)
 {
+
+#ifdef USE_ARROW
     Py_Initialize();
 
     int success = arrow::py::import_pyarrow();
@@ -608,7 +625,7 @@ PYBIND11_MODULE(backend, m)
     if (success != 0) {
         throw std::runtime_error("Error initializing pyarrow.");
     } 
-
+#endif
     m.doc() = "Nyxus";
     
     m.def("initialize_environment", &initialize_environment, "Environment initialization");
@@ -631,6 +648,7 @@ PYBIND11_MODULE(backend, m)
     m.def("get_parquet_file_imp", &get_parquet_file_imp, "Returns path to parquet file");
     m.def("create_parquet_file_imp", &create_parquet_file_imp, "Create parquet file for the features calculations");
     m.def("get_arrow_table_imp", &get_arrow_table_imp, py::call_guard<py::gil_scoped_release>());
+    m.def("arrow_is_enabled_imp", &arrow_is_enabled_imp, "Check if arrow is enabled.");
 }
 
 ///
