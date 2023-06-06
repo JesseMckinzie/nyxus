@@ -1,5 +1,6 @@
 #pragma once
 
+#ifdef USE_ARROW
 namespace pybind11
 {
     namespace detail
@@ -11,7 +12,7 @@ namespace pybind11
             PYBIND11_TYPE_CASTER(std::shared_ptr<TableType>, _("pyarrow::Table"));
             // Python -> C++
             bool load(handle src, bool)
-            {
+            {  
                 PyObject *source = src.ptr();
                 if (!arrow::py::is_table(source))
                     return false;
@@ -33,3 +34,4 @@ namespace pybind11
         };
     }
 } // namespace pybind11::detail
+#endif
