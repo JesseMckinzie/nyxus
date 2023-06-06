@@ -347,6 +347,15 @@ class TestNyxus():
             
             features = nyx.featurize(intens, seg)
             
+            if (not nyx.arrow_is_enabled()):
+                
+                with pytest.raises (Exception):
+                    nyx.create_arrow_file()
+                    
+                with pytest.raises (Exception):
+                    arrow_array = nyx.get_arrow_memory_mapping()
+                return
+            
             nyx.create_arrow_file()
             
             arrow_array = nyx.get_arrow_memory_mapping()
@@ -374,6 +383,12 @@ class TestNyxus():
             
             features = nyx.featurize(intens, seg)
             
+            if (not nyx.arrow_is_enabled()):
+                with pytest.raises (Exception):
+                    arrow_array = nyx.get_arrow_memory_mapping()
+                
+                return
+            
             arrow_array = nyx.get_arrow_memory_mapping()
             
             for col in features:
@@ -399,6 +414,11 @@ class TestNyxus():
             
             features = nyx.featurize(intens, seg)
             
+            if (not nyx.arrow_is_enabled()):
+                with pytest.raises (Exception):
+                    nyx.create_arrow_file()
+                return
+            
             nyx.create_arrow_file()
             
             path = nyx.get_arrow_ipc_file()
@@ -412,7 +432,16 @@ class TestNyxus():
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
             
+            if (not nyx.arrow_is_enabled()):
+                assert True
+                return
+            
             features = nyx.featurize(intens, seg)
+            
+            if (not nyx.arrow_is_enabled()):
+                with pytest.raises (Exception):
+                    path = nyx.get_arrow_ipc_file()
+                return
                     
             path = nyx.get_arrow_ipc_file()
             
@@ -426,9 +455,19 @@ class TestNyxus():
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
             
+            if (not nyx.arrow_is_enabled()):
+                assert True
+                return
+            
             features = nyx.featurize(intens, seg)
             
             nyx.create_arrow_file('out/out.arrow')
+            
+            if (not nyx.arrow_is_enabled()):
+                with pytest.raises (Exception):
+                    path = nyx.get_arrow_ipc_file()
+                    
+                return
             
             path = nyx.get_arrow_ipc_file()
             
@@ -442,10 +481,18 @@ class TestNyxus():
             
             features = nyx.featurize(intens, seg)
             
+            if (not nyx.arrow_is_enabled()):
+                with pytest.raises (Exception):
+                     nyx.create_parquet_file()
+            
+                with pytest.raises (Exception):
+                    parquet_file = nyx.get_parquet_file()
+                    
+                return
+            
             nyx.create_parquet_file()
             
             parquet_file = nyx.get_parquet_file()
-            
 
             # Read the Parquet file into a Pandas DataFrame
             parquet_df = pq.read_table(parquet_file).to_pandas()
