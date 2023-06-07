@@ -167,6 +167,8 @@ option(USEARROW "Use Arrow" ON)
 if (USEARROW)
 	# Find arrow library
 	find_library(ARROW_LIB arrow)
+	# Find arrow library
+	find_library(PARQUET_LIB parquet)
 
 	# Look for installed packages the system
 	find_package(Parquet REQUIRED)
@@ -192,9 +194,9 @@ if(BUILD_CLI)
 			target_link_libraries(nyxus PRIVATE arrow_shared )
 
 			if(PARQUET_LINK_SHARED)
-				target_link_libraries(nyxus PRIVATE Parquet::parquet_shared)
+				target_link_libraries(nyxus PRIVATE parquet_shared)
 			else()
-				target_link_libraries(nyxus PRIVATE Parquet::parquet_static)
+				target_link_libraries(nyxus PRIVATE parquet_static)
 			endif()
 
 		else()
@@ -358,9 +360,9 @@ if(BUILD_LIB)
 			target_include_directories(backend PRIVATE ${Python_INCLUDE_DIRS})
 
 			if(PARQUET_LINK_SHARED)
-				target_link_libraries(backend PRIVATE Parquet::parquet_shared)
+				target_link_libraries(backend PRIVATE parquet_shared)
 			else()
-				target_link_libraries(backend PRIVATE Parquet::parquet_static)
+				target_link_libraries(backend PRIVATE parquet_static)
 			endif()
 
 		else()
