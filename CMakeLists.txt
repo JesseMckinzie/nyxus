@@ -167,13 +167,9 @@ if (USEARROW)
 	# Find arrow library
 	find_library(ARROW_LIB arrow)
 
-
-
 	# Look for installed packages the system
 	find_package(Arrow REQUIRED)
 
-	# Look for installed packages the system
-	find_package(Parquet REQUIRED)
 
 	add_definitions(-DUSE_ARROW)
 endif()

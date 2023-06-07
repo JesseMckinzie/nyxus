@@ -3,9 +3,9 @@
 #ifdef USE_ARROW
 #include <arrow/api.h>
 #include <arrow/io/api.h>
-#include <parquet/arrow/reader.h>
-#include <parquet/arrow/writer.h>
-#include <parquet/exception.h>
+#include <arrow/parquet/arrow/reader.h>
+#include <arrow/parquet/arrow/writer.h>
+#include <arrow/parquet/exception.h>
 #include <arrow/ipc/api.h>
 #include <arrow/result.h>
 
