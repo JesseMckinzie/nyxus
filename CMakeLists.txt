@@ -160,7 +160,6 @@ set(SOURCE
 	src/nyx/scan_fastloader_way.cpp
 )
 
-option(PARQUET_LINK_SHARED "Link to the Parquet shared library" ON)
 
 option(USEARROW "Use Arrow" ON)
 
@@ -168,8 +167,7 @@ if (USEARROW)
 	# Find arrow library
 	find_library(ARROW_LIB arrow)
 
-	# Look for installed packages the system
-	find_package(Parquet REQUIRED)
+
 
 	# Look for installed packages the system
 	find_package(Arrow REQUIRED)
@@ -190,12 +188,6 @@ if(BUILD_CLI)
 			target_link_libraries(nyxus PRIVATE ${ARROW_LIB} )
 
 			target_link_libraries(nyxus PRIVATE arrow_shared )
-
-			if(PARQUET_LINK_SHARED)
-				target_link_libraries(nyxus PRIVATE Parquet::parquet_shared)
-			else()
-				target_link_libraries(nyxus PRIVATE Parquet::parquet_static)
-			endif()
 
 		else()
 			message(FATAL_ERROR "libarrow.so not found.")
@@ -357,11 +349,6 @@ if(BUILD_LIB)
 			target_link_libraries(backend PRIVATE arrow_shared )
 			target_include_directories(backend PRIVATE ${Python_INCLUDE_DIRS})
 
-			if(PARQUET_LINK_SHARED)
-				target_link_libraries(backend PRIVATE Parquet::parquet_shared)
-			else()
-				target_link_libraries(backend PRIVATE Parquet::parquet_static)
-			endif()
 
 		else()
 			message(FATAL_ERROR "libarrow.so not found.")
