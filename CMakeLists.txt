@@ -166,10 +166,10 @@ option(USEARROW "Use Arrow" ON)
 if (USEARROW)
 	# Find arrow library
 	find_library(ARROW_LIB arrow)
+	find_package(Parquet CONFIG REQUIRED PATHS ${Arrow_DIR} NO_DEFAULT_PATH)
 
 	# Look for installed packages the system
 	find_package(Arrow REQUIRED)
-
 
 	add_definitions(-DUSE_ARROW)
 endif()
