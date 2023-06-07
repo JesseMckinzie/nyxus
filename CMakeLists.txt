@@ -172,6 +172,9 @@ if (USEARROW)
 	# Look for installed packages the system
 	find_package(Arrow REQUIRED)
 
+	# Look for installed packages the system
+	find_package(Parquet REQUIRED)
+
 	add_definitions(-DUSE_ARROW)
 endif()
 
@@ -188,6 +191,8 @@ if(BUILD_CLI)
 			target_link_libraries(nyxus PRIVATE ${ARROW_LIB} )
 
 			target_link_libraries(nyxus PRIVATE arrow_shared )
+
+			target_link_libraries(nyxus PRIVATE parquet_shared)
 
 		else()
 			message(FATAL_ERROR "libarrow.so not found.")
@@ -347,6 +352,7 @@ if(BUILD_LIB)
 			include_directories(${PYARROW_INCLUDE_PATH})
 
 			target_link_libraries(backend PRIVATE arrow_shared )
+			target_link_libraries(backend PRIVATE parquet_shared)
 			target_include_directories(backend PRIVATE ${Python_INCLUDE_DIRS})
 
 
