@@ -379,7 +379,7 @@ class TestNyxus():
             
             path = nyx.get_arrow_ipc_file()
             
-            os.remove(path)
+            #os.remove(path)
                 
         def test_arrow_ipc_no_create(self):
             
@@ -414,7 +414,7 @@ class TestNyxus():
                     
             path = nyx.get_arrow_ipc_file()
             
-            os.remove(path)
+            #os.remove(path)
                     
         def test_arrow_ipc_path(self):
             
@@ -436,7 +436,7 @@ class TestNyxus():
             
             assert path == 'out.arrow'
             
-            os.remove(path)
+            #os.remove(path)
             
         def test_arrow_ipc_path_no_create(self):
             
@@ -458,7 +458,7 @@ class TestNyxus():
             
             assert path == 'out.arrow'
             
-            os.remove(path)
+            #os.remove(path)
         
             
         def test_custom_arrow_ipc_path(self):
@@ -527,4 +527,4 @@ class TestNyxus():
                     
             path = nyx.get_parquet_file()
             
-            os.remove(path)
+            #os.remove(path)
