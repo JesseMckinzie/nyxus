@@ -10,3 +10,4 @@ cmake
 dcmtk >=3.6.7
 fmjpeg2koj >=1.0.3
 arrow-cpp
+parquet-cpp
