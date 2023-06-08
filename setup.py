@@ -106,6 +106,7 @@ for ext in ext_modules:
     ext.include_dirs.append(pa.get_include())
     ext.include_dirs.append(pybind11.get_include())
 
+    '''
     if os.name == 'nt':  # windows
         # only for windows we link
         ext.libraries.extend(pa.get_libraries())
@@ -113,6 +114,7 @@ for ext in ext_modules:
 
     if os.name == 'posix':
         ext.extra_compile_args.append('-std=c++17')
+    '''
 
 setup(
     name="nyxus",
