@@ -336,10 +336,15 @@ if(BUILD_LIB)
 
 			# Store the path in a CMake variable
 			set(PYARROW_INCLUDE_PATH "${PATH_OUTPUT}" CACHE INTERNAL "Path to pyarrow include directory")
+			
+			# Set filename for finding pyarrow
+			set(python_filename "ci-utils/find_pyarrow.py")
+			set(python_filepath "${CMAKE_CURRENT_SOURCE_DIR}/${python_filename}")
 
 			# Execute the Python script to find pyarrow library path
 			execute_process(
-				COMMAND ${Python_EXECUTABLE} -c "import pyarrow as pa; path=pa.get_library_dirs()[0] + '/libarrow_python.dylib'; print(path)"
+				#COMMAND ${Python_EXECUTABLE} -c "import pyarrow as pa; path=pa.get_library_dirs()[0] + '/libarrow_python.dylib'; print(path)"
+				COMMAND ${Python_EXECUTABLE} ${python_filepath}
 				OUTPUT_VARIABLE LIB_PATH_OUTPUT
 				OUTPUT_STRIP_TRAILING_WHITESPACE
 			)
@@ -351,11 +356,13 @@ if(BUILD_LIB)
 			message(STATUS "PyArrow Include Path: ${PYARROW_INCLUDE_PATH}")
 			message(STATUS "PyArrow Include Path: ${PYARROW_LIB_PATH}")
 
+			#link arrow
 			target_link_libraries(backend PRIVATE ${ARROW_LIB} )
 			target_link_libraries(backend PRIVATE ${PYARROW_LIB_PATH} )
 
+			# add pyarrow include path
 			include_directories(${PYARROW_INCLUDE_PATH})
-
+			
 			target_link_libraries(backend PRIVATE arrow_shared )
 			target_include_directories(backend PRIVATE ${Python_INCLUDE_DIRS})
 
