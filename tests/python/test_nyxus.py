@@ -1,7 +1,7 @@
+import pyarrow.parquet as pq
 import nyxus
 import pytest
 import numpy as np
-import pyarrow.parquet as pq
 import pandas as pd
 import math
 from pathlib import Path
