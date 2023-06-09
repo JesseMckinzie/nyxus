@@ -171,10 +171,10 @@ if (USEARROW)
 	find_library(PARQUET_LIB parquet)
 
 	# Look for installed packages the system
-	find_package(Parquet REQUIRED)
+	find_package(Arrow REQUIRED)
 
 	# Look for installed packages the system
-	find_package(Arrow REQUIRED)
+	find_package(Parquet REQUIRED)
 
 	add_definitions(-DUSE_ARROW)
 endif()
