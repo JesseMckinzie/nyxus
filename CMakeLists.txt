@@ -166,9 +166,9 @@ option(USEARROW "Use Arrow" ON)
 
 if (USEARROW)
 	# Find arrow library
-	find_library(ARROW_LIB arrow)
+	#find_library(ARROW_LIB arrow)
 	# Find arrow library
-	find_library(PARQUET_LIB parquet)
+	#find_library(PARQUET_LIB parquet)
 
 	# Look for installed packages the system
 	find_package(Arrow REQUIRED)
@@ -187,21 +187,21 @@ if(BUILD_CLI)
 	add_executable(nyxushie src/nyx/dirs_and_files.cpp src/nyx/environment_basic.cpp src/nyx/image_loader1x.cpp src/nyx/main_nyxushie.cpp src/nyx/nested_roi.cpp src/nyx/python/nested_roi_py.cpp src/nyx/roi_cache_basic.cpp)
 
 	if(USEARROW)
-		if (ARROW_LIB)
+		#if (ARROW_found)
 
-			target_link_libraries(nyxus PRIVATE ${ARROW_LIB} )
+		target_link_libraries(nyxus PRIVATE ${ARROW_LIB} )
 
-			target_link_libraries(nyxus PRIVATE arrow_shared )
+		target_link_libraries(nyxus PRIVATE arrow_shared )
 
-			if(PARQUET_LINK_SHARED)
-				target_link_libraries(nyxus PRIVATE parquet_shared)
-			else()
-				target_link_libraries(nyxus PRIVATE parquet_static)
-			endif()
-
+		if(PARQUET_LINK_SHARED)
+			target_link_libraries(nyxus PRIVATE parquet_shared)
 		else()
-			message(FATAL_ERROR "libarrow.so not found.")
+			target_link_libraries(nyxus PRIVATE parquet_static)
 		endif()
+
+		#else()
+		#	message(FATAL_ERROR "libarrow.so not found.")
+		#endif()
 	endif()
 
 endif()
