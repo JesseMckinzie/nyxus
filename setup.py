@@ -1,3 +1,5 @@
+import pyarrow as pa
+
 import os
 import re
 import sys
@@ -11,7 +13,6 @@ from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
 
 import numpy as np
-import pyarrow as pa
 import pybind11
 
 
@@ -95,7 +96,20 @@ class CMakeBuild(build_ext):
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+    
+pa.create_library_symlinks()
+    
+ext_modules=[CMakeExtension("nyxus/backend")]
 
+for ext in ext_modules:
+    # The Numpy C headers are currently required
+    ext.include_dirs.append(np.get_include())
+    ext.include_dirs.append(pa.get_include())
+    ext.libraries.extend(pa.get_libraries())
+    ext.library_dirs.extend(pa.get_library_dirs())
+
+    if os.name == 'posix':
+        ext.extra_compile_args.append('-std=c++17')
 
 setup(
     name="nyxus",
@@ -109,7 +123,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages("src/nyx/python"),
     package_dir={"": "src/nyx/python"},
-    ext_modules=[CMakeExtension("nyxus/backend")],
+    ext_modules=ext_modules,
     test_suite="tests",
     zip_safe=False,
     python_requires=">=3.6",
