@@ -358,12 +358,14 @@ if(BUILD_LIB)
 
 		#link arrow
 		target_link_libraries(backend PRIVATE ${ARROW_LIB} )
-		target_link_libraries(backend PRIVATE ${PYARROW_LIB_PATH} )
-
+		
+		
+		#target_link_libraries(backend PRIVATE ${PYARROW_LIB_PATH} )
 		# add pyarrow include path
 		include_directories(${PYARROW_INCLUDE_PATH})
 		
 		target_link_libraries(backend PRIVATE arrow_shared )
+		#target_link_libraries(backend PRIVATE arrow-python )
 		target_include_directories(backend PRIVATE ${Python_INCLUDE_DIRS})
 
 		if(PARQUET_LINK_SHARED)
