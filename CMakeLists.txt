@@ -342,12 +342,12 @@ if(BUILD_LIB)
 		set(python_filepath "${CMAKE_CURRENT_SOURCE_DIR}/${python_filename}")
 
 		# Execute the Python script to find pyarrow library path
-		execute_process(
+		#execute_process(
 			#COMMAND ${Python_EXECUTABLE} -c "import pyarrow as pa; path=pa.get_library_dirs()[0] + '/libarrow_python.dylib'; print(path)"
-			COMMAND ${Python_EXECUTABLE} ${python_filepath}
-			OUTPUT_VARIABLE LIB_PATH_OUTPUT
-			OUTPUT_STRIP_TRAILING_WHITESPACE
-		)
+		#	COMMAND ${Python_EXECUTABLE} ${python_filepath}
+		#	OUTPUT_VARIABLE LIB_PATH_OUTPUT
+		#	OUTPUT_STRIP_TRAILING_WHITESPACE
+		#)
 
 		# Store the path in a CMake variable
 		set(PYARROW_LIB_PATH "${LIB_PATH_OUTPUT}" CACHE INTERNAL "Path to pyarrow library directory")
