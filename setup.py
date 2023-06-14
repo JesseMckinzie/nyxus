@@ -107,6 +107,12 @@ for ext in ext_modules:
     ext.include_dirs.append(pa.get_include())
     ext.libraries.extend(pa.get_libraries())
     ext.library_dirs.extend(pa.get_library_dirs())
+    
+    if os.name is 'nt':  # windows
+        # only for windows we link
+        ext.libraries.extend(pa.get_libraries())
+        
+    ext.library_dirs.extend(pa.get_library_dirs())
 
     if os.name == 'posix':
         ext.extra_compile_args.append('-std=c++17')
