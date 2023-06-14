@@ -348,6 +348,7 @@ if(BUILD_LIB)
 		#	OUTPUT_VARIABLE LIB_PATH_OUTPUT
 		#	OUTPUT_STRIP_TRAILING_WHITESPACE
 		#)
+		#find_package(arrow_python_shared REQUIRED)
 
 		# Store the path in a CMake variable
 		set(PYARROW_LIB_PATH "${LIB_PATH_OUTPUT}" CACHE INTERNAL "Path to pyarrow library directory")
@@ -365,7 +366,7 @@ if(BUILD_LIB)
 		include_directories(${PYARROW_INCLUDE_PATH})
 		
 		target_link_libraries(backend PRIVATE arrow_shared )
-		#target_link_libraries(backend PRIVATE arrow-python )
+		target_link_libraries(backend PRIVATE arrow_python_shared )
 		target_include_directories(backend PRIVATE ${Python_INCLUDE_DIRS})
 
 		if(PARQUET_LINK_SHARED)
