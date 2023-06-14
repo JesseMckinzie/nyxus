@@ -1,16 +1,13 @@
 import pyarrow as pa
 import platform
-path=pa.get_library_dirs()[0] + '/libarrow_python'
+path=pa.get_library_dirs()[0]
 operating_system = platform.system()
 
-file = ''
 if operating_system == 'Linux':
-    path += '.so'
+    path += '/libarrow_python.so'
 elif operating_system == 'Darwin':
-    path += '.dylib'
+    path += '/libarrow_python.dylib'
 elif operating_system == 'Windows':
-    path = pa.get_libraries() + '\libarrow_python.dll'
+    path += '\libarrow_python.lib'
     
-
-
 print(path)
