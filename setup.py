@@ -92,31 +92,10 @@ class CMakeBuild(build_ext):
             ["cmake", "--build", "."] + build_args, cwd=self.build_temp
         )
         print()  # Add an empty line for cleaner output
-
-
+        
 with open("README.md", "r") as fh:
     long_description = fh.read()
     
-pa.create_library_symlinks()
-    
-ext_modules=[CMakeExtension("nyxus/backend")]
-
-for ext in ext_modules:
-    # The Numpy C headers are currently required
-    ext.include_dirs.append(np.get_include())
-    ext.include_dirs.append(pa.get_include())
-    ext.libraries.extend(pa.get_libraries())
-    ext.library_dirs.extend(pa.get_library_dirs())
-    
-    if os.name is 'nt':  # windows
-        # only for windows we link
-        ext.libraries.extend(pa.get_libraries())
-        
-    ext.library_dirs.extend(pa.get_library_dirs())
-
-    if os.name == 'posix':
-        ext.extra_compile_args.append('-std=c++17')
-
 setup(
     name="nyxus",
     version=versioneer.get_version(),
