@@ -8,6 +8,6 @@ if operating_system == 'Linux':
 elif operating_system == 'Darwin':
     path += '/libarrow_python.dylib'
 elif operating_system == 'Windows':
-    path += '\libarrow_python.lib'
+    path += '\arrow_python.dll'
     
 print(path)
