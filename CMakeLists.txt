@@ -366,7 +366,7 @@ if(BUILD_LIB)
 		include_directories(${PYARROW_INCLUDE_PATH})
 		
 		target_link_libraries(backend PRIVATE arrow_shared )
-		target_link_libraries(backend PRIVATE arrow_python_shared )
+		#target_link_libraries(backend PRIVATE arrow_python_shared )
 		target_include_directories(backend PRIVATE ${Python_INCLUDE_DIRS})
 
 		if(PARQUET_LINK_SHARED)
