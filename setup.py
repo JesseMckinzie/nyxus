@@ -10,12 +10,6 @@ from distutils.version import LooseVersion
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
 
-package = 'pyarrow'
-try:
-    return __import__(package)
-except ImportError:
-    return None
-
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=""):
