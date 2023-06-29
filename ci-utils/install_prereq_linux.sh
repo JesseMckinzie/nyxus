@@ -179,10 +179,6 @@ mkdir build
 cd build/
 cmake -DARROW_PARQUET="ON" .. 
 make install -j4
-cd ../../
-cd python
-export PYARROW_WITH_PARQUET=1
-export PYARROW_WITH_DATASET=1
-export PYARROW_PARALLEL=4
-python setup.py build_ext --inplace
-cd ../../
+cd ../../../
+
+python -m pip install --no-cache-dir pyarrow
