@@ -48,7 +48,7 @@ jobs:
                                    python -m pip install pyarrow==12.0.0
           CIBW_BEFORE_ALL_LINUX: bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
-                                   cp -r local_install /tmp/nyxus_bld&&
+                                   cp -r local_install /tmp/nyxus_bld &&
                                    python -m pip install pyarrow==12.0.0
           CIBW_BEFORE_ALL_WINDOWS: ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install &&
