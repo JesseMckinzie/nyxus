@@ -10,6 +10,12 @@ from distutils.version import LooseVersion
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
 
+package = 'pyarrow'
+try:
+    return __import__(package)
+except ImportError:
+    return None
+
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=""):
@@ -108,6 +114,6 @@ setup(
     test_suite="tests",
     zip_safe=False,
     python_requires=">=3.6",
-    #setup_requires=["pyarrow>=10.0.0"],
+    setup_requires=["pyarrow>=10.0.0"],
     install_requires=["numpy", "pandas", "pyarrow>=10.0.0"],
 )
