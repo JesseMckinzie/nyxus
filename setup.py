@@ -108,5 +108,6 @@ setup(
     test_suite="tests",
     zip_safe=False,
     python_requires=">=3.6",
-    install_requires=["numpy", "pandas", "pyarrow>=10.0.0"],
+    install_requires=["numpy", "pandas"],
+    tests_require = ["pyarrow>=10.0.0"]
 )
