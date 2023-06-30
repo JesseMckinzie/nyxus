@@ -45,7 +45,7 @@ jobs:
                                    brew install llvm libomp &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
-                                   cp -r local_install /tmp/nyxus_bld
+                                   cp -r local_install /tmp/nyxus_bld 
           CIBW_BEFORE_ALL_LINUX:  python -m pip install Cython numpy &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
