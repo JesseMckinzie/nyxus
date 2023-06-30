@@ -181,4 +181,4 @@ cmake -DARROW_PARQUET="ON" ..
 make install -j4
 cd ../../../
 
-python -m pip install --no-cache-dir pyarrow
+python -m pip install --no-cache-dir pyarrow==12.0.0

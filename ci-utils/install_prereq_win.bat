@@ -164,7 +164,7 @@ popd
 popd
 popd
 
-python -m pip install --no-cache-dir pyarrow
+python -m pip install --no-cache-dir pyarrow==12.0.0
 
 SET ROOTTDIR="%cd%"
 curl -L https://github.com/DraconPern/fmjpeg2koj/archive/refs/tags/v1.0.3.zip -o fmjpeg2koj.zip
