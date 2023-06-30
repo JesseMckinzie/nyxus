@@ -12,7 +12,7 @@ jobs:
       MACOSX_DEPLOYMENT_TARGET: "10.15"
     strategy:
       matrix:
-        os: [ubuntu-20.04], #macos-11, windows-latest]
+        os: [ubuntu-20.04, macos-11, windows-latest]
         cibw_archs: ["auto64"]
         cibw_build: ["cp37-*", "cp38-*", "cp39-*", "cp310-*"]
 
@@ -41,16 +41,16 @@ jobs:
           CIBW_BUILD: ${{ matrix.cibw_build }}
           CIBW_SKIP: "*musllinux*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
-          CIBW_BEFORE_ALL_MACOS: python-3.9 -m pip install Cython numpy &&
+          CIBW_BEFORE_ALL_MACOS: python -m pip install Cython numpy &&
                                    brew install llvm libomp &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
-          CIBW_BEFORE_ALL_LINUX:  python-3.9 -m pip install Cython numpy &&
+          CIBW_BEFORE_ALL_LINUX:  python -m pip install Cython numpy &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
-          CIBW_BEFORE_ALL_WINDOWS: python-3.9 -m pip install Cython numpy &&
+          CIBW_BEFORE_ALL_WINDOWS: python -m pip install Cython numpy &&
                                    ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install
                                    
