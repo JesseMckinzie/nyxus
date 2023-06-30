@@ -177,7 +177,21 @@ unzip arrow-apache-arrow-12.0.0.zip
 cd arrow-apache-arrow-12.0.0/cpp
 mkdir build
 cd build/
-cmake -DARROW_PARQUET="ON" -DARROW_DATASET="ON" -DARROW_CSV="ON" .. 
+cmake -DARROW_COMPUTE=ON \
+    -DARROW_CSV=ON \
+    -DARROW_DATASET=ON \
+    -DARROW_FILESYSTEM=ON \
+    -DARROW_HDFS=ON \
+    -DARROW_JSON=ON \
+    -DARROW_PARQUET=ON \
+    -DARROW_WITH_BROTLI=ON \
+    -DARROW_WITH_BZ2=ON \
+    -DARROW_WITH_LZ4=ON \
+    -DARROW_WITH_SNAPPY=ON \
+    -DARROW_WITH_ZLIB=ON \
+    -DARROW_WITH_ZSTD=ON \
+    -DPARQUET_REQUIRE_ENCRYPTION=ON \ 
+    .. 
 make install -j4
 cd ../../
 cd python/
