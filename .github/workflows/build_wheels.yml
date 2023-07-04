@@ -60,7 +60,8 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-listdeps {wheel} && DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
-          CIBW_TEST_REQUIRES: numpy pandas pytest requests pyarrow==12.0.0
+          CIBW_BEFORE_TEST: bash ci-utils/install_arrow_linux.sh
+          CIBW_TEST_REQUIRES: numpy pandas pytest requests 
           CIBW_TEST_COMMAND: pytest {project}/tests/python
 
       - name: Upload Artifact
