@@ -41,16 +41,16 @@ jobs:
           CIBW_BUILD: ${{ matrix.cibw_build }}
           CIBW_SKIP: "*musllinux*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-          CIBW_BEFORE_ALL_MACOS: python -m pip install Cython numpy && python setup.py clean --all &&
+          CIBW_BEFORE_ALL_MACOS: python -m pip install Cython numpy pyarrow && python setup.py clean --all &&
                                    brew install llvm libomp &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld 
-          CIBW_BEFORE_ALL_LINUX:  python -m pip install Cython numpy && python setup.py clean --all &&
+          CIBW_BEFORE_ALL_LINUX:  python -m pip install Cython numpy pyarrow && python setup.py clean --all &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
-          CIBW_BEFORE_ALL_WINDOWS: python -m pip install Cython numpy && python setup.py clean --all &&
+          CIBW_BEFORE_ALL_WINDOWS: python -m pip install Cython numpy pyarrow && python setup.py clean --all &&
                                    ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install
                                      
