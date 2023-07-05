@@ -13,7 +13,7 @@ mkdir build
 cd build/
 cmake -DCMAKE_INSTALL_PREFIX=$ARROW_HOME \
         -DCMAKE_INSTALL_LIBDIR=lib \
-        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_BUILD_TYPE=Release \
         -DARROW_BUILD_TESTS=ON \
         -DARROW_COMPUTE=ON \
         -DARROW_CSV=ON \
