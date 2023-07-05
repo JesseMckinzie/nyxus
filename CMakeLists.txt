@@ -346,11 +346,11 @@ if(USEARROW)
 		set(PYARROW_LIB_PATH "${LIB_PATH_OUTPUT}" CACHE INTERNAL "Path to pyarrow library directory")
 
 		if (PYARROW_INCLUDE_PATH STREQUAL "")
-			mesage(FATAL_ERROR "Pyarrow library not found.")
+			message(FATAL_ERROR "Pyarrow library not found.")
 		endif()
 
 		if (PYARROW_LIB_PATH STREQUAL "")
-			mesage(FATAL_ERROR "Pyarrow library not found.")
+			message(FATAL_ERROR "Pyarrow library not found.")
 		endif()
 
 		# Print the path
