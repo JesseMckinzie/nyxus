@@ -175,12 +175,6 @@ cd ../../
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
 unzip arrow-apache-arrow-12.0.0.zip
 cd arrow-apache-arrow-12.0.0/
-python3 -m venv pyarrow-dev
-source ./pyarrow-dev/bin/activate
-pip install -r python/requirements-build.txt
-mkdir dist
-export ARROW_HOME=../../$Z5_INSTALL_DIR/
-export LD_LIBRARY_PATH=../../$Z5_INSTALL_DIR/dist/lib:$LD_LIBRARY_PATH
 cd cpp/
 mkdir build
 cd build/
