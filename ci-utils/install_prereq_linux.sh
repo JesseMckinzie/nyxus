@@ -179,7 +179,7 @@ python3 -m venv pyarrow-dev
 source ./pyarrow-dev/bin/activate
 pip install -r python/requirements-build.txt
 mkdir dist
-export ARROW_HOME=../../$Z5_INSTALL_DIR
+export ARROW_HOME=../../$Z5_INSTALL_DIR/
 export LD_LIBRARY_PATH=../../$Z5_INSTALL_DIR/dist/lib:$LD_LIBRARY_PATH
 cd cpp/
 mkdir build
@@ -188,13 +188,13 @@ cmake -DCMAKE_INSTALL_PREFIX=$ARROW_HOME \
         -DCMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR/ \
         -DCMAKE_INSTALL_LIBDIR=lib \
         -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_PARQUET=ON \
         -DARROW_COMPUTE=ON \
         -DARROW_CSV=ON \
         -DARROW_DATASET=ON \
         -DARROW_ACERO=ON \
         .. 
-make -j4
-make install
+make install -j4
 cd ../../../
 
 
