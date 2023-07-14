@@ -175,11 +175,12 @@ cd ../../
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
 unzip arrow-apache-arrow-12.0.0.zip
 cd arrow-apache-arrow-12.0.0/
+export ARROW_HOME=../../../$Z5_INSTALL_DIR/
 cd cpp/
 mkdir build
 cd build/
 cmake -DCMAKE_INSTALL_PREFIX=$ARROW_HOME \
-        -DCMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR/ \
+        -DCMAKE_PREFIX_PATH=../../../$Z5_INSTALL_DIR/ \
         -DCMAKE_INSTALL_LIBDIR=lib \
         -DCMAKE_BUILD_TYPE=Release \
         -DARROW_PARQUET=ON \
