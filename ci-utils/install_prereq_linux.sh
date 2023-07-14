@@ -189,8 +189,8 @@ cmake -DCMAKE_INSTALL_PREFIX=$ARROW_HOME \
         -DARROW_DATASET=ON \
         -DARROW_ACERO=ON \
         .. 
+cat thrift_ep-prefix/src/thrift_ep-build/CMakeFiles/CMakeError.log
 make install -j4
-cat thrift_ep-prefix/src/thrift_ep-stamp/thrift_ep-configure-*.log
 cd ../../../
 
 
