@@ -175,13 +175,10 @@ cd ../../
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
 unzip arrow-apache-arrow-12.0.0.zip
 cd arrow-apache-arrow-12.0.0/
-python3 -m venv pyarrow-dev
-source ./pyarrow-dev/bin/activate
-pip install -r arrow/python/requirements-build.txt
-export ARROW_HOME=../../../$Z5_INSTALL_DIR/
 cd cpp/
 mkdir build
 cd build/
+export ARROW_HOME=../../../$Z5_INSTALL_DIR/
 cmake -DCMAKE_INSTALL_PREFIX=$ARROW_HOME \
         -DCMAKE_PREFIX_PATH=../../../$Z5_INSTALL_DIR/ \
         -DCMAKE_INSTALL_LIBDIR=lib \
