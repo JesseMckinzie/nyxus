@@ -109,6 +109,6 @@ setup(
     zip_safe=False,
     python_requires=">=3.6",
     #use_scm_version=True,
-    #setup_requires=["pyarrow>=10.0.0"],
+    setup_requires=["Cython"],
     install_requires=["numpy", "pandas"]
 )
