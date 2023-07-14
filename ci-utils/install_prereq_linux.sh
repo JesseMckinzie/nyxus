@@ -185,13 +185,19 @@ cmake -DCMAKE_INSTALL_PREFIX=$ARROW_HOME \
         -DCMAKE_BUILD_TYPE=Release \
         -DARROW_PARQUET=ON \
         -DARROW_COMPUTE=ON \
+        -DARROW_PYTHON=ON \
         -DARROW_CSV=ON \
         -DARROW_DATASET=ON \
         -DARROW_ACERO=ON \
         .. 
 cat thrift_ep-prefix/src/thrift_ep-build/CMakeFiles/CMakeError.log
 make install -j4
-cd ../../../
+cd ../../python/
+export PYARROW_WITH_PARQUET=1
+export PYARROW_WITH_DATASET=1
+export PYARROW_PARALLEL=4
+python setup.py build_ext --inplace
+cd ../../
 
 
 
