@@ -41,7 +41,7 @@ jobs:
           CIBW_BUILD: ${{ matrix.cibw_build }}
           CIBW_SKIP: "*musllinux*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-          CIBW_BEFORE_ALL_MACOS: brew install llvm libomp && python -m pip install Cython && 
+          CIBW_BEFORE_ALL_MACOS: brew install llvm libomp && 
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld 
@@ -58,7 +58,7 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
           CIBW_TEST_REQUIRES: numpy pandas pytest requests pyarrow
-          CIBW_TEST_COMMAND: pytest {project}/tests/python
+          CIBW_TEST_COMMAND: pytest {project}/tests/python "not arrow"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3

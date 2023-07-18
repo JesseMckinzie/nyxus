@@ -108,7 +108,5 @@ setup(
     test_suite="tests",
     zip_safe=False,
     python_requires=">=3.6",
-    #use_scm_version=True,
-    #setup_requires=["Cython"],
-    install_requires=["numpy", "pandas"]
+    install_requires=["numpy", "pandas", "pyarrow"]
 )

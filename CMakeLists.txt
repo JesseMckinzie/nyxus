@@ -162,7 +162,7 @@ set(SOURCE
 
 option(PARQUET_LINK_SHARED "Link to the Parquet shared library" ON)
 
-option(USEARROW "Use Arrow" ON)
+option(USEARROW "Use Arrow" OFF)
 
 if (USEARROW)
 	# Look for installed packages the system
