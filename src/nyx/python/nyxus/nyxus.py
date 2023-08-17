@@ -26,8 +26,6 @@ from .backend import (
     )
 
 if (arrow_headers_found() and arrow_is_enabled_imp()):
-
-        from .nyxus_arrow import link_arrow_lib
         
         from .backend_arrow import (
             create_arrow_file_imp, 
@@ -38,6 +36,8 @@ if (arrow_headers_found() and arrow_is_enabled_imp()):
         )
             
         import pyarrow as pa
+        
+        from .nyxus_arrow import link_arrow_lib
         
         link_arrow_lib()
     

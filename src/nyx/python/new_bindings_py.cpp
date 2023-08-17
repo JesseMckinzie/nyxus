@@ -641,6 +641,16 @@ bool arrow_is_enabled_imp() {
 
 PYBIND11_MODULE(backend, m)
 {
+    // this must be called before any other functions in python
+#ifdef USE_ARROW
+    Py_Initialize();
+
+    int success = arrow::py::import_pyarrow();
+
+    if (success != 0) {
+        throw std::runtime_error("Error initializing pyarrow.");
+    } 
+#endif
 
     m.doc() = "Nyxus";
     
@@ -664,16 +674,6 @@ PYBIND11_MODULE(backend, m)
 
 PYBIND11_MODULE(backend_arrow, m_arrow)
 {
-
-#ifdef USE_ARROW
-    Py_Initialize();
-
-    int success = arrow::py::import_pyarrow();
-
-    if (success != 0) {
-        throw std::runtime_error("Error initializing pyarrow.");
-    } 
-#endif
 
     m_arrow.doc() = "Nyxus Arrow";
 
