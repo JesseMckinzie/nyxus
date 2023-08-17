@@ -346,7 +346,7 @@ if(USEARROW)
 		# add pyarrow include path
 		include_directories(${PYARROW_INCLUDE_PATH})
 		#add pyarrow library
-		list(APPEND Nyxus_LIBRARIES arrow_python)
+		#list(APPEND Nyxus_LIBRARIES arrow_python)
 
 		pybind11_add_module(backend_arrow
 			${SOURCE}
@@ -355,6 +355,8 @@ if(USEARROW)
 			src/nyx/nested_roi.cpp
 			src/nyx/image_loader1x.cpp
 		)
+
+		target_link_libraries(backend_arrow PRIVATE arrow_python)
 
 		target_link_directories(backend_arrow PRIVATE ${PYARROW_LIB_PATH})
 
