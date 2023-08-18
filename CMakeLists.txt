@@ -175,6 +175,7 @@ if (USEARROW)
 		find_package(Parquet)
 
 		if (Parquet_FOUND)
+			message(WARNING "Adding use arrow on")
 			add_definitions(-DUSE_ARROW)
 		else()
 			message(WARNING "The Parquet library was not found. The build will continue without Arrow support.")
@@ -343,10 +344,6 @@ if(USEARROW)
 		message(STATUS "PyArrow Include Path: ${PYARROW_INCLUDE_PATH}")
 		message(STATUS "PyArrow Library Path: ${PYARROW_LIB_PATH}")
 
-		# add pyarrow include path
-		include_directories(${PYARROW_INCLUDE_PATH})
-		#add pyarrow library
-		#list(APPEND Nyxus_LIBRARIES arrow_python)
 
 		pybind11_add_module(backend_arrow
 			${SOURCE}
@@ -356,13 +353,33 @@ if(USEARROW)
 			src/nyx/image_loader1x.cpp
 		)
 
+
+		# add pyarrow include path
+		include_directories(${PYARROW_INCLUDE_PATH})
+
+		target_link_libraries(backend_arrow PRIVATE arrow_shared)
+		list(APPEND Nyxus_LIBRARIES arrow_shared)
+
+		if(PARQUET_LINK_SHARED)
+			target_link_libraries(backend_arrow PRIVATE parquet_shared)
+		else()
+			target_link_libraries(backend_arrow PRIVATE parquet_static)
+		endif()
+
+		
 		target_link_libraries(backend_arrow PRIVATE arrow_python)
+		#target_link_libraries(backend PRIVATE arrow_python)
 
 		target_link_directories(backend_arrow PRIVATE ${PYARROW_LIB_PATH})
 
 		target_compile_definitions(backend_arrow PRIVATE WITH_PYTHON_H)
 		# VERSION_INFO is defined by setup.py and passed into the C++ code as a define (VERSION_INFO) here.
 		target_compile_definitions(backend_arrow PRIVATE VERSION_INFO=${VERSION_INFO})
+
+		include_directories(${PYARROW_INCLUDE_PATH})
+		#add pyarrow library
+		list(APPEND Nyxus_LIBRARIES arrow_python)
+		target_link_directories(backend PRIVATE ${PYARROW_LIB_PATH})
 
 	endif()
 

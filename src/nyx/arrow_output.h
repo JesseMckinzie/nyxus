@@ -42,11 +42,11 @@ public:
                             size_t num_rows,
                             const std::string& arrow_file_path="NyxusFeatures.arrow") {
         
-
+        std::cout << "1" << std::endl;
         if(arrow_file_path != "" && !fs::is_directory(arrow_file_path) && !Nyxus::ends_with_substr(arrow_file_path, ".arrow")) {
             throw std::invalid_argument("The arrow file path must end in \".arrow\"");
         }
-
+        std::cout << "2" << std::endl;
         if (arrow_file_path == "") {
             arrow_file_path_="NyxusFeatures.arrow";
         } else {
@@ -56,11 +56,11 @@ public:
         if (fs::is_directory(arrow_file_path)) {
             arrow_file_path_ += "/NyxusFeatures.arrow";
         } 
-
+        std::cout << "3" << std::endl;
         writer_ = WriterFactory::create_writer(arrow_file_path_);
-            
+        std::cout << "4" << std::endl;
         writer_->write(header, string_columns, results, num_rows);
-
+        std::cout << "5" << std::endl;
 
 
     }

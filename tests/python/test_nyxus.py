@@ -361,7 +361,7 @@ class TestNyxus():
 
         @pytest.mark.arrow
         def test_make_arrow_ipc(self):
-            
+             
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
             

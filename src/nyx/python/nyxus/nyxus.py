@@ -1,12 +1,3 @@
-import os
-import sys
-import numpy as np
-import pandas as pd
-from typing import Optional, List
-
-from .nyxus_arrow import arrow_headers_found
-
-
 from .backend import (
     initialize_environment,
     featurize_directory_imp,
@@ -24,6 +15,14 @@ from .backend import (
     get_params_imp,
     arrow_is_enabled_imp,
     )
+
+import os
+import sys
+import numpy as np
+import pandas as pd
+from typing import Optional, List
+
+from .nyxus_arrow import arrow_headers_found
 
 if (arrow_headers_found() and arrow_is_enabled_imp()):
         
