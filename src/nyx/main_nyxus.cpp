@@ -4,12 +4,14 @@
 #include "environment.h"
 #include "globals.h"
 #include "arrow_output_stream.h"
+#include <glog/logging.h>
 #ifdef USE_GPU
 	bool gpu_initialize(int dev_id); 
 #endif
 
 int main (int argc, char** argv)
 {
+	google::InitGoogleLogging(argv[0]);
 	VERBOSLVL1(std::cout << PROJECT_NAME << " /// " << PROJECT_VER << " /// (c) 2021-2023 Axle Informatics" << " Build of " << __TIMESTAMP__ << "\n";)
 
 	bool parseOk = theEnvironment.parse_cmdline (argc, argv);
@@ -59,28 +61,13 @@ int main (int argc, char** argv)
 	auto startTS = getTimeStr();
 	VERBOSLVL1(std::cout << "\n>>> STARTING >>> " << startTS << "\n";)
 
-	// Save features in Apache formats, if enabled
+
+	bool use_arrow = false;
+
 #ifdef USE_ARROW
-
-	std::string csv_file = "";
-	std::string csv_path = "";
-	std::string arrow_path = "";
-	if (theEnvironment.arrow_output_type != "") { 
-
-		csv_path = fs::temp_directory_path().u8string() + "/nyx_tmp";
-
-		fs::create_directory(csv_path);
-
-		theEnvironment.useCsv = true;
-		theEnvironment.separateCsv = false;
-		arrow_path = theEnvironment.output_dir;
-		theEnvironment.output_dir = csv_path;
-
-		csv_file = csv_path + "/NyxusFeatures.csv";
-
-	}
+	use_arrow = theEnvironment.arrow_output_type == "ARROW" || theEnvironment.arrow_output_type == "PARQUET";
 #endif
-
+	
 	// Process the image data
 	int min_online_roi_size = 0;
 	errorCode = processDataset (
@@ -90,7 +77,8 @@ int main (int argc, char** argv)
 		theEnvironment.n_pixel_scan_threads, 
 		theEnvironment.n_reduce_threads,
 		min_online_roi_size,
-		theEnvironment.useCsv, // 'true' to save to csv
+		use_arrow, // 'true' to save to csv
+		theEnvironment.useCsv,
 		theEnvironment.output_dir);
 
 	// Report feature extraction error, if any
@@ -111,26 +99,6 @@ int main (int argc, char** argv)
 			std::cout << std::endl << "Error #" << errorCode << std::endl;
 			break;
 	}
-
-	// Save features in Apache formats, if enabled
-	#ifdef USE_ARROW
-
-		if (theEnvironment.arrow_output_type == "ARROW" || theEnvironment.arrow_output_type == "ARROWIPC") {
-			ArrowOutputStream arrow_stream = ArrowOutputStream();
-
-			Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
-
-			std::cout << "writing from csv" << std::endl;
-			arrow_stream.create_arrow_file(csv_file, theResultsCache.get_headerBuf(), arrow_path);
-		} else { 
-			if (theEnvironment.arrow_output_type == "PARQUET") 
-				theEnvironment.arrow_output.create_parquet_file(theResultsCache.get_headerBuf(),
-					theResultsCache.get_stringColBuf(),
-					theResultsCache.get_calcResultBuf(),
-					theResultsCache.get_num_rows(),
-					theEnvironment.output_dir);
-		}
-	#endif 
 
 	// Process nested ROIs
 	if (theEnvironment.nestedOptions.defined())
