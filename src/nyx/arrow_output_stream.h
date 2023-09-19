@@ -1,5 +1,6 @@
 #pragma once
 
+#ifdef USE_ARROW
 //#ifdef USE_ARROW
 #include <string>
 #include <memory>
@@ -36,58 +37,36 @@ private:
 
 
 public:
-    std::shared_ptr<ApacheArrowWriter> create_arrow_file(const std::vector<std::string>& header,
-                            const std::string& arrow_file_path="NyxusFeatures.arrow") {
+    std::shared_ptr<ApacheArrowWriter> create_arrow_file(const std::string& arrow_file_type,
+                                                         const std::string& arrow_file_path,
+                                                         const std::vector<std::string>& header) {
         
 
-        if(arrow_file_path != "" && !fs::is_directory(arrow_file_path) && !(Nyxus::ends_with_substr(arrow_file_path, ".arrow") || Nyxus::ends_with_substr(arrow_file_path, ".feather"))) {
+        if(arrow_file_path != "" && !fs::is_directory(arrow_file_path) && !(Nyxus::ends_with_substr(arrow_file_path, ".arrow") || Nyxus::ends_with_substr(arrow_file_path, ".feather") || Nyxus::ends_with_substr(arrow_file_path, ".parquet"))) {
             throw std::invalid_argument("The arrow file path must end in \".arrow\"");
         }
 
+        if (!(arrow_file_type == "ARROW" || arrow_file_type == "ARROWIPC" || arrow_file_type == "PARQUET")) {
+            throw std::invalid_argument("The valid file types are ARROW, ARROWIPC, or PARQUET");
+        }
+
+        std::string extension = (arrow_file_type == "PARQUET") ? ".parquet" : ".arrow";
+
         if (arrow_file_path == "") {
-            arrow_file_path_="NyxusFeatures.arrow";
+            arrow_file_path_ = "NyxusFeatures" + extension;
         } else {
             arrow_file_path_ = arrow_file_path;
         }
 
         if (fs::is_directory(arrow_file_path)) {
-            arrow_file_path_ += "/NyxusFeatures.arrow";
+            arrow_file_path_ += "/NyxusFeatures" + extension;
         } 
 
         writer_ = WriterFactory::create_writer(arrow_file_path_, header);
 
         return writer_;
-
     }
 
-    void create_parquet_file(const std::vector<std::string>& header,
-                             const std::vector<std::string>& string_columns,
-                             const std::vector<double>& results,
-                             size_t num_rows,
-                             const std::string& parquet_file_path="NyxusFeatures.parquet") {
-
-        if(parquet_file_path != "" && !fs::is_directory(parquet_file_path) && !Nyxus::ends_with_substr(parquet_file_path, ".parquet")) {
-            throw std::invalid_argument("The parquet file path must end in \".parquet\"");
-        }
-
-        if (parquet_file_path == "") {
-            parquet_file_path_="NyxusFeatures.parquet";
-        } else {
-            parquet_file_path_ = parquet_file_path;
-        }
-
-        if (fs::is_directory(parquet_file_path)) {
-            parquet_file_path_ += "/NyxusFeatures.parquet";
-        }
-
-        //writer_ = WriterFactory::create_writer(parquet_file_path_);
-            
-        //writer_->write(header, string_columns, results, num_rows);
-    }
-
-    std::string get_arrow_file() {return arrow_file_path_;}
-
-    std::string get_parquet_file() { return parquet_file_path_ ;}
 
     std::shared_ptr<arrow::Table> get_arrow_table(const std::vector<std::string>& header,
                                                       const std::vector<std::string>& string_columns,
@@ -110,4 +89,4 @@ public:
     }
 
 };
-//#endif
+#endif

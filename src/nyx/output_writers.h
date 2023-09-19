@@ -115,8 +115,6 @@ public:
 
         PARQUET_THROW_NOT_OK(labels_builder.Finish(&array_2));
         arrays.push_back(array_2);
-
-        int idx;
         for (int i = 1; i < num_columns; ++i)
         {
             arrow::DoubleBuilder builder;
@@ -137,7 +135,6 @@ public:
             arrays.push_back(temp_array);
         }
 
-        //table_ = arrow::Table::Make(schema, arrays);
         return arrow::Table::Make(schema, arrays);
     }
 
@@ -150,7 +147,9 @@ public:
      * @param number_of_rows Number of rows
      * @return arrow::Status 
      */
-    virtual arrow::Status write (const std::string & intFpath, const std::string & segFpath, const std::string & outputDir) = 0;
+    virtual arrow::Status write () = 0;
+
+    virtual arrow::Status close () = 0;
 
 };
 
@@ -164,10 +163,63 @@ class ParquetWriter : public ApacheArrowWriter {
     private:
 
         std::string output_file_;
+        std::shared_ptr<arrow::Schema> schema_;
+        std::shared_ptr<arrow::io::FileOutputStream> output_stream_;
+        std::unique_ptr<parquet::arrow::FileWriter> writer_;
+
+        arrow::Status setup(const std::vector<std::string> &header) {
+
+
+            std::vector<std::shared_ptr<arrow::Field>> fields;
+            
+
+            fields.push_back(arrow::field("intensity_image", arrow::utf8()));
+            fields.push_back(arrow::field("segmentation_image", arrow::utf8()));
+            fields.push_back(arrow::field("ROI_label", arrow::int64()));
+
+            std::cout << "header size: " << header.size() << std::endl;
+
+            for (int i = 3; i < header.size(); ++i)
+            {
+                fields.push_back(arrow::field(header[i], arrow::float64()));
+            }
+
+            schema_ = arrow::schema(fields);
+
+            std::cout << schema_->ToString() << std::endl;
+
+            PARQUET_ASSIGN_OR_THROW(
+                output_stream_, arrow::io::FileOutputStream::Open(output_file_)
+            );
+
+            // Choose compression
+            std::shared_ptr<parquet::WriterProperties> props =
+                parquet::WriterProperties::Builder().compression(arrow::Compression::SNAPPY)->build();
+
+            // Opt to store Arrow schema for easier reads back into Arrow
+            std::shared_ptr<parquet::ArrowWriterProperties> arrow_props =
+                parquet::ArrowWriterProperties::Builder().store_schema()->build();
+            
+            ARROW_ASSIGN_OR_RAISE(
+                writer_, parquet::arrow::FileWriter::Open(*schema_,
+                                                        arrow::default_memory_pool(), output_stream_,
+                                                        props, arrow_props));
+
+            return arrow::Status::OK();
+        }
 
     public:
 
-        ParquetWriter(const std::string& output_file) : output_file_(output_file) {}
+        ParquetWriter(const std::string& output_file, const std::vector<std::string>& header) : output_file_(output_file) {
+
+            auto status = this->setup(header);
+
+            if (!status.ok()) {
+                // Handle read error
+                auto err = status.ToString();
+                throw std::runtime_error("Error writing setting up Arrow writer: " + err);
+            }
+        }
 
         /**
          * @brief Write to Parquet 
@@ -178,20 +230,123 @@ class ParquetWriter : public ApacheArrowWriter {
          * @param number_of_rows Number of rows
          * @return arrow::Status 
          */
-        arrow::Status write (const std::string & intFpath, const std::string & segFpath, const std::string & outputDir) override {
-            /*
-            table_ = generate_arrow_table(header, string_columns, numeric_columns, number_of_rows);
+        arrow::Status write () override {
 
-            std::shared_ptr<arrow::io::FileOutputStream> outfile;
+            std::vector<std::tuple<std::vector<std::string>, int, std::vector<double>>> features = Nyxus::get_feature_values();
 
-            PARQUET_ASSIGN_OR_THROW(
-                outfile, arrow::io::FileOutputStream::Open(output_file_));
+            int num_rows = features.size();
 
-            PARQUET_THROW_NOT_OK(
-                parquet::arrow::WriteTable(*table_, arrow::default_memory_pool(), outfile, 3));
-            */ 
+            std::vector<std::shared_ptr<arrow::Array>> arrays;
+
+            arrow::StringBuilder string_builder;
+            std::shared_ptr<arrow::Array> intensity_array;
+
+
+            arrow::Status append_status;
+            // construct intensity column
+            for (int i = 0; i < num_rows; ++i) {
+                append_status = string_builder.Append(std::get<0>(features[i])[1]);
+
+                if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
+            }
+
+            append_status = string_builder.Finish(&intensity_array);
+            if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
+            
+
+            arrays.push_back(intensity_array);
+            string_builder.Reset();
+
+            std::shared_ptr<arrow::Array> segmentation_array;
+
+            // construct intensity column
+            for (int i = 0; i < num_rows; ++i) {
+                append_status = string_builder.Append(std::get<0>(features[i])[0]);
+
+                if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
+            }
+
+            append_status = string_builder.Finish(&segmentation_array);
+
+            if (!append_status.ok()) {
+                // Handle read error
+                auto err = append_status.ToString();
+                throw std::runtime_error("Error writing Arrow file 2: " + err);
+            }
+
+            arrays.push_back(segmentation_array);
+
+            arrow::Int64Builder int_builder;
+            std::shared_ptr<arrow::Array> labels_array;
+            // construct label column
+            for (int i = 0; i < num_rows; ++i) {
+                append_status = int_builder.Append(std::get<1>(features[i]));
+                if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
+            }
+
+            append_status = int_builder.Finish(&labels_array);
+            if (!append_status.ok()) {
+                // Handle read error
+                auto err = append_status.ToString();
+                throw std::runtime_error("Error writing Arrow file 2: " + err);
+            }
+            arrays.push_back(labels_array);
+
+            // construct columns for each feature 
+            for (int j = 0; j < std::get<2>(features[0]).size(); ++j) {
+
+                arrow::DoubleBuilder builder;   
+                std::shared_ptr<arrow::Array> double_array;
+
+                for (int i = 0; i < num_rows; ++i) {
+                    append_status = builder.Append(std::get<2>(features[i])[j]);
+
+                    if (!append_status.ok()) {
+                        // Handle read error
+                        auto err = append_status.ToString();
+                        throw std::runtime_error("Error writing Arrow file 2: " + err);
+                    }
+                }
+
+                append_status =  builder.Finish(&double_array);
+
+                if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
+
+                arrays.push_back(double_array);
+            }
+
+            std::shared_ptr<arrow::RecordBatch> batch = arrow::RecordBatch::Make(schema_, num_rows, arrays);
+
+            ARROW_ASSIGN_OR_RAISE(auto table,
+                        arrow::Table::FromRecordBatches(schema_, {batch}));
+
+            ARROW_RETURN_NOT_OK(writer_->WriteTable(*table.get(), batch->num_rows()));
 
             return arrow::Status::OK();
+    }
+
+    arrow::Status close() override {
+        return arrow::Status::OK();
     }
 };
 
@@ -239,15 +394,43 @@ class ArrowIPCWriter : public ApacheArrowWriter {
             writer_ = arrow::ipc::MakeStreamWriter(output_stream_,  schema_);
         }
 
+        arrow::Status setup(const std::vector<std::string> &header) {
+
+
+            std::vector<std::shared_ptr<arrow::Field>> fields;
+            
+
+            fields.push_back(arrow::field("intensity_image", arrow::utf8()));
+            fields.push_back(arrow::field("segmentation_image", arrow::utf8()));
+            fields.push_back(arrow::field("ROI_label", arrow::int64()));
+
+            for (int i = 3; i < header.size(); ++i)
+            {
+                fields.push_back(arrow::field(header[i], arrow::float64()));
+            }
+
+            schema_ = arrow::schema(fields);
+
+            ARROW_ASSIGN_OR_RAISE(
+                output_stream_, arrow::io::FileOutputStream::Open(output_file_)
+            );
+            
+            writer_ = arrow::ipc::MakeFileWriter(output_stream_,  schema_);
+
+            return arrow::Status::OK();
+        }
+
     public:
 
         ArrowIPCWriter(const std::string& output_file, const std::vector<std::string> &header) : output_file_(output_file) {
 
-            this->set_schema(header);
+            auto status = this->setup(header);
 
-            this->set_output_stream(output_file);
-
-            this->set_stream_writer();
+            if (!status.ok()) {
+                // Handle read error
+                auto err = status.ToString();
+                throw std::runtime_error("Error writing setting up Arrow writer: " + err);
+            }
         }    
 
         /**
@@ -259,11 +442,9 @@ class ArrowIPCWriter : public ApacheArrowWriter {
          * @param number_of_rows Number of rows
          * @return arrow::Status 
          */
-        arrow::Status write (const std::string & intFpath, const std::string & segFpath, const std::string & outputDir) override {
+        arrow::Status write () override {
 
-            std::shared_ptr<arrow::RecordBatch> batch;
-
-            auto features = Nyxus::get_feature_values();
+            std::vector<std::tuple<std::vector<std::string>, int, std::vector<double>>> features = Nyxus::get_feature_values();
 
             int num_rows = features.size();
 
@@ -272,12 +453,26 @@ class ArrowIPCWriter : public ApacheArrowWriter {
             arrow::StringBuilder string_builder;
             std::shared_ptr<arrow::Array> intensity_array;
 
+
+            arrow::Status append_status;
             // construct intensity column
             for (int i = 0; i < num_rows; ++i) {
-                string_builder.Append(std::get<0>(features[i])[1]);
+                append_status = string_builder.Append(std::get<0>(features[i])[1]);
+
+                if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
             }
 
-            string_builder.Finish(&intensity_array);
+            append_status = string_builder.Finish(&intensity_array);
+            if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
+            
 
             arrays.push_back(intensity_array);
             string_builder.Reset();
@@ -286,10 +481,22 @@ class ArrowIPCWriter : public ApacheArrowWriter {
 
             // construct intensity column
             for (int i = 0; i < num_rows; ++i) {
-                string_builder.Append(std::get<0>(features[i])[0]);
+                append_status = string_builder.Append(std::get<0>(features[i])[0]);
+
+                if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
             }
 
-            string_builder.Finish(&segmentation_array);
+            append_status = string_builder.Finish(&segmentation_array);
+
+            if (!append_status.ok()) {
+                // Handle read error
+                auto err = append_status.ToString();
+                throw std::runtime_error("Error writing Arrow file 2: " + err);
+            }
 
             arrays.push_back(segmentation_array);
 
@@ -297,36 +504,50 @@ class ArrowIPCWriter : public ApacheArrowWriter {
             std::shared_ptr<arrow::Array> labels_array;
             // construct label column
             for (int i = 0; i < num_rows; ++i) {
-                int_builder.Append(std::get<1>(features[i]));
+                append_status = int_builder.Append(std::get<1>(features[i]));
+                if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
             }
 
-            int_builder.Finish(&labels_array);
-
+            append_status = int_builder.Finish(&labels_array);
+            if (!append_status.ok()) {
+                // Handle read error
+                auto err = append_status.ToString();
+                throw std::runtime_error("Error writing Arrow file 2: " + err);
+            }
             arrays.push_back(labels_array);
 
             // construct columns for each feature 
-            for (int j = 3; j < std::get<2>(features[0]).size(); ++j) {
+            for (int j = 0; j < std::get<2>(features[0]).size(); ++j) {
 
                 arrow::DoubleBuilder builder;   
                 std::shared_ptr<arrow::Array> double_array;
 
                 for (int i = 0; i < num_rows; ++i) {
-                    builder.Append(std::get<2>(features[i])[j]);
+                    append_status = builder.Append(std::get<2>(features[i])[j]);
+
+                    if (!append_status.ok()) {
+                        // Handle read error
+                        auto err = append_status.ToString();
+                        throw std::runtime_error("Error writing Arrow file 2: " + err);
+                    }
                 }
 
-                builder.Finish(&double_array);
+                append_status =  builder.Finish(&double_array);
+
+                if (!append_status.ok()) {
+                    // Handle read error
+                    auto err = append_status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+                }
 
                 arrays.push_back(double_array);
             }
 
-
-            //ARROW_ASSIGN_OR_RAISE(
-            //    batch, arrow::RecordBatch::Make(schema_, num_rows, arrays)
-            //);
-
-            batch = arrow::RecordBatch::Make(schema_, num_rows, arrays);
-
-            // put data in record batch now or make a non empty batch
+            std::shared_ptr<arrow::RecordBatch> batch = arrow::RecordBatch::Make(schema_, num_rows, arrays);
 
             auto status = writer_->get()->WriteRecordBatch(*batch);
 
@@ -372,7 +593,7 @@ class WriterFactory {
             
             if (Nyxus::ends_with_substr(output_file, ".parquet")) {
                 
-                return std::make_shared<ParquetWriter>(output_file);
+                return std::make_shared<ParquetWriter>(output_file, header);
 
             } else if (Nyxus::ends_with_substr(output_file, ".arrow") || Nyxus::ends_with_substr(output_file, ".feather")) {
                 

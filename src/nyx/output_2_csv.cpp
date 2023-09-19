@@ -433,7 +433,7 @@ namespace Nyxus
 	}
 
 	std::vector<std::tuple<std::vector<std::string>, int, std::vector<double>>> get_feature_values() {
-
+		std::cout << "get feature values" << std::endl;
 		std::vector<std::tuple<std::vector<std::string>, int, std::vector<double>>> features;
 
 		// Sort the labels

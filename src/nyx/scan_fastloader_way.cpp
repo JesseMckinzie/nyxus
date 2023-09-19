@@ -33,6 +33,9 @@ namespace py = pybind11;
 #include<windows.h>
 #endif
 
+#include <chrono>
+
+
 namespace Nyxus
 {
 	bool processIntSegImagePair (const std::string& intens_fpath, const std::string& label_fpath, int num_FL_threads, int filepair_index, int tot_num_filepairs)
@@ -209,6 +212,7 @@ namespace Nyxus
 		bool save2csv,
 		const std::string& csvOutputDir)
 	{
+		double total_write_time = 0;
 		#ifdef CHECKTIMING
 		if (Stopwatch::inclusive())
 			Stopwatch::reset();
@@ -220,10 +224,22 @@ namespace Nyxus
 
 		// initialize arrow writer if needed
 	#ifdef USE_ARROW
-		std::shared_ptr<ArrowIPCWriter> writer;
+		std::shared_ptr<ApacheArrowWriter> writer;
+
 		if (arrow_output) {
+			auto start = std::chrono::high_resolution_clock::now();
+			Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
+			ArrowOutputStream arrow_writer = ArrowOutputStream();
+			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, csvOutputDir, theResultsCache.get_headerBuf());
+			auto stop = std::chrono::high_resolution_clock::now();
+			total_write_time += (std::chrono::duration_cast<std::chrono::microseconds>(stop - start)).count();
+			/*
+			auto start = std::chrono::high_resolution_clock::now();
 			Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
 			writer = std::make_shared<ArrowIPCWriter>(ArrowIPCWriter(csvOutputDir, theResultsCache.get_headerBuf()));
+			auto stop = std::chrono::high_resolution_clock::now();
+			total_write_time += (std::chrono::duration_cast<std::chrono::microseconds>(stop - start)).count();
+			*/
 		}
 	#endif
 
@@ -267,19 +283,36 @@ namespace Nyxus
 
 		#ifdef USE_ARROW
 			if (arrow_output) {
-				writer->write(ifp, lfp, csvOutputDir);
+				std::cout << "writing to arrow" << std::endl;
+				auto start = std::chrono::high_resolution_clock::now();
+				auto status = writer->write();
+				auto stop = std::chrono::high_resolution_clock::now();
+				
+				if (!status.ok()) {
+                    // Handle read error
+                    auto err = status.ToString();
+                    throw std::runtime_error("Error writing Arrow file 2: " + err);
+				}
+				
+				total_write_time += (std::chrono::duration_cast<std::chrono::microseconds>(stop - start)).count();
 			}
 		#endif
 
 			// For the non-Apache output mode, save the result for this intensity-label file pair
-			if (save2csv)
-				ok = save_features_2_csv(ifp, lfp, csvOutputDir);
-			else
-				ok = save_features_2_buffer(theResultsCache);
-			if (ok == false)
-			{
-				std::cout << "save_features_2_csv() returned an error code" << std::endl;
-				return 2;
+			if (!arrow_output) {
+				if (save2csv) {
+					auto start = std::chrono::high_resolution_clock::now();
+					ok = save_features_2_csv(ifp, lfp, csvOutputDir);
+					auto stop = std::chrono::high_resolution_clock::now();
+					total_write_time += (std::chrono::duration_cast<std::chrono::microseconds>(stop - start)).count();
+				} else {
+					ok = save_features_2_buffer(theResultsCache);
+				}
+				if (ok == false)
+				{
+					std::cout << "save_features_2_csv() returned an error code" << std::endl;
+					return 2;
+				}
 			}
 
 			theImLoader.close();
@@ -328,10 +361,19 @@ namespace Nyxus
 
 	#ifdef USE_ARROW
 		if (arrow_output) {
-			writer->close();
+			auto start = std::chrono::high_resolution_clock::now();
+			auto status = writer->close();
+			auto stop = std::chrono::high_resolution_clock::now();
+			total_write_time += (std::chrono::duration_cast<std::chrono::microseconds>(stop - start)).count();
+			if (!status.ok()) {
+                    // Handle read error
+				auto err = status.ToString();
+				throw std::runtime_error("Error writing Arrow file 2: " + err);
+			}
 		}
 	#endif
-
+	
+		std::cout << std::endl << "-----------" << "TOTAL WRITE TIME: " << total_write_time << std::endl;
 		return 0; // success
 	}
 

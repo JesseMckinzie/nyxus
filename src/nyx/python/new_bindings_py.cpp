@@ -177,15 +177,6 @@ py::tuple featurize_directory_imp (
 
     auto arrow_output = !pandas_output;
 
-    std::string csv_out = "";
-    if (arrow_output) {
-        //auto csv_dir = fs::temp_directory_path().u8string() + "/nyx_tmp/"; // store in separate variable for safe deletion
-        auto csv_dir = "/Users/jmckinzie/Documents/GitHub/nyxus/out";
-        std::cout << csv_dir << std::endl;
-        fs::create_directory(csv_dir);
-        theEnvironment.output_dir = csv_dir;
-    }
-
     theEnvironment.separateCsv = false;
 
     // Process the image sdata
@@ -224,17 +215,6 @@ py::tuple featurize_directory_imp (
         return py::make_tuple (pyHeader, pyStrData, pyNumData);
     } 
 
-    /*
-    ArrowOutputStream arrow_stream = ArrowOutputStream();
-
-
-    Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
-
-    std::cout << "before" << std::endl;
-    arrow_stream.create_arrow_file(csv_file, theResultsCache.get_headerBuf(), arrow_file_path);
-    std::cout << "end" << std::endl;
-    */
-    // To avoid duplication, return a void dataframe on the Python-side when the output is a file in Arrow format
     return py::make_tuple();
 }
 
