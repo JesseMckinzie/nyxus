@@ -582,12 +582,9 @@ std::string get_parquet_file_imp() {
 
 #ifdef USEARROW
 
-std::shared_ptr<arrow::Table> get_arrow_table_imp() {
+std::shared_ptr<arrow::Table> get_arrow_table_imp(const std::string& file_path) {
 
-    return theEnvironment.arrow_output.get_arrow_table(theResultsCache.get_headerBuf(),
-                                                       theResultsCache.get_stringColBuf(),
-                                                       theResultsCache.get_calcResultBuf(),
-                                                       theResultsCache.get_num_rows());
+    return ApacheArrowWriter::get_arrow_table(file_path);
 }
 
 #else

@@ -33,8 +33,7 @@
  */
 class ApacheArrowWriter
 {
-protected:
-    std::shared_ptr<arrow::Table> table_;
+
 public:
 
     /**
@@ -42,7 +41,50 @@ public:
      * 
      * @return std::shared_ptr<arrow::Table> 
      */
-    std::shared_ptr<arrow::Table> get_arrow_table() {return table_;}
+    static std::shared_ptr<arrow::Table> get_arrow_table(const std::string& file_path) {
+
+        auto file_extension = fs::path(file_path).extension.u8string();
+
+        if (file_extension == ".parquet") {
+            arrow::MemoryPool* pool = arrow::default_memory_pool();
+
+            std::shared_ptr<arrow::io::RandomAccessFile> input;
+
+            ARROW_ASSIGN_OR_RAISE(input, arrow::io::ReadableFile::Open(file_path));
+            
+            std::unique_ptr<parquet::arrow::FileReader> arrow_reader;
+
+            ARROW_RETURN_NOT_OK(parquet::arrow::OpenFile(input, pool, &arrow_reader));
+
+            // Read entire file as a single Arrow table
+            std::shared_ptr<arrow::Table> table;
+            ARROW_RETURN_NOT_OK(arrow_reader->ReadTable(&table));
+
+            return table;
+
+        } else if (file_extension == ".arrow") {
+
+            arrow::MemoryPool* pool = arrow::default_memory_pool();
+
+            std::shared_ptr<arrow::io::RandomAccessFile> input;
+
+            ARROW_ASSIGN_OR_RAISE(input, arrow::io::ReadableFile::Open(file_path));
+            
+            std::unique_ptr<arrow::ipc::FileReader> arrow_reader;
+
+            ARROW_RETURN_NOT_OK(arrow::ipc::OpenFile(input, pool, &arrow_reader));
+
+            // Read entire file as a single Arrow table
+            std::shared_ptr<arrow::Table> table;
+            ARROW_RETURN_NOT_OK(arrow_reader->ReadTable(&table));
+
+            return table;
+            
+        } else {
+            throw std::invalid_argument("Error: file must either be an Arrow or Parquet file.");
+        }
+
+    }
 
     /**
      * @brief Generate an Arrow table from Nyxus output

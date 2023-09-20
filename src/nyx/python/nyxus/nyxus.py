@@ -797,7 +797,7 @@ class Nyxus:
             raise RuntimeError("Apache arrow is not enabled. Please rebuild Nyxus with Arrow support to enable this functionality.")
     
     
-    def get_arrow_table(self):
+    def get_arrow_table(self, arrow_file_path: str):
         """Returns an arrow table containing the feature calculations.
 
         Parameters
@@ -811,7 +811,7 @@ class Nyxus:
         """
         
         if self.arrow_is_enabled():
-            return get_arrow_table_imp()
+            return get_arrow_table_imp(arrow_file_path)
         else:
             raise RuntimeError("Nyxus was not built with Arrow. To use this functionality, rebuild Nyxus with Arrow support on.")
     
