@@ -88,15 +88,15 @@ class Nyxus:
         Size of filter kernel's side
     gabor_gamma: float (optional, default 0.1)
         Aspect ratio of the Gaussian factor
-    gabor_sig2lam: float (optional, deafult 0.8)
+    gabor_sig2lam: float (optional, default 0.8)
         Spatial frequency bandwidth.
     gabor_f0: float (optional, default 0.1)
         frequency of the baseline lowpass filter as denominator of `\pi`.
-    gabor_theta: float (optional, default 45): 
+    gabor_thetas: list[float] (optional, default [0, 45, 90, 135]): 
         Orientation of the Gaussian in degrees 0-180.
     gabor_thold: float (optional, 0.025)
         lower threshold of the filtered image to baseline ratio. 
-    gabor_freqs: list[int] (optional, default [1,2,4,8,16,32,64])
+    gabor_freqs: list[float] (optional, default [4, 16, 32, 64])
         comma-separated denominators of `\pi` as frequencies of Gabor filter's harmonic factor.
     """
 
@@ -114,9 +114,9 @@ class Nyxus:
         gabor_gamma: float = 0.1,
         gabor_sig2lam: float = 0.8,
         gabor_f0: float = 0.1,
-        gabor_theta: float = 45,
         gabor_thold: float = 0.025,
-        gabor_freqs: List[int] = [1,2,4,8,16,32,64]
+        gabor_thetas: List[int] = [0, 45, 90, 135],
+        gabor_freqs: List[int] = [4, 16, 32, 64]
         ):
 
         if neighbor_distance <= 0:
@@ -153,15 +153,14 @@ class Nyxus:
             using_gpu,
             ibsi)
         
-        
         self.set_gabor_feature_params(
-            kersize=gabor_kersize,
-            gamma=gabor_gamma,
-            sig2lam=gabor_sig2lam,
-            f0=gabor_f0,
-            theta=gabor_theta,
-            thold=gabor_thold,
-            freqs=gabor_freqs
+            kersize = gabor_kersize,
+            gamma = gabor_gamma,
+            sig2lam = gabor_sig2lam,
+            f0 = gabor_f0,
+            thold = gabor_thold,
+            thetas = gabor_thetas,
+            freqs = gabor_freqs
         )
         
         # list of valid outputs that are used throughout featurize functions
@@ -371,18 +370,20 @@ class Nyxus:
         self,
         intensity_files: list,
         mask_files: list,
+        single_roi: bool,
         output_type: Optional[str] = "pandas",
         output_path: Optional[str] = ""):
         """Extract features from image file pairs passed as lists
 
         Extracts all the requested features _at the image level_ from the intensity images
         present in list `intensity_files` with respect to region of interest masks presented in 
-        list `mask_files`. Multiple 
+        list `mask_files`. Single-ROI feature extraction is enforced via passing 'True' as parameter 'single_roi'
 
         Parameters
         ----------
         intensity_files : list of intensity image file paths
         mask_files : list of mask image file paths
+        single_roi : 'True' to treat items of 'intensity_files' as single-ROI ('mask_files' will be ignored), 'False' to treat items of 'intensity_files' and 'mask_files' as intensity/segmentation image pairs
 
         Returns
         -------
@@ -398,11 +399,11 @@ class Nyxus:
             raise IOError ("The list of segment file paths is empty")
         
         if (output_type not in self._valid_output_types):
-            raise  ValueError(f'Invalid output type {output_type}. Valid output types are {self._valid_output_types}.')
+            raise  ValueError(f'Invalid output type {output_type}. Valid output types are {self._valid_output_types}')
 
         if (output_type == 'pandas'):
             
-            header, string_data, numeric_data = featurize_fname_lists_imp (intensity_files, mask_files, True)
+            header, string_data, numeric_data = featurize_fname_lists_imp (intensity_files, mask_files, single_roi, True)
 
             df = pd.concat(
                 [
@@ -420,7 +421,7 @@ class Nyxus:
         
         else:
             
-            featurize_fname_lists_imp (intensity_files, mask_files, False)
+            featurize_fname_lists_imp (intensity_files, mask_files, single_roi, False)
             
             output_type = output_type.lower() # ignore case of output type
             
@@ -501,8 +502,8 @@ class Nyxus:
         * gamma (float): aspect ratio of the Gaussian factor. Example: customize_gabor_feature(gamma=0.1)
         * sig2lam (float): spatial frequency bandwidth. Example: customize_gabor_feature(sig2lam=0.8)
         * f0 (float): frequency of the baseline lowpass filter as denominator of `\pi`. Example: customize_gabor_feature(f0=0.1)
-        * theta (float): orientation of the Gaussian in degrees 0-180. Example: customize_gabor_feature(theta=1.5708)
         * thold (float): lower threshold of the filtered image to baseline ratio. Example: customize_gabor_feature(thold=0.025)
+        * thetas (list[int]): list of orientations of the Gaussian in degrees 0-180 matching 'freqs'. Example: customize_gabor_feature(theta=1.5708)
         * freqs (list[int]): list of denominators of `\pi` as frequencies of Gabor filter's harmonic factor. Example: customize_gabor_feature(freqs="1,2,4,8,16,32,64")
         """
 
@@ -511,8 +512,8 @@ class Nyxus:
             'gamma',
             'sig2lam',
             'f0',
-            'theta',
             'thold',
+            'thetas',
             'freqs'
         ]
         
@@ -524,11 +525,11 @@ class Nyxus:
         gamma = str(kwargs.get ('gamma', ""))
         sig2lam = str(kwargs.get ('sig2lam', ""))
         f0 = str(kwargs.get ('f0', ""))
-        theta = str(kwargs.get ('theta', ""))
         thold = str(kwargs.get ('thold', ""))
+        thetas = kwargs.get ('thetas', [])
         freqs = kwargs.get ('freqs', [])
 
-        if len(kersize)==0 and len(gamma)==0 and len(sig2lam)==0 and len(f0)==0 and len(theta)==0 and len(thold)==0 and len(freqs)==0:
+        if len(kersize)==0 and len(gamma)==0 and len(sig2lam)==0 and len(f0)==0 and len(thold)==0 and len(freqs)==0 and len(thetas)==0 :
             raise IOError ("Illegal arguments passed to set_gabor_feature_params()")
         
         if (freqs == []):
@@ -536,7 +537,12 @@ class Nyxus:
         else:
             freqs = ",".join(str(i) for i in freqs)
 
-        customize_gabor_feature_imp (kersize, gamma, sig2lam, f0, theta, thold, freqs)
+        if (thetas == []):
+            thetas = ""
+        else:
+            thetas = ",".join(str(i) for i in thetas)
+
+        customize_gabor_feature_imp (kersize, gamma, sig2lam, f0, thetas, thold, freqs)
 
     
     def set_environment_params (self, **params):
@@ -562,6 +568,8 @@ class Nyxus:
             Id of the gpu to use. To find available gpus along with ids, using nyxus.get_gpu_properties().
             The default value of -1 uses cpu calculations. Note that the gpu features only support a single 
             thread for feature calculation. 
+        * verbose: int (optional, non-negative, default 0)
+            Level of diagnostic output shown in the console. Set '0' to disable any diagnostic output.
         
         """
         
@@ -616,7 +624,7 @@ class Nyxus:
         * gabor_gamma (float): aspect ratio of the Gaussian factor. Example: set_params(gabor_gamma=0.1)
         * gabor_sig2lam (float): spatial frequency bandwidth. Example: set_params(gabor_sig2lam=0.8)
         * gabor_f0 (float): frequency of the baseline lowpass filter as denominator of `\pi`. Example: set_params(gabor_f0=0.1)
-        * gabor_theta (float): orientation of the Gaussian in degrees 0-180. Example: set_params(gabor_theta=1.5708)
+        * gabor_thetas (str): comma-separated orientations of the Gaussian in degrees 0-180. Example: set_params(gabor_thetas="0,45,60")
         * gabor_thold (float): lower threshold of the filtered image to baseline ratio. Example: set_params(gabor_thold=0.025)
         * gabor_freqs (str): comma-separated denominators of `\pi` as frequencies of Gabor filter's harmonic factor. Example: set_params(gabor_freqs="1,2,4,8,16,32,64")
         """
@@ -675,7 +683,7 @@ class Nyxus:
         * gabor_gamma (float): aspect ratio of the Gaussian factor. Example: set_params(gabor_gamma=0.1)
         * gabor_sig2lam (float): spatial frequency bandwidth. Example: set_params(gabor_sig2lam=0.8)
         * gabor_f0 (float): frequency of the baseline lowpass filter as denominator of `\pi`. Example: set_params(gabor_f0=0.1)
-        * gabor_theta (float): orientation of the Gaussian in degrees 0-180. Example: set_params(gabor_theta=1.5708)
+        * gabor_thetas (str): comma-separated orientations of the Gaussian in degrees 0-180. Example: set_params(gabor_thetas="45,60,70")
         * gabor_thold (float): lower threshold of the filtered image to baseline ratio. Example: set_params(gabor_thold=0.025)
         * gabor_freqs (str): comma-separated denominators of `\pi` as frequencies of Gabor filter's harmonic factor. Example: set_params(gabor_freqs="1,2,4,8,16,32,64")
         

@@ -108,7 +108,7 @@ void set_environment_params_imp (
     uint32_t n_reduce_threads = 0,
     uint32_t n_loader_threads = 0,
     int using_gpu = -2,
-    int verbosity_level = 0
+    int verb_level = 0
 ) {
     if (features.size() > 0) {
         theEnvironment.recognizedFeatureNames = features;
@@ -134,8 +134,10 @@ void set_environment_params_imp (
         theEnvironment.n_loader_threads = n_loader_threads;
     }
 
-    if (verbosity_level != 0)
-        theEnvironment.verbosity = verbosity_level;
+    if (verb_level >= 0)
+        theEnvironment.set_verbosity_level (verb_level);
+    else
+        throw std::runtime_error("Error: verbosity (" + std::to_string(verb_level) + ") should be a non-negative value");
 }
 
 py::tuple featurize_directory_imp (
@@ -293,10 +295,10 @@ py::tuple featurize_montage_imp (
     return py::make_tuple(error_message, path);
 }
 
-py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list & seg_fnames, bool pandas_output=true)
+py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list & seg_fnames, bool single_roi, bool pandas_output=true)
 {
     // Set the whole-slide/multi-ROI flag
-    theEnvironment.singleROI = false;
+    theEnvironment.singleROI = single_roi;
 
     std::vector<std::string> intensFiles, labelFiles;
     for (auto it = int_fnames.begin(); it != int_fnames.end(); ++it)
@@ -498,9 +500,16 @@ std::map<std::string, ParameterTypes> get_params_imp(const std::vector<std::stri
     params["gabor_gamma"] = GaborFeature::gamma;
     params["gabor_sig2lam"] = GaborFeature::sig2lam;
     params["gabor_f0"] = GaborFeature::f0LP;
-    params["gabor_theta"] = GaborFeature::get_theta_in_degrees(); // convert theta back from radians
     params["gabor_thold"] = GaborFeature::GRAYthr;
-    params["gabor_freqs"] = GaborFeature::f0;
+
+    std::vector<double> f, t;
+    for (auto p : GaborFeature::f0_theta_pairs)
+    {
+        f.push_back (p.first);
+        t.push_back (Nyxus::rad2deg(p.second));
+    }
+    params["gabor_freqs"] = f;
+    params["gabor_thetas"] = t;
 
     if (vars.size() == 0) 
         return params;
@@ -638,7 +647,7 @@ PYBIND11_MODULE(backend, m)
 
 ///
 /// The following code block is a quick & simple manual test of the Python interface 
-/// invokable from from the command line. It lets you bypass building and installing the Python library.
+/// invocable from from the command line. It lets you bypass building and installing the Python library.
 /// To use it, 
 ///     #define TESTING_PY_INTERFACE, 
 ///     exclude file main_nyxus.cpp from build, and 

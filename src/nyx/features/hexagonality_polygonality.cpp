@@ -24,7 +24,7 @@ void HexagonalityPolygonalityFeature::calculate (LR& r)
     double perimeter_neighbors;
 
     if (neighbors == 0)
-        perimeter_neighbors = std::numeric_limits<double>::quiet_NaN();
+        perimeter_neighbors = HexagonalityPolygonalityFeature::novalue;
     else
         perimeter_neighbors = perimeter / neighbors;
 
@@ -111,7 +111,7 @@ void HexagonalityPolygonalityFeature::calculate (LR& r)
         std::vector<double> list_perim = { perim1, perim2, perim3, perim4, perim5, perim6, perim7, perim8, perim9, perim10, perim11, perim12, perim13, perim14 };
         std::vector<double> perim_array; 
 
-        // 1 - Create an array of the ratio of all Perimeters to eachother. 2 - Create Summary statistics of all array ratios.
+        // 1 - Create an array of the ratio of all Perimeters to each other. 2 - Create Summary statistics of all array ratios.
         double sum2 = 0;
         for (int ib = 0; ib < list_perim.size(); ++ib)
             for (int ic = ib + 1; ic < list_perim.size(); ++ic)
@@ -141,9 +141,9 @@ void HexagonalityPolygonalityFeature::calculate (LR& r)
     else
         if (neighbors < 3)
         {
-            polyAve = std::numeric_limits<double>::quiet_NaN();
-            hexAve = std::numeric_limits<double>::quiet_NaN();
-            hexSd = std::numeric_limits<double>::quiet_NaN();
+            polyAve = HexagonalityPolygonalityFeature::novalue;
+            hexAve = HexagonalityPolygonalityFeature::novalue;
+            hexSd = HexagonalityPolygonalityFeature::novalue;
         }
 }
 
@@ -169,12 +169,29 @@ void HexagonalityPolygonalityFeature::parallel_process_1_batch (size_t start, si
         int lab = (*ptrLabels)[i];
         LR& r = (*ptrLabelData)[lab];
 
+        // Feasibility check #1
         if (r.has_bad_data())
-            continue;
+        {
+            // Explicitly assign dummy yet valid values to indicate that features weren't calculated. Better than NAN - less data cleaning before training
+            HexagonalityPolygonalityFeature hexpo;
+            hexpo.polyAve = hexpo.hexAve = hexpo.hexSd = HexagonalityPolygonalityFeature::novalue;
+            hexpo.save_value(r.fvals);
 
-        // Skip if the contour, convex hull, and neighbors are unavailable, otherwise the related features will be == NAN. Those feature will be equal to the default unassigned value.
-        if (r.contour.size() == 0 || r.convHull_CH.size() == 0 || r.fvals[NUM_NEIGHBORS][0] == 0)
+            // Skip feature calculation
             continue;
+        }
+
+        // Feasibility check #2
+        if (r.contour.size() == 0 || r.fvals[CONVEX_HULL_AREA][0] == 0 || r.fvals[NUM_NEIGHBORS][0] == 0)
+        {
+            // Explicitly assign dummy yet valid values to indicate that features weren't calculated. Better than NAN - less data cleaning before training
+            HexagonalityPolygonalityFeature hexpo;
+            hexpo.polyAve = hexpo.hexAve = hexpo.hexSd = HexagonalityPolygonalityFeature::novalue;
+            hexpo.save_value(r.fvals);
+
+            // Skip feature calculation
+            continue;
+        }
 
         HexagonalityPolygonalityFeature hexpo;
         hexpo.calculate(r);

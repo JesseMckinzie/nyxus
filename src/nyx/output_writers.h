@@ -28,7 +28,7 @@
  * @brief Base class for creating Apache Arrow output writers
  * 
  * This class provides methods for the Arrow table used for writing to Arrow formats and
- * provides virtual functions to overriden for writing to different formats
+ * provides virtual functions to overridden for writing to different formats
  * 
  */
 class ApacheArrowWriter
@@ -268,7 +268,7 @@ class ParquetWriter : public ApacheArrowWriter {
          * 
          * @param header Header data
          * @param string_columns String data (filenames)
-         * @param numeric_columns Numberic data (feature calculations)
+         * @param numeric_columns Numeric data (feature calculations)
          * @param number_of_rows Number of rows
          * @return arrow::Status 
          */
@@ -480,7 +480,7 @@ class ArrowIPCWriter : public ApacheArrowWriter {
          * 
          * @param header Header data
          * @param string_columns String data (filenames)
-         * @param numeric_columns Numberic data (feature calculations)
+         * @param numeric_columns Numeric data (feature calculations)
          * @param number_of_rows Number of rows
          * @return arrow::Status 
          */

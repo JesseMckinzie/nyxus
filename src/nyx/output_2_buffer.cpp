@@ -46,7 +46,7 @@ namespace Nyxus
 				bool angledGlcmFeature = std::find (GLCMFeature::featureset.begin(), GLCMFeature::featureset.end(), fc) != GLCMFeature::featureset.end();
 				if (angledGlcmFeature)
 				{
-					// Polulate with angles
+					// Populate with angles
 					for (auto ang : theEnvironment.glcmAngles)
 					{
 						std::string col = fn + "_" + std::to_string(ang);
@@ -61,7 +61,7 @@ namespace Nyxus
 				bool glrlmFeature = std::find (GLRLMFeature::featureset.begin(), GLRLMFeature::featureset.end(), fc) != GLRLMFeature::featureset.end();
 				if (glrlmFeature)
 				{
-					// Polulate with angles
+					// Populate with angles
 					for (auto ang : GLRLMFeature::rotAngles)
 					{
 						std::string col = fn + "_" + std::to_string(ang);
@@ -76,7 +76,7 @@ namespace Nyxus
 				if (fc == GABOR)
 				{
 					// Generate the feature value list
-					for (auto i = 0; i < GaborFeature::f0.size(); i++)
+					for (auto i = 0; i < GaborFeature::f0_theta_pairs.size(); i++)
 					{
 						std::string col = fn + "_" + std::to_string(i);
 						rescache.add_to_header(col);	
@@ -195,7 +195,7 @@ namespace Nyxus
 					if (vv.size() < GLCMFeature::angles.size())
 						vv.resize(GLCMFeature::angles.size(), 0.0);
 					
-					// Polulate with angles
+					// Populate with angles
 					int nAng = GLCMFeature::angles.size();
 					for (int i=0; i < nAng; i++)
 						rescache.add_numeric(vv[i]);		
@@ -208,7 +208,7 @@ namespace Nyxus
 				bool glrlmFeature = std::find (GLRLMFeature::featureset.begin(), GLRLMFeature::featureset.end(), fc) != GLRLMFeature::featureset.end();
 				if (glrlmFeature)
 				{
-					// Polulate with angles
+					// Populate with angles
 					int nAng = 4;
 					for (int i=0; i < nAng; i++)
 						rescache.add_numeric(vv[i]);		
@@ -219,7 +219,7 @@ namespace Nyxus
 				// --Gabor
 				if (fc == GABOR)
 				{
-					for (auto i = 0; i < GaborFeature::f0.size(); i++)
+					for (auto i = 0; i < GaborFeature::f0_theta_pairs.size(); i++)
 						rescache.add_numeric(vv[i]);		
 
 					// Proceed with other features
