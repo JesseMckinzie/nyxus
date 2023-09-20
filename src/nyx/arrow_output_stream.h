@@ -73,19 +73,9 @@ public:
                                                       const std::vector<double>& results,
                                                       size_t num_rows) {
                                                         
-        /*if (writer_ == nullptr) {
-            //writer_ = WriterFactory::create_writer("out.arrow");
-
-            writer_->generate_arrow_table(header, string_columns, results, num_rows);
-
-            return writer_->get_arrow_table();
-        }
-        */
-
         auto table = writer_->get_arrow_table();
 
         return table;
-
     }
 
 };
