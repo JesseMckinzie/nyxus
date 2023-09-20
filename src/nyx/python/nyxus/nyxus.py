@@ -234,28 +234,10 @@ class Nyxus:
         
         else:
             
-            path = featurize_directory_imp(intensity_dir, label_dir, file_pattern, False, output_path)
-            print('after in python')
-            return path
+            featurize_directory_imp(intensity_dir, label_dir, file_pattern, False, output_path)
+        
+
             
-            output_type = output_type.lower() # ignore case of output type
-            
-            '''
-            if (output_type == 'arrow' or output_type == 'arrowipc'):
-                
-                self.create_arrow_file(output_path)
-                
-                return self.get_arrow_ipc_file()
-                
-            elif (output_type == 'parquet'):
-                
-                self.create_parquet_file(output_path)
-                
-                return self.get_parquet_file()
-            '''
-            
-            
-    
     def featurize(
         self,
         intensity_images: np.ndarray,
@@ -291,6 +273,10 @@ class Nyxus:
             Pandas DataFrame containing the requested features with one row per label
             per image.
         """
+        valid_output_types = ['arrow', 'parquet', 'pandas']
+        if (output_type != "" and output_type not in valid_output_types):
+            raise ValueError("Invalid output type: " + output_type + ". Valid options are: " + valid_output_types)
+            
         
         # verify argument types
         if not isinstance(intensity_images, np.ndarray):
@@ -343,7 +329,7 @@ class Nyxus:
     
         if (output_type == 'pandas'):
                 
-            header, string_data, numeric_data, error_message = featurize_montage_imp (intensity_images, label_images, intensity_names, label_names, True)
+            header, string_data, numeric_data, error_message = featurize_montage_imp (intensity_images, label_images, intensity_names, label_names, True, "", "")
             
             self.error_message = error_message
             if(error_message != ''):
@@ -365,25 +351,18 @@ class Nyxus:
             
         else:
             
-            error_message = featurize_montage_imp (intensity_images, label_images, intensity_names, label_names, False)
+            error_message = featurize_montage_imp (intensity_images, label_images, intensity_names, label_names, False, output_type, output_path)
             
             self.error_message = error_message
-            if(error_message != ''):
-                print(error_message)
             
-            output_type = output_type.lower() # ignore case of output type
+            if(error_message[0] != ''):
+                raise RuntimeError('Error calculating features: ' + error_message[0])
             
-            if (output_type == 'arrow' or output_type == 'arrowipc'):
+            if (output_path.endswith('.arrow') or output_path.endswith('.parquet')):
+                return output_path
+            else:
+                return output_path + 'NyxusFeatures.' + output_type
                 
-                self.create_arrow_file(output_path)
-                
-                return self.get_arrow_ipc_file()
-                
-            elif (output_type == 'parquet'):
-                
-                self.create_parquet_file(output_path)
-                
-                return self.get_parquet_file()
     
     def using_gpu(self, gpu_on: bool):
         use_gpu(gpu_on)

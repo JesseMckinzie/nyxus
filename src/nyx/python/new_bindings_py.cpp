@@ -188,7 +188,8 @@ py::tuple featurize_directory_imp (
         theEnvironment.n_pixel_scan_threads,
         theEnvironment.n_reduce_threads,
         min_online_roi_size,
-        arrow_output, // 'true' to save to csv
+        arrow_output,
+        false,
         theEnvironment.output_dir);
 
     if (errorCode)
@@ -197,16 +198,10 @@ py::tuple featurize_directory_imp (
     // Output the result
     if (pandas_output) 
     {
-    #ifdef USE_ARROW
-        // Get by value to preserve buffers for writing to arrow
-        auto pyHeader = py::array(py::cast(theResultsCache.get_headerBufByVal()));
-        auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBufByVal()));
-        auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBufByVal()));
-    #else // regular dataframe output
+
         auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
         auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
         auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
-    #endif
 
         // Shape the user-facing dataframe
         auto nRows = theResultsCache.get_num_rows();
@@ -223,10 +218,17 @@ py::tuple featurize_montage_imp (
     const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& label_images,
     const std::vector<std::string>& intensity_names,
     const std::vector<std::string>& label_names,
-    bool pandas_output=true)
+    bool pandas_output=true,
+    const std::string arrow_output_type="",
+    const std::string output_dir="")
 {  
     // Set the whole-slide/multi-ROI flag
     theEnvironment.singleROI = false;
+
+#ifdef USE_ARROW
+    // Set arrow output type
+    theEnvironment.arrow_output_type = arrow_output_type;
+#endif
 
     auto intens_buffer = intensity_images.request();
     auto label_buffer = label_images.request();
@@ -266,33 +268,29 @@ py::tuple featurize_montage_imp (
         theEnvironment.n_reduce_threads,
         intensity_names,
         label_names,
-        error_message);
+        error_message,
+        !pandas_output,
+        output_dir);
 
     if (errorCode)
         throw std::runtime_error("Error #" + std::to_string(errorCode) + " " + error_message + " occurred during dataset processing.");
 
     if (pandas_output) {
 
-        #ifdef USE_ARROW
-            // Get by value to preserve buffers for writing to arrow
-            auto pyHeader = py::array(py::cast(theResultsCache.get_headerBufByVal()));
-            auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBufByVal()));
-            auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBufByVal()));
-        #else 
-            auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
-            auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
-            auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
-        #endif
-            auto nRows = theResultsCache.get_num_rows();
-            pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
-            pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
+        auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
+        auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
+        auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
+
+        auto nRows = theResultsCache.get_num_rows();
+        pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
+        pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
 
         return py::make_tuple(pyHeader, pyStrData, pyNumData, error_message);
     
     } 
 
-    // Return "nothing" when output will be an Arrow format
-    return py::make_tuple(error_message);
+    std::string path = output_dir + "NyxusFeatures.";
+    return py::make_tuple(error_message, path);
 }
 
 py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list & seg_fnames, bool pandas_output=true)
@@ -347,6 +345,7 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
         theEnvironment.n_pixel_scan_threads,
         theEnvironment.n_reduce_threads,
         min_online_roi_size,
+        !pandas_output,
         false, // 'true' to save to csv
         theEnvironment.output_dir);
     if (errorCode)
@@ -354,25 +353,17 @@ py::tuple featurize_fname_lists_imp (const py::list& int_fnames, const py::list 
 
     if (pandas_output) {
 
-        #ifdef USE_ARROW
-            // Get by value to preserve buffers for writing to arrow
-            auto pyHeader = py::array(py::cast(theResultsCache.get_headerBufByVal()));
-            auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBufByVal()));
-            auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBufByVal()));
-        #else 
             auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
             auto pyStrData = py::array(py::cast(theResultsCache.get_stringColBuf()));
             auto pyNumData = as_pyarray(std::move(theResultsCache.get_calcResultBuf()));
-        #endif
+
             auto nRows = theResultsCache.get_num_rows();
             pyStrData = pyStrData.reshape({nRows, pyStrData.size() / nRows});
             pyNumData = pyNumData.reshape({ nRows, pyNumData.size() / nRows });
 
             return py::make_tuple(pyHeader, pyStrData, pyNumData);
-        
+
     } 
-
-
 
     // Return "nothing" when output will be an Arrow format
     return py::make_tuple();
