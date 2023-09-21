@@ -521,24 +521,7 @@ std::map<std::string, ParameterTypes> get_params_imp(const std::vector<std::stri
 std::string get_arrow_file_imp() {
 #ifdef USE_ARROW
 
-    return theEnvironment.arrow_writer.get_arrow_file();
-
-#else
-    
-    throw std::runtime_error("Arrow functionality is not available. Rebuild Nyxus with Arrow enabled.");
-
-#endif
-}
-
-void create_parquet_file_imp(std::string& parquet_file_path) {
-
-#ifdef USE_ARROW
-
-    return theEnvironment.arrow_output.create_parquet_file(theResultsCache.get_headerBuf(),
-                                            theResultsCache.get_stringColBuf(),
-                                            theResultsCache.get_calcResultBuf(),
-                                            theResultsCache.get_num_rows(),
-                                            parquet_file_path);
+    return theEnvironment.arrow_writer->get_arrow_file();
 
 #else
     
@@ -551,7 +534,7 @@ std::string get_parquet_file_imp() {
 
 #ifdef USE_ARROW
 
-    return theEnvironment.arrow_writer.get_arrow_file();
+    return theEnvironment.arrow_writer->get_arrow_file();
 
 #else
     
@@ -611,7 +594,6 @@ PYBIND11_MODULE(backend, m)
     m.def("arrow_is_enabled_imp", &arrow_is_enabled_imp, "Check if arrow is enabled.");
     m.def("get_arrow_file_imp", &get_arrow_file_imp, "Get path to arrow file");
     m.def("get_parquet_file_imp", &get_parquet_file_imp, "Returns path to parquet file");
-    m.def("create_parquet_file_imp", &create_parquet_file_imp, "Create parquet file for the features calculations");
     m.def("get_arrow_table_imp", &get_arrow_table_imp, py::call_guard<py::gil_scoped_release>());
 }
 

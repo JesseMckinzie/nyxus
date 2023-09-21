@@ -233,7 +233,7 @@ namespace Nyxus
 
 			theEnvironment.arrow_writer = ArrowOutputStream();
 
-			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, csvOutputDir, theResultsCache.get_headerBuf());
+			writer = theEnvironment.arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, csvOutputDir, theResultsCache.get_headerBuf());
 		}
 	#endif
 
