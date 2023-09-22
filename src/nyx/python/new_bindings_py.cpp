@@ -521,7 +521,7 @@ std::map<std::string, ParameterTypes> get_params_imp(const std::vector<std::stri
 std::string get_arrow_file_imp() {
 #ifdef USE_ARROW
 
-    return theEnvironment.arrow_writer->get_arrow_file();
+    return theEnvironment.arrow_writer.get_arrow_path();
 
 #else
     
@@ -534,7 +534,7 @@ std::string get_parquet_file_imp() {
 
 #ifdef USE_ARROW
 
-    return theEnvironment.arrow_writer->get_arrow_file();
+    return theEnvironment.arrow_writer.get_arrow_path();
 
 #else
     
