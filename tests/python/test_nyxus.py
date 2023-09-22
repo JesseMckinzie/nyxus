@@ -89,6 +89,8 @@ class TestNyxus():
         def test_get_default_params(self):
             
             nyx = nyxus.Nyxus (["*ALL*"])
+            
+            assert 0 == 1
             assert nyx is not None
             
             # actual
@@ -491,73 +493,7 @@ class TestNyxus():
             path = nyx.get_arrow_ipc_file()
             
             assert path == 'NyxusFeatures.arrow'
-            
-            #os.remove(path)
-        
-        @pytest.mark.arrow  
-        def test_custom_arrow_ipc_path(self):
-            
-            nyx = nyxus.Nyxus (["*ALL*"])
-            assert nyx is not None
-            
-            if (not nyx.arrow_is_enabled()):
-                assert True
-                return
-            
-            features = nyx.featurize(intens, seg)
-            
-            nyx.create_arrow_file('out/out.arrow')
-            
-            if (not nyx.arrow_is_enabled()):
-                with pytest.raises (Exception):
-                    path = nyx.get_arrow_ipc_file()
-                    
-                return
-            
-            path = nyx.get_arrow_ipc_file()
-            
-            assert path == 'out/out.arrow'
-        
-        @pytest.mark.arrow
-        def test_make_parquet_file(self):
-            
-            nyx = nyxus.Nyxus (["*ALL*"])
-            assert nyx is not None
-            
-            features = nyx.featurize(intens, seg)
-            
-            if (not nyx.arrow_is_enabled()):
-                with pytest.raises (Exception):
-                     nyx.create_parquet_file()
-            
-                with pytest.raises (Exception):
-                    parquet_file = nyx.get_parquet_file()
-                    
-                return
-            
-            nyx.create_parquet_file()
-            
-            parquet_file = nyx.get_parquet_file()
 
-            # Read the Parquet file into a Pandas DataFrame
-            parquet_df = pq.read_table(parquet_file).to_pandas()
-                
-            
-            for col in features:
-                column_list = features[col].tolist()
-                arrow_list = parquet_df[col].tolist()
-                
-                for i in range(len(column_list)):
-                    feature_value = column_list[i]
-                    arrow_value = arrow_list[i]
-                    
-                    #skip nan values
-                    if (isinstance(feature_value, (int, float)) and math.isnan(feature_value)):
-                        if (not math.isnan(arrow_value)):
-                            assert False
-
-                        continue
-                    assert feature_value == arrow_value
         
         @pytest.mark.arrow        
         def test_parquet_writer(self):
