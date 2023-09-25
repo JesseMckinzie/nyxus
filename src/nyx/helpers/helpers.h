@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <sstream>
 
 namespace Nyxus
 {
@@ -315,6 +317,20 @@ namespace Nyxus
 	inline double deg2rad (double x)
 	{
 		return x / 180. * 3.14159265358979323846;
+	}
+
+	inline std::vector<std::string> split(const std::string& str, const char delimiter) {
+		std::vector<std::string> split_string;
+
+		std::stringstream ss(str);
+
+		while(ss.good()) {
+			std::string substr;
+			std::getline(ss, substr, delimiter);
+			split_string.push_back(substr);
+		}
+
+		return split_string;
 	}
 }
 

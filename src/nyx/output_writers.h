@@ -8,6 +8,7 @@
 #include <parquet/exception.h>
 #include <arrow/ipc/api.h>
 #include <arrow/result.h>
+#include <arrow/ipc/reader.h>
 
 #include <arrow/csv/api.h>
 
@@ -64,7 +65,7 @@ public:
      * 
      * @return std::shared_ptr<arrow::Table> 
      */
-    std::shared_ptr<arrow::Table> get_arrow_table(const std::string& file_path) {
+    static std::shared_ptr<arrow::Table> get_arrow_table(const std::string& file_path) {
 
         auto file_extension = fs::path(file_path).extension().u8string();
 
@@ -73,17 +74,12 @@ public:
 
             std::shared_ptr<arrow::io::RandomAccessFile> input;
 
-            auto status = this->open(input, file_path);
-
-            if (!status.ok()) {
-                    // Handle read error
-                auto err = status.ToString();
-                throw std::runtime_error("Error reading Arrow file: " + err);
-            }
+            //auto status = this->open(input, file_path);
+            input = arrow::io::ReadableFile::Open(file_path).ValueOrDie();
             
             std::unique_ptr<parquet::arrow::FileReader> arrow_reader;
 
-            status = parquet::arrow::OpenFile(input, pool, &arrow_reader);
+            auto status = parquet::arrow::OpenFile(input, pool, &arrow_reader);
 
             if (!status.ok()) {
                     // Handle read error
@@ -108,51 +104,37 @@ public:
 
             // Create a memory-mapped file for reading.
             std::shared_ptr<arrow::io::ReadableFile> input;
-            auto status = this->open(input, file_path);
-
-            if (!status.ok()) {
-                    // Handle read error
-                auto err = status.ToString();
-                throw std::runtime_error("Error reading Arrow file: " + err);
-            }
+            input = arrow::io::ReadableFile::Open(file_path).ValueOrDie();
 
             // Create an IPC reader.
             //std::shared_ptr<arrow::ipc::RecordBatchFileReader> ipc_reader;
-            auto ipc_reader = (arrow::ipc::RecordBatchFileReader::Open(input.get()))->get();
+            auto ipc_reader = (arrow::ipc::RecordBatchStreamReader::Open(input.get())).ValueOrDie();
 
-            if (!status.ok()) {
-                    // Handle read error
-                auto err = status.ToString();
-                throw std::runtime_error("Error reading Arrow file: " + err);
+            return ipc_reader->ToTable().ValueOrDie();
+
+            /*
+            std::vector<std::shared_ptr<arrow::RecordBatch>> batches_array;
+
+
+            arrow::ipc::RecordBatchFileReader * reader_ptr = ipc_reader.ValueOrDie().get()
+            arrow::RecordBatchIterator ipc_reader_iterator = arrow::RecordBatchIterator(*reader_ptr);
+
+            for (const auto& batch: ipc_reader_iterator) {
+                batches_array.push_back(batch.ValueOrDie());
             }
+            */
 
-            // Read the schema from the file.
-            //std::shared_ptr<arrow::Schema> schema;
-            //status = ipc_reader->ReadSchema(&schema);
-
-            if (!status.ok()) {
-                    // Handle read error
-                auto err = status.ToString();
-                throw std::runtime_error("Error reading Arrow file: " + err);
-            }
-
-            // Create an empty table to hold the combined data.
-            
-            
-            
-            std::shared_ptr<arrow::Table> table;
-
-
-            std::vector<std::shared_ptr<arrow::RecordBatch>> batches;
+            /*
             for (int i = 0; i < ipc_reader->num_record_batches(); ++i) {
                 std::shared_ptr<arrow::RecordBatch> batch = (ipc_reader->ReadRecordBatch(i)).ValueOrDie();
 
-                batches.push_back(batch);
+                batches_array.push_back(batch);
             }
+            */
             
-            table = arrow::Table::FromRecordBatches(batches).ValueOrDie();
+            //auto table = arrow::Table::FromRecordBatches(batches_array).ValueOrDie();
 
-            return table;
+            //return table;
             
         } else {
             throw std::invalid_argument("Error: file must either be an Arrow or Parquet file.");
@@ -289,9 +271,9 @@ class ParquetWriter : public ApacheArrowWriter {
             std::vector<std::shared_ptr<arrow::Field>> fields;
             
 
-            fields.push_back(arrow::field("intensity_image", arrow::utf8()));
-            fields.push_back(arrow::field("segmentation_image", arrow::utf8()));
-            fields.push_back(arrow::field("ROI_label", arrow::int64()));
+            fields.push_back(arrow::field(header[0], arrow::utf8()));
+            fields.push_back(arrow::field(header[1], arrow::utf8()));
+            fields.push_back(arrow::field(header[2], arrow::int64()));
 
             for (int i = 3; i < header.size(); ++i)
             {
@@ -357,7 +339,7 @@ class ParquetWriter : public ApacheArrowWriter {
             arrow::Status append_status;
             // construct intensity column
             for (int i = 0; i < num_rows; ++i) {
-                append_status = string_builder.Append(std::get<0>(features[i])[1]);
+                append_status = string_builder.Append(std::get<0>(features[i])[0]);
 
                 if (!append_status.ok()) {
                     // Handle read error
@@ -381,7 +363,7 @@ class ParquetWriter : public ApacheArrowWriter {
 
             // construct intensity column
             for (int i = 0; i < num_rows; ++i) {
-                append_status = string_builder.Append(std::get<0>(features[i])[0]);
+                append_status = string_builder.Append(std::get<0>(features[i])[1]);
 
                 if (!append_status.ok()) {
                     // Handle read error
@@ -480,9 +462,9 @@ class ArrowIPCWriter : public ApacheArrowWriter {
 
             std::vector<std::shared_ptr<arrow::Field>> fields;
 
-            fields.push_back(arrow::field("intensity_image", arrow::utf8()));
-            fields.push_back(arrow::field("segmentation_image", arrow::utf8()));
-            fields.push_back(arrow::field("ROI_label", arrow::int64()));
+            fields.push_back(arrow::field(header[0], arrow::utf8()));
+            fields.push_back(arrow::field(header[1], arrow::utf8()));
+            fields.push_back(arrow::field(header[2], arrow::int64()));
 
             for (int i = 3; i < header.size(); ++i)
             {
@@ -569,7 +551,7 @@ class ArrowIPCWriter : public ApacheArrowWriter {
             arrow::Status append_status;
             // construct intensity column
             for (int i = 0; i < num_rows; ++i) {
-                append_status = string_builder.Append(std::get<0>(features[i])[1]);
+                append_status = string_builder.Append(std::get<0>(features[i])[0]);
 
                 if (!append_status.ok()) {
                     // Handle read error
@@ -593,7 +575,7 @@ class ArrowIPCWriter : public ApacheArrowWriter {
 
             // construct intensity column
             for (int i = 0; i < num_rows; ++i) {
-                append_status = string_builder.Append(std::get<0>(features[i])[0]);
+                append_status = string_builder.Append(std::get<0>(features[i])[1]);
 
                 if (!append_status.ok()) {
                     // Handle read error

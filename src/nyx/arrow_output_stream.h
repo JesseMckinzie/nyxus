@@ -41,15 +41,17 @@ public:
                                                          const std::vector<std::string>& header) {
         
 
+        std::string arrow_file_type_upper = Nyxus::toupper(arrow_file_type);
+
         if(arrow_file_path != "" && !fs::is_directory(arrow_file_path) && !(Nyxus::ends_with_substr(arrow_file_path, ".arrow") || Nyxus::ends_with_substr(arrow_file_path, ".feather") || Nyxus::ends_with_substr(arrow_file_path, ".parquet"))) {
             throw std::invalid_argument("The arrow file path must end in \".arrow\"");
         }
 
-        if (!(arrow_file_type == "ARROW" || arrow_file_type == "ARROWIPC" || arrow_file_type == "PARQUET")) {
+        if (!(arrow_file_type_upper == "ARROW" || arrow_file_type_upper == "ARROWIPC" || arrow_file_type_upper == "PARQUET")) {
             throw std::invalid_argument("The valid file types are ARROW, ARROWIPC, or PARQUET");
         }
 
-        std::string extension = (arrow_file_type == "PARQUET") ? ".parquet" : ".arrow";
+        std::string extension = (arrow_file_type_upper == "PARQUET") ? ".parquet" : ".arrow";
 
         if (arrow_file_path == "") {
             arrow_file_path_ = "NyxusFeatures" + extension;

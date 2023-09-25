@@ -543,7 +543,7 @@ std::string get_parquet_file_imp() {
 #endif
 }
 
-#ifdef USEARROW
+#ifdef USE_ARROW
 
 std::shared_ptr<arrow::Table> get_arrow_table_imp(const std::string& file_path) {
 
@@ -552,7 +552,7 @@ std::shared_ptr<arrow::Table> get_arrow_table_imp(const std::string& file_path) 
 
 #else
 
-void get_arrow_table_imp() {
+void get_arrow_table_imp(const std::string& file_path) {
     throw std::runtime_error("Arrow functionality is not available. Rebuild Nyxus with Arrow enabled.");
 }
 
