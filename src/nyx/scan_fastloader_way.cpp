@@ -377,13 +377,10 @@ namespace Nyxus
 		std::shared_ptr<ApacheArrowWriter> writer;
 
 		if (arrow_output) {
-			
-			// Get header data for arrow output
-			Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
 
 			ArrowOutputStream arrow_writer = ArrowOutputStream();
 
-			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir, theResultsCache.get_headerBuf());
+			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir,  Nyxus::split(Nyxus::get_header(theFeatureSet.getEnabledFeatures()), ','));
 		}
 	#endif
 
