@@ -210,7 +210,7 @@ namespace Nyxus
 		int min_online_roi_size,
 		bool arrow_output,
 		bool save2csv,
-		const std::string& csvOutputDir)
+		const std::string& outputDir)
 	{
 
 		#ifdef CHECKTIMING
@@ -230,7 +230,10 @@ namespace Nyxus
 
 			theEnvironment.arrow_writer = ArrowOutputStream();
 
-			writer = theEnvironment.arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, csvOutputDir, Nyxus::split(Nyxus::get_header(theFeatureSet.getEnabledFeatures()), ','));
+			// Get header data for arrow output
+			Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
+
+			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir,  theResultsCache.get_headerBuf());
 		}
 	#endif
 
@@ -289,7 +292,7 @@ namespace Nyxus
 			if (!arrow_output) {
 
 				if (save2csv) {
-					ok = save_features_2_csv(ifp, lfp, csvOutputDir);
+					ok = save_features_2_csv(ifp, lfp, outputDir);
 				} else {
 					ok = save_features_2_buffer(theResultsCache);
 				}
@@ -380,7 +383,10 @@ namespace Nyxus
 
 			ArrowOutputStream arrow_writer = ArrowOutputStream();
 
-			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir,  Nyxus::split(Nyxus::get_header(theFeatureSet.getEnabledFeatures()), ','));
+			// Get header data for arrow output
+			Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
+
+			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir,  theResultsCache.get_headerBuf());
 		}
 	#endif
 
