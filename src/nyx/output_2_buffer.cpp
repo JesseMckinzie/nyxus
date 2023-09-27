@@ -142,8 +142,10 @@ namespace Nyxus
 				// Regular feature
 				rescache.add_to_header(fn);	
 			}
+		
+		return true;
 	}
-	
+
 	/// @brief Copies ROIs' feature values into a ResultsCache structure that will then shape them as a table
 	bool save_features_2_buffer (ResultsCache& rescache)
 	{
