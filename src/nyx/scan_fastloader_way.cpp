@@ -233,7 +233,7 @@ namespace Nyxus
 			// Get header data for arrow output
 			Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
 
-			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir,  theResultsCache.get_headerBuf());
+			writer = theEnvironment.arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir,  theResultsCache.get_headerBuf());
 		}
 	#endif
 
@@ -381,12 +381,12 @@ namespace Nyxus
 
 		if (arrow_output) {
 
-			ArrowOutputStream arrow_writer = ArrowOutputStream();
+			theEnvironment.arrow_writer = ArrowOutputStream();
 
 			// Get header data for arrow output
 			Nyxus::generate_header(theResultsCache, theFeatureSet.getEnabledFeatures());
 
-			writer = arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir,  theResultsCache.get_headerBuf());
+			writer = theEnvironment.arrow_writer.create_arrow_file(theEnvironment.arrow_output_type, outputDir,  theResultsCache.get_headerBuf());
 		}
 	#endif
 
