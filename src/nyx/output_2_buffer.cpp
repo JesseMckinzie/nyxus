@@ -28,6 +28,122 @@
 namespace Nyxus
 {
 
+	bool generate_header(ResultsCache& rescache, std::vector<std::tuple<std::string, AvailableFeatures>> F) 
+	{
+		rescache.add_to_header({"mask_image", "intensity_image", "label"});
+
+			for (auto& enabdF : F)
+			{
+				auto fn = std::get<0>(enabdF);	// feature name
+				auto fc = std::get<1>(enabdF);	// feature code
+
+				// Handle missing feature name (which is a significant issue!) in order to at least be able to trace back to the feature code
+				if (fn.empty())
+					fn = "feature" + std::to_string(fc);
+
+				// Parameterized feature
+				// --GLCM family
+				bool angledGlcmFeature = std::find (GLCMFeature::featureset.begin(), GLCMFeature::featureset.end(), fc) != GLCMFeature::featureset.end();
+				if (angledGlcmFeature)
+				{
+					// Populate with angles
+					for (auto ang : theEnvironment.glcmAngles)
+					{
+						std::string col = fn + "_" + std::to_string(ang);
+						rescache.add_to_header(col);	
+					}
+
+					// Proceed with other features
+					continue;
+				}
+
+				// --GLRLM family
+				bool glrlmFeature = std::find (GLRLMFeature::featureset.begin(), GLRLMFeature::featureset.end(), fc) != GLRLMFeature::featureset.end();
+				if (glrlmFeature)
+				{
+					// Populate with angles
+					for (auto ang : GLRLMFeature::rotAngles)
+					{
+						std::string col = fn + "_" + std::to_string(ang);
+						rescache.add_to_header(col);	
+					}
+					
+					// Proceed with other features
+					continue;
+				}
+
+				// --Gabor
+				if (fc == GABOR)
+				{
+					// Generate the feature value list
+					for (auto i = 0; i < GaborFeature::f0_theta_pairs.size(); i++)
+					{
+						std::string col = fn + "_" + std::to_string(i);
+						rescache.add_to_header(col);	
+					}
+
+					// Proceed with other features
+					continue;
+				}
+
+				if (fc == FRAC_AT_D)
+				{
+					// Generate the feature value list
+					for (auto i = 0; i < RadialDistributionFeature::num_features_FracAtD; i++)
+					{
+						std::string col = fn + "_" + std::to_string(i);
+						rescache.add_to_header(col);
+					}
+
+					// Proceed with other features
+					continue;
+				}
+
+				if (fc == MEAN_FRAC)
+				{
+					// Generate the feature value list
+					for (auto i = 0; i < RadialDistributionFeature::num_features_MeanFrac; i++)
+					{
+						std::string col = fn + "_" + std::to_string(i);
+						rescache.add_to_header(col);
+					}
+
+					// Proceed with other features
+					continue;
+				}
+
+				if (fc == RADIAL_CV)
+				{
+					// Generate the feature value list
+					for (auto i = 0; i < RadialDistributionFeature::num_features_RadialCV; i++)
+					{
+						std::string col = fn + "_" + std::to_string(i);
+						rescache.add_to_header(col);
+					}
+
+					// Proceed with other features
+					continue;
+				}
+
+				// --Zernike family
+				if (fc == ZERNIKE2D)
+				{
+					// Populate with indices
+					for (int i = 0; i < ZernikeFeature::num_feature_values_calculated; i++)
+					{
+						std::string col = fn + "_" + std::to_string(i);
+						rescache.add_to_header(col);
+					}
+
+					// Proceed with other features
+					continue;
+				}
+
+				// Regular feature
+				rescache.add_to_header(fn);	
+			}
+	}
+	
 	/// @brief Copies ROIs' feature values into a ResultsCache structure that will then shape them as a table
 	bool save_features_2_buffer (ResultsCache& rescache)
 	{
