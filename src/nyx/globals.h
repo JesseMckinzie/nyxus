@@ -60,7 +60,7 @@ namespace Nyxus
 	bool save_features_2_buffer (ResultsCache& results_cache);	
 	
 	std::vector<std::tuple<std::vector<std::string>, int, std::vector<double>>> get_feature_values();	
-	std::string get_header(const std::vector<std::tuple<std::string, AvailableFeatures>>& F );
+	std::vector<std::string> get_header(const std::vector<std::tuple<std::string, AvailableFeatures>>& F );
 
 
 

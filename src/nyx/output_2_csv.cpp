@@ -55,15 +55,15 @@ namespace Nyxus
 		return x;
 	}
 
-	std::string get_header(const std::vector<std::tuple<std::string, AvailableFeatures>>& F ) {
+	std::vector<std::string> get_header(const std::vector<std::tuple<std::string, AvailableFeatures>>& F ) {
 		std::stringstream ssHead;
+
+		std::vector<std::string> head;
 
 		// Mandatory column names
 		for (const auto& s : mandatory_output_columns)
 		{
-			ssHead << s;
-			if (s != mandatory_output_columns.back())
-				ssHead << ",";
+			head.emplace_back(s);
 		}
 
 		// Optional columns
@@ -91,7 +91,7 @@ namespace Nyxus
 					// CSV separator
 					//if (ang != theEnvironment.rotAngles[0])
 					//	ssHead << ",";
-					ssHead << "," << fn << "_" << ang;
+					head.emplace_back(fn + "_" + std::to_string(ang));
 				}
 				// Proceed with other features
 				continue;
@@ -104,7 +104,7 @@ namespace Nyxus
 				// Populate with angles
 				for (auto ang : GLRLMFeature::rotAngles)
 				{
-					ssHead << "," << fn << "_" << ang;
+					head.emplace_back(fn + "_" + std::to_string(ang));
 				}
 				// Proceed with other features
 				continue;
@@ -115,7 +115,7 @@ namespace Nyxus
 			{
 				// Generate the feature value list
 				for (auto i = 0; i < GaborFeature::f0_theta_pairs.size(); i++)
-					ssHead << "," << fn << "_" << i;
+					head.emplace_back(fn + "_" + std::to_string(i));
 
 				// Proceed with other features
 				continue;
@@ -125,7 +125,7 @@ namespace Nyxus
 			{
 				// Generate the feature value list
 				for (auto i = 0; i < RadialDistributionFeature::num_features_FracAtD; i++)
-					ssHead << "," << fn << "_" << i;
+					head.emplace_back(fn + "_" + std::to_string(i));
 
 				// Proceed with other features
 				continue;
@@ -135,7 +135,7 @@ namespace Nyxus
 			{
 				// Generate the feature value list
 				for (auto i = 0; i < RadialDistributionFeature::num_features_MeanFrac; i++)
-					ssHead << "," << fn << "_" << i;
+					head.emplace_back(fn + "_" + std::to_string(i));
 
 				// Proceed with other features
 				continue;
@@ -145,7 +145,7 @@ namespace Nyxus
 			{
 				// Generate the feature value list
 				for (auto i = 0; i < RadialDistributionFeature::num_features_RadialCV; i++)
-					ssHead << "," << fn << "_" << i;
+					head.emplace_back(fn + "_" + std::to_string(i));
 
 				// Proceed with other features
 				continue;
@@ -156,17 +156,17 @@ namespace Nyxus
 			{
 				// Populate with indices
 				for (int i = 0; i < ZernikeFeature::num_feature_values_calculated; i++)	// i < ZernikeFeature::num_feature_values_calculated
-					ssHead << "," << fn << "_Z" << i;						
+					head.emplace_back(fn + "_Z" + std::to_string(i));						
 
 				// Proceed with other features
 				continue;
 			}
 
 			// Regular feature
-			ssHead << "," << fn;
+			head.emplace_back(fn);
 		}
 
-		return ssHead.str();
+		return head;
 	}
 
 	std::string get_feature_output_fname (const std::string& intFpath, const std::string& segFpath)
@@ -230,8 +230,19 @@ namespace Nyxus
 		// -- Header
 		if (mustRenderHeader)
 		{
-			
-			fprintf(fp, "%s\n", Nyxus::get_header(F).c_str());
+			std::stringstream ssHead;
+
+			auto head_vector = Nyxus::get_header(F);
+
+			for(const auto& column: head_vector){
+				ssHead << column << ", ";
+			}
+
+			auto head_string = ssHead.str();
+
+			head_string.pop_back(); // remove trailing comma
+
+			fprintf(fp, "%s\n", head_string.c_str());
 
 			// Prevent rendering the header again for another image's portion of labels
 			if (theEnvironment.separateCsv == false)
