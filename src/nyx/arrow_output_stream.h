@@ -31,7 +31,6 @@ class ArrowOutputStream {
 private:
 
     std::string arrow_file_path_ = "";
-	std::string parquet_file_path_ = "";
 	std::shared_ptr<ApacheArrowWriter> writer_ = nullptr;
 	std::string arrow_output_type_ = "";    
 
@@ -42,15 +41,17 @@ public:
                                                          const std::vector<std::string>& header) {
         
 
+        std::string arrow_file_type_upper = Nyxus::toupper(arrow_file_type);
+
         if(arrow_file_path != "" && !fs::is_directory(arrow_file_path) && !(Nyxus::ends_with_substr(arrow_file_path, ".arrow") || Nyxus::ends_with_substr(arrow_file_path, ".feather") || Nyxus::ends_with_substr(arrow_file_path, ".parquet"))) {
             throw std::invalid_argument("The arrow file path must end in \".arrow\"");
         }
 
-        if (!(arrow_file_type == "ARROW" || arrow_file_type == "ARROWIPC" || arrow_file_type == "PARQUET")) {
+        if (!(arrow_file_type_upper == "ARROW" || arrow_file_type_upper == "ARROWIPC" || arrow_file_type_upper == "PARQUET")) {
             throw std::invalid_argument("The valid file types are ARROW, ARROWIPC, or PARQUET");
         }
 
-        std::string extension = (arrow_file_type == "PARQUET") ? ".parquet" : ".arrow";
+        std::string extension = (arrow_file_type_upper == "PARQUET") ? ".parquet" : ".arrow";
 
         if (arrow_file_path == "") {
             arrow_file_path_ = "NyxusFeatures" + extension;
@@ -60,7 +61,7 @@ public:
 
         if (fs::is_directory(arrow_file_path)) {
             arrow_file_path_ += "/NyxusFeatures" + extension;
-        } 
+        }
 
         writer_ = WriterFactory::create_writer(arrow_file_path_, header);
 
@@ -68,24 +69,15 @@ public:
     }
 
 
-    std::shared_ptr<arrow::Table> get_arrow_table(const std::vector<std::string>& header,
-                                                      const std::vector<std::string>& string_columns,
-                                                      const std::vector<double>& results,
-                                                      size_t num_rows) {
+    std::shared_ptr<arrow::Table> get_arrow_table(const std::string& file_path) {
                                                         
-        /*if (writer_ == nullptr) {
-            //writer_ = WriterFactory::create_writer("out.arrow");
-
-            writer_->generate_arrow_table(header, string_columns, results, num_rows);
-
-            return writer_->get_arrow_table();
-        }
-        */
-
-        auto table = writer_->get_arrow_table();
+        auto table = writer_->get_arrow_table(file_path);
 
         return table;
+    }
 
+    std::string get_arrow_path() {
+        return arrow_file_path_;
     }
 
 };

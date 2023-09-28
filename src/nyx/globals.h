@@ -37,6 +37,7 @@ namespace Nyxus
 	bool processTrivialRois (const std::vector<int>& trivRoiLabels, const std::string& intens_fpath, const std::string& label_fpath, int num_FL_threads, size_t memory_limit);
 	bool processNontrivialRois (const std::vector<int>& nontrivRoiLabels, const std::string& intens_fpath, const std::string& label_fpath, int num_FL_threads);
 	void dump_roi_metrics(const std::string & label_fpath);
+
 	bool generate_header(ResultsCache& rescache, std::vector<std::tuple<std::string, AvailableFeatures>> F);
 
 	// Shows a message in CLI ('send_to_stderr': stdout or stderr) or Python terminal
@@ -47,7 +48,7 @@ namespace Nyxus
 	bool gatherRoisMetricsInMemory (const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& intens_image, const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& label_image, int start_idx);
 	bool processIntSegImagePairInMemory (const std::string& intens_fpath, const std::string& label_fpath, int filepair_index, const std::string& intens_name, const std::string& seg_name);
 	int processMontage(const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& intensFiles, const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& labelFiles, int numReduceThreads, const std::vector<std::string>& intensity_names,
-		const std::vector<std::string>& seg_names, std::string& error_message);
+		const std::vector<std::string>& seg_names, std::string& error_message, bool arrow_output=false, const std::string& outputDir="");
 	bool scanTrivialRois (const std::vector<int>& batch_labels, const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& intens_images, const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& label_images, int start_idx);
 	bool processTrivialRoisInMemory (const std::vector<int>& trivRoiLabels, const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& intens_fpath, const py::array_t<unsigned int, py::array::c_style | py::array::forcecast>& label_fpath, int start_idx, size_t memory_limit);
 #endif
@@ -57,7 +58,11 @@ namespace Nyxus
 	extern const std::vector<std::string> mandatory_output_columns;
 	bool save_features_2_csv (const std::string & intFpath, const std::string & segFpath, const std::string & outputDir);
 	bool save_features_2_buffer (ResultsCache& results_cache);	
+	
 	std::vector<std::tuple<std::vector<std::string>, int, std::vector<double>>> get_feature_values();	
+	std::vector<std::string> get_header(const std::vector<std::tuple<std::string, AvailableFeatures>>& F );
+
+
 
 	void init_feature_buffers();
 	void clear_feature_buffers();	

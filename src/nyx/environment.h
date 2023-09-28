@@ -10,7 +10,7 @@
 
 #ifdef USE_ARROW
 	#include "output_writers.h"
-	#include "arrow_output.h"
+	#include "arrow_output_stream.h"
 #endif
 
 #ifdef USE_GPU
@@ -118,8 +118,8 @@ public:
 
 #ifdef USE_ARROW
 
-	ArrowOutput arrow_output = ArrowOutput();
 	std::string arrow_output_type = "";
+	ArrowOutputStream  arrow_writer;
 	
 #endif
 
@@ -143,7 +143,7 @@ public:
 	std::string rawGlcmAngles = "";
 	std::vector<int> glcmAngles = {0, 45, 90, 135};
 
-	std::string verbosity = "";	// 'verbosity_level' is inherited from BasicEnvironment
+	std::string rawVerbosity = "";	// 'verbosity_level' is inherited from BasicEnvironment
 
 	std::string rawOnlineStatsThresh = "";
 	int onlineStatsTreshold = 0;
