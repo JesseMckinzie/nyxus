@@ -442,7 +442,7 @@ class ParquetWriter : public ApacheArrowWriter {
     }
 
     arrow::Status close () override {
-        arrow::Status status = writer_->get()->Close();
+        arrow::Status status = writer_->Close();
 
             if (!status.ok()) {
                 // Handle read error
@@ -451,8 +451,7 @@ class ParquetWriter : public ApacheArrowWriter {
             }
             return arrow::Status::OK();
             
-        }
-        
+
         return arrow::Status::OK();
     }
 };
