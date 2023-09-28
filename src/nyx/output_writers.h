@@ -436,10 +436,23 @@ class ParquetWriter : public ApacheArrowWriter {
 
             ARROW_RETURN_NOT_OK(writer_->WriteTable(*table.get(), batch->num_rows()));
 
+            
+
             return arrow::Status::OK();
     }
 
-    arrow::Status close() override {
+    arrow::Status close () override {
+        arrow::Status status = writer_->get()->Close();
+
+            if (!status.ok()) {
+                // Handle read error
+                auto err = status.ToString();
+                throw std::runtime_error("Error closing the Arrow file: " + err);
+            }
+            return arrow::Status::OK();
+            
+        }
+        
         return arrow::Status::OK();
     }
 };
