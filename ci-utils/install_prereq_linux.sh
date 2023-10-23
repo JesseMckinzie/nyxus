@@ -182,6 +182,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$ARROW_HOME \
         -DARROW_CSV=ON \
         -DARROW_DATASET=ON \
         -DARROW_ACERO=ON \
+        -DARROW_PYTHON=ON \
         .. 
 make -j4
 make install
