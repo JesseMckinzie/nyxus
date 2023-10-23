@@ -162,7 +162,7 @@ set(SOURCE
 
 if(NOT ESSENTIAL)
 	option(PARQUET_LINK_SHARED "Link to the Parquet shared library" ON)
-	option(USEARROW "Use Arrow" OFF)
+	option(USEARROW "Use Arrow" ON)
 
 	if (USEARROW)
 		# Look for installed packages the system
@@ -175,12 +175,12 @@ if(NOT ESSENTIAL)
 			if (Parquet_FOUND)
 				add_definitions(-DUSE_ARROW)
 			else()
-				message(WARNING "The Parquet library was not found. The build will continue without Arrow support.")
+				message(FATAL_ERROR "The Parquet library was not found. The build will continue without Arrow support.")
 				set(USEARROW OFF)
 			endif()
 
 		else ()
-		message(WARNING "The Arrow library was not found. The build will continue without Arrow support.")
+		message(FATAL_ERROR "The Arrow library was not found. The build will continue without Arrow support.")
 			set(USEARROW OFF)
 		endif()
 
