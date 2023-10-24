@@ -162,6 +162,16 @@ cmake -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/   -DCMAKE_PREFIX_PATH=../../
 make install -j4
 cd ../../
 
+ROOTDIR=$(pwd)
+curl -L https://github.com/sameeul/fmjpeg2koj/archive/refs/heads/fix_cmake.zip -o fmjpeg2koj.zip
+unzip fmjpeg2koj.zip
+cd fmjpeg2koj-fix_cmake/
+mkdir build_man
+cd build_man/
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/   -DCMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR/  -DFMJPEG2K=$ROOTDIR/$Z5_INSTALL_DIR/  ..
+make install -j4
+cd ../../
+
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
 unzip arrow-apache-arrow-12.0.0.zip
 cd arrow-apache-arrow-12.0.0/
@@ -187,14 +197,5 @@ cd ../../python
 export PYARROW_WITH_PARQUET=1
 export PYARROW_WITH_DATASET=1
 export PYARROW_PARALLEL=4
-python setup.py build_ext --inplace
-
-ROOTDIR=$(pwd)
-curl -L https://github.com/sameeul/fmjpeg2koj/archive/refs/heads/fix_cmake.zip -o fmjpeg2koj.zip
-unzip fmjpeg2koj.zip
-cd fmjpeg2koj-fix_cmake/
-mkdir build_man
-cd build_man/
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/   -DCMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR/  -DFMJPEG2K=$ROOTDIR/$Z5_INSTALL_DIR/  ..
-make install -j4
-cd ../../
+export PYARROW_BUNDLE_ARROW_CPP=1
+pip install . -vv
