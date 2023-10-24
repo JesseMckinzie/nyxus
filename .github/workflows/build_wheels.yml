@@ -22,6 +22,13 @@ jobs:
         with:
           submodules: recursive    
 
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: anaconda-client-env
+          python-version: 3.8
+          channels: conda-forge
+          auto-activate-base: false
+
       - uses: ilammy/msvc-dev-cmd@v1
         name: Add MSVS Path
 
@@ -36,18 +43,14 @@ jobs:
 
       - name: Building wheels 
         run: |
+          conda install mamba
+          mamba install compilers pytest requests --file ${{github.workspace}}/ci-utils/envs/conda_cpp.txt --file ${{github.workspace}}/ci-utils/envs/conda_py.txt
           CMAKE_ARGS="-DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DUSEARROW=ON" python -m pip install . -vv
           python -m cibuildwheel --output-dir dist
         env:
           CIBW_BUILD: ${{ matrix.cibw_build }}
           CIBW_SKIP: "*musllinux*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-          CIBW_BEFORE_ALL_MACOS: conda install mamba
-                                 mamba install compilers pytest requests --file ${{github.workspace}}/ci-utils/envs/conda_cpp.txt --file ${{github.workspace}}/ci-utils/envs/conda_py.txt  
-          CIBW_BEFORE_ALL_LINUX:  conda install mamba
-                                 mamba install compilers pytest requests --file ${{github.workspace}}/ci-utils/envs/conda_cpp.txt --file ${{github.workspace}}/ci-utils/envs/conda_py.txt  
-          CIBW_BEFORE_ALL_WINDOWS: conda install mamba
-                                 mamba install compilers pytest requests --file ${{github.workspace}}/ci-utils/envs/conda_cpp.txt --file ${{github.workspace}}/ci-utils/envs/conda_py.txt  
                                      
           CIBW_ENVIRONMENT_MACOS: REPAIR_LIBRARY_PATH="/tmp/nyxus_bld/local_install/lib:/tmp/nyxus_bld/local_install/lib64" ON_GITHUB="TRUE" PATH="$(brew --prefix llvm)/bin:$PATH" NYXUS_DEP_DIR="/tmp/nyxus_bld/local_install"
           CIBW_ENVIRONMENT_LINUX: LD_LIBRARY_PATH="/tmp/nyxus_bld/local_install/lib:/tmp/nyxus_bld/local_install/lib64:$LD_LIBRARY_PATH" ON_GITHUB="TRUE" NYXUS_DEP_DIR="/tmp/nyxus_bld/local_install" 
