@@ -175,9 +175,7 @@ cd ../../
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
 unzip arrow-apache-arrow-12.0.0.zip
 cd arrow-apache-arrow-12.0.0/
-python3 -m venv pyarrow-dev
-source ./pyarrow-dev/bin/activate
-pip install -r python/requirements-build.txt
+python3 -m pip install -r python/requirements-build.txt
 cd cpp/
 mkdir build
 cd build/
@@ -193,4 +191,11 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         .. 
 make -j4
 make install
-
+cd ../../python
+export PYARROW_WITH_PARQUET=1
+export PYARROW_WITH_DATASET=1
+export PYARROW_PARALLEL=4
+export PYARROW_BUNDLE_ARROW_CPP=1
+export CMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR
+python3 setup.py build_ext --inplace
+python3 -m pip install . -vv
