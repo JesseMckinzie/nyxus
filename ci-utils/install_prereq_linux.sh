@@ -193,4 +193,4 @@ echo virtaul env
 echo $VIRTUAL_ENV
 echo python
 echo $(which python)
-python -m pip install pyarrow
+python -m pip install pyarrow==12.0.0
