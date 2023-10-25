@@ -185,17 +185,11 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         -DARROW_COMPUTE=ON \
         -DARROW_CSV=ON \
         -DARROW_DATASET=ON \
-        -DARROW_ACERO=ON \
-        -DARROW_PYTHON=ON \
+        -DARROW_ACERO=ON 
         -DARROW_PARQUET=ON \
         .. 
 make -j4
 make install
-cd ../../python
-export PYARROW_WITH_PARQUET=1
-export PYARROW_WITH_DATASET=1
-export PYARROW_PARALLEL=4
-export PYARROW_BUNDLE_ARROW_CPP=1
-export CMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR
-python3 setup.py build_ext --inplace
-python3 -m pip install . -vv
+echo $VIRTUAL_ENV
+echo which python3
+python3 -m pip pyarrow
