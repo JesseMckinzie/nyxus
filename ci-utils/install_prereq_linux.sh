@@ -175,7 +175,6 @@ cd ../../
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
 unzip arrow-apache-arrow-12.0.0.zip
 cd arrow-apache-arrow-12.0.0/
-python3 -m pip install -r python/requirements-build.txt
 cd cpp/
 mkdir build
 cd build/
@@ -185,11 +184,13 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         -DARROW_COMPUTE=ON \
         -DARROW_CSV=ON \
         -DARROW_DATASET=ON \
-        -DARROW_ACERO=ON 
+        -DARROW_ACERO=ON \
         -DARROW_PARQUET=ON \
         .. 
 make -j4
 make install
+echo virtaul env
 echo $VIRTUAL_ENV
-echo which python3
+echo python3
+echo $(which python3)
 python3 -m pip pyarrow
