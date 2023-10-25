@@ -191,6 +191,6 @@ make -j4
 make install
 echo virtaul env
 echo $VIRTUAL_ENV
-echo python3
-echo $(which python3)
-python3 -m pip pyarrow
+echo python
+echo $(which python)
+python -m pip install pyarrow
