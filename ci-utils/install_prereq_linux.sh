@@ -193,3 +193,11 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         .. 
 make -j4
 make install
+cd ../../python
+export PYARROW_WITH_PARQUET=1
+export PYARROW_WITH_DATASET=1
+export PYARROW_PARALLEL=4
+export PYARROW_BUNDLE_ARROW_CPP=1
+export CMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR
+python3 setup.py build_ext --inplace
+python3 -m pip install . -vv
