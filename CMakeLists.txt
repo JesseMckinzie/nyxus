@@ -180,7 +180,7 @@ if(NOT ESSENTIAL)
 			endif()
 
 		else ()
-		message(FATAL_ERROR "The Arrow library was not found. The build will continue without Arrow support.")
+			message(FATAL_ERROR "The Arrow library was not found. The build will continue without Arrow support.")
 			set(USEARROW OFF)
 		endif()
 
