@@ -172,4 +172,25 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/  
 make install -j4
 cd ../../
 
-python -m pip install pyarrow==12.0.0
+curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
+unzip arrow-apache-arrow-12.0.0.zip
+cd arrow-apache-arrow-12.0.0/
+cd cpp/
+mkdir build
+cd build/
+cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DARROW_COMPUTE=ON \
+        -DARROW_CSV=ON \
+        -DARROW_DATASET=ON \
+        -DARROW_ACERO=ON \
+        -DARROW_PARQUET=ON \
+        .. 
+make -j4
+make install
+echo virtaul env
+echo $VIRTUAL_ENV
+echo python
+echo $(which python)
+python -m pip install pyarrow==12.0.1
