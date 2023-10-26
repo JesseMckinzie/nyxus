@@ -189,8 +189,30 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         .. 
 make -j4
 make install
-echo virtaul env
-echo $VIRTUAL_ENV
-echo python
-echo $(which python)
+
 python -m pip install pyarrow==12.0.0
+pip show pyarrow > output.txt
+location=$(grep "Location:" output.txt | awk '{print $2}')
+
+parquet_location="pyarrow/libparquet.1200.dylib"
+arrow_location="pyarrow/libarrow.1200.dylib"
+
+parquet_path="$location/$parquet_location"
+arrow_path="$location/$arrow_location"
+
+if [ -e "$parquet_location" ]; then
+    # Delete the file
+    rm "$parquet_path"
+    echo "File $parquet_location deleted from $location."
+else
+    echo "File $parquet_location not found in $location."
+fi
+
+if [ -e "$arrow_location" ]; then
+    # Delete the file
+    rm "$arrow_path"
+    echo "File $arrow_location deleted from $location."
+else
+    echo "File $arrow_location not found in $location."
+fi
+
