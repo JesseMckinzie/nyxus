@@ -172,9 +172,9 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/  
 make install -j4
 cd ../../
 
-curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.1.zip -o  arrow-apache-arrow-12.0.1.zip
-unzip arrow-apache-arrow-12.0.1.zip
-cd arrow-apache-arrow-12.0.1/
+curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
+unzip arrow-apache-arrow-12.0.0.zip
+cd arrow-apache-arrow-12.0.0/
 cd cpp/
 mkdir build
 cd build/
@@ -190,30 +190,4 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
 make -j4
 make install
 
-python -m pip install pyarrow==12.0.0
-pip show pyarrow > output.txt
-location=$(grep "Location:" output.txt | awk '{print $2}')
-
-parquet_location="pyarrow/libparquet.1200.dylib"
-arrow_location="pyarrow/libarrow.1200.dylib"
-
-parquet_path="$location/$parquet_location"
-arrow_path="$location/$arrow_location"
-
-echo parquet_path $parquet_path
-echo arrow_path $arrow_path
-
-if [ -e "$parquet_path" ]; then
-    rm "$parquet_path"
-    echo "File $parquet_location deleted from $location."
-else
-    echo "File $parquet_location not found in $location."
-fi
-
-if [ -e "$arrow_path" ]; then
-    rm "$arrow_path"
-    echo "File $arrow_location deleted from $location."
-else
-    echo "File $arrow_location not found in $location."
-fi
-
+python -m pip install pyarrow==12.0.1
