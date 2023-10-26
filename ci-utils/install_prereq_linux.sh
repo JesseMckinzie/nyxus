@@ -172,9 +172,9 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/  
 make install -j4
 cd ../../
 
-curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.0.zip -o  arrow-apache-arrow-12.0.0.zip
-unzip arrow-apache-arrow-12.0.0.zip
-cd arrow-apache-arrow-12.0.0/
+curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-12.0.1.zip -o  arrow-apache-arrow-12.0.1.zip
+unzip arrow-apache-arrow-12.0.1.zip
+cd arrow-apache-arrow-12.0.1/
 cd cpp/
 mkdir build
 cd build/
@@ -193,4 +193,4 @@ echo virtaul env
 echo $VIRTUAL_ENV
 echo python
 echo $(which python)
-python -m pip install pyarrow==12.0.1
+python -m pip install pyarrow==12.0.0
