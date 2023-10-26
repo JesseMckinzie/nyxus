@@ -200,16 +200,17 @@ arrow_location="pyarrow/libarrow.1200.dylib"
 parquet_path="$location/$parquet_location"
 arrow_path="$location/$arrow_location"
 
-if [ -e "$parquet_location" ]; then
-    # Delete the file
+echo parquet_path $parquet_path
+echo arrow_path $arrow_path
+
+if [ -e "$parquet_path" ]; then
     rm "$parquet_path"
     echo "File $parquet_location deleted from $location."
 else
     echo "File $parquet_location not found in $location."
 fi
 
-if [ -e "$arrow_location" ]; then
-    # Delete the file
+if [ -e "$arrow_path" ]; then
     rm "$arrow_path"
     echo "File $arrow_location deleted from $location."
 else
