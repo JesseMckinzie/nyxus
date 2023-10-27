@@ -163,7 +163,7 @@ set(SOURCE
 if(NOT ESSENTIAL)
 	option(PARQUET_LINK_SHARED "Link to the Parquet shared library" ON)
 	option(USEARROW "Use Arrow" ON)
-
+	
 	if (USEARROW)
 		# Look for installed packages the system
 		find_package(Arrow)
@@ -312,13 +312,9 @@ endif()
 if(NOT ESSENTIAL) 
 	if(USEARROW)
 
-		list(APPEND Nyxus_LIBRARIES arrow_shared)
+		#list(APPEND Nyxus_LIBRARIES arrow_shared)
 
-		if(PARQUET_LINK_SHARED)
-			list(APPEND Nyxus_LIBRARIES parquet_shared)
-		else()
-			list(APPEND Nyxus_LIBRARIES parquet_static)
-		endif()
+		#list(APPEND Nyxus_LIBRARIES parquet_shared)
 
 		if (BUILD_LIB)
 			# Find Python
