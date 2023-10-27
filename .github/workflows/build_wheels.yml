@@ -12,7 +12,7 @@ jobs:
       MACOSX_DEPLOYMENT_TARGET: "10.15"
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [macos-11]
         cibw_archs: ["auto64"]
         cibw_build: ["cp38-*", "cp39-*", "cp310-*", "cp311-*"]
 
@@ -45,7 +45,9 @@ jobs:
                                    python3 -m pip install setuptools==68.2.2 &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
-                                   cp -r local_install /tmp/nyxus_bld 
+                                   cp -r local_install /tmp/nyxus_bld &&
+                                   rm /tmp/nyxus_bld/lib/libparquet.1200.dylib &&
+                                   rm /tmp/nyxus_bld/lib/libarrow.1200.dylib
           CIBW_BEFORE_ALL_LINUX:  bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
