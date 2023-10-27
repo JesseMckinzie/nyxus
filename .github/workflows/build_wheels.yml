@@ -45,7 +45,7 @@ jobs:
                                    python3 -m pip install setuptools==68.2.2 &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
-                                   cp -r local_install /tmp/nyxus_bld &&
+                                   cp -r local_install /tmp/nyxus_bld
           CIBW_BEFORE_ALL_LINUX:  bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
