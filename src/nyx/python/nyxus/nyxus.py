@@ -34,7 +34,6 @@ if (arrow_headers_found() and arrow_is_enabled_imp()):
         from .backend import (
             get_arrow_file_imp, 
             get_parquet_file_imp, 
-            get_arrow_table_imp,
         )
             
         import pyarrow as pa
