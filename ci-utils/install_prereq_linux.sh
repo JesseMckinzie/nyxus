@@ -189,5 +189,3 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         .. 
 make -j4
 make install
-
-python -m pip install pyarrow==12.0.1

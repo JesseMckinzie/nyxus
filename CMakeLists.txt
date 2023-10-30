@@ -163,7 +163,7 @@ set(SOURCE
 if(NOT ESSENTIAL)
 	option(PARQUET_LINK_SHARED "Link to the Parquet shared library" ON)
 	option(USEARROW "Use Arrow" ON)
-	
+
 	if (USEARROW)
 		# Look for installed packages the system
 		find_package(Arrow)
@@ -312,46 +312,9 @@ endif()
 if(NOT ESSENTIAL) 
 	if(USEARROW)
 
-		#list(APPEND Nyxus_LIBRARIES arrow_shared)
+		list(APPEND Nyxus_LIBRARIES arrow_shared)
 
-		#list(APPEND Nyxus_LIBRARIES parquet_shared)
-
-		if (BUILD_LIB)
-			# Find Python
-			find_package(Python REQUIRED COMPONENTS Interpreter)
-			# Execute the Python script to find pyarrow include path
-			execute_process(
-				COMMAND ${Python_EXECUTABLE} -c "import pyarrow as pa; print(pa.get_include())"
-				OUTPUT_VARIABLE PATH_OUTPUT
-				OUTPUT_STRIP_TRAILING_WHITESPACE
-			)
-			# Store the path in a CMake variable
-			set(PYARROW_INCLUDE_PATH "${PATH_OUTPUT}" CACHE INTERNAL "Path to pyarrow include directory")
-			# Execute the Python script to find pyarrow library path
-			execute_process(
-				COMMAND ${Python_EXECUTABLE} -c "import pyarrow as pa; print(pa.get_library_dirs()[0])"
-				OUTPUT_VARIABLE LIB_PATH_OUTPUT
-				OUTPUT_STRIP_TRAILING_WHITESPACE
-			)
-			# Store the path in a CMake variable
-			set(PYARROW_LIB_PATH "${LIB_PATH_OUTPUT}" CACHE INTERNAL "Path to pyarrow library directory")
-			if (PYARROW_INCLUDE_PATH STREQUAL "")
-				message(FATAL_ERROR "Pyarrow library not found.")
-			endif()
-			if (PYARROW_LIB_PATH STREQUAL "")
-				message(FATAL_ERROR "Pyarrow library not found.")
-			endif()
-			# Print the path
-			message(STATUS "PyArrow Include Path: ${PYARROW_INCLUDE_PATH}")
-			message(STATUS "PyArrow Library Path: ${PYARROW_LIB_PATH}")
-
-			# add pyarrow include path
-			include_directories(${PYARROW_INCLUDE_PATH})
-			#add pyarrow library
-			list(APPEND Nyxus_LIBRARIES arrow_python)
-			target_link_directories(backend PRIVATE ${PYARROW_LIB_PATH})
-
-		endif()
+		list(APPEND Nyxus_LIBRARIES parquet_shared)
 
 	endif()
 endif() # ESSENTIAL
