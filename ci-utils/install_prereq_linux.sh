@@ -186,13 +186,7 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         -DARROW_DATASET=ON \
         -DARROW_ACERO=ON \
         -DARROW_PARQUET=ON \
-        -DARROW_WITH_BROTLI=ON \
-        -DARROW_WITH_BZ2=ON \
-        -DARROW_WITH_LZ4=ON \
         -DARROW_WITH_SNAPPY=ON \
-        -DARROW_WITH_ZLIB=ON \
-        -DARROW_WITH_ZSTD=ON \
-        -DPARQUET_REQUIRE_ENCRYPTION=ON \
         .. 
 make -j4
 make install
