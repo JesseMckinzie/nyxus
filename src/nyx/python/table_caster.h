@@ -1,6 +1,7 @@
 #pragma once
 
 #ifdef USE_ARROW
+/*
 namespace pybind11
 {
     namespace detail
@@ -23,7 +24,7 @@ namespace pybind11
                 return true;
             }
             // C++ -> Python
-            static handle cast(std::shared_ptr<TableType> src, return_value_policy /* policy */, handle /* parent */)
+            static handle cast(std::shared_ptr<TableType> src, return_value_policy // policy , handle parent)
             {
                 return arrow::py::wrap_table(src);
             }
@@ -34,4 +35,5 @@ namespace pybind11
         };
     }
 } // namespace pybind11::detail
+*/
 #endif

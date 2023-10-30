@@ -20,12 +20,12 @@
 
     #include <arrow/table.h>
 
-    #include <arrow/python/platform.h>
-    #include <arrow/python/datetime.h>
-    #include <arrow/python/init.h>
-    #include <arrow/python/pyarrow.h>
+    //#include <arrow/python/platform.h>
+    //#include <arrow/python/datetime.h>
+    //#include <arrow/python/init.h>
+    //#include <arrow/python/pyarrow.h>
 
-    #include "table_caster.h"
+    //#include "table_caster.h"
 #endif
 
 namespace py = pybind11;
@@ -544,7 +544,7 @@ std::string get_parquet_file_imp() {
 }
 
 #ifdef USE_ARROW
-
+/*
 std::shared_ptr<arrow::Table> get_arrow_table_imp(const std::string& file_path) {
     
     arrow::Status status;
@@ -563,7 +563,7 @@ std::shared_ptr<arrow::Table> get_arrow_table_imp(const std::string& file_path) 
 void get_arrow_table_imp(const std::string& file_path) {
     throw std::runtime_error("Arrow functionality is not available. Rebuild Nyxus with Arrow enabled.");
 }
-
+*/
 #endif
 
 bool arrow_is_enabled_imp() {
@@ -574,13 +574,13 @@ PYBIND11_MODULE(backend, m)
 {
 
 #ifdef USE_ARROW
-    Py_Initialize();
+    //Py_Initialize();
 
-    int success = arrow::py::import_pyarrow();
+    //int success = arrow::py::import_pyarrow();
 
-    if (success != 0) {
-        throw std::runtime_error("Error initializing pyarrow.");
-    } 
+    //if (success != 0) {
+    //   throw std::runtime_error("Error initializing pyarrow.");
+    //} 
 #endif
     m.doc() = "Nyxus";
     
@@ -602,7 +602,7 @@ PYBIND11_MODULE(backend, m)
     m.def("arrow_is_enabled_imp", &arrow_is_enabled_imp, "Check if arrow is enabled.");
     m.def("get_arrow_file_imp", &get_arrow_file_imp, "Get path to arrow file");
     m.def("get_parquet_file_imp", &get_parquet_file_imp, "Returns path to parquet file");
-    m.def("get_arrow_table_imp", &get_arrow_table_imp, py::call_guard<py::gil_scoped_release>());
+    //m.def("get_arrow_table_imp", &get_arrow_table_imp, py::call_guard<py::gil_scoped_release>());
 }
 
 ///
