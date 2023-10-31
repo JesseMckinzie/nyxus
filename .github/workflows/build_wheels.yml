@@ -46,7 +46,7 @@ jobs:
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
-          CIBW_BEFORE_ALL_LINUX:  apt-get install -y llvm &&
+          CIBW_BEFORE_ALL_LINUX:  yum install -y llvm &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
