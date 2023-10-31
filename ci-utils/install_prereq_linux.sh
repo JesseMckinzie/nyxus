@@ -172,6 +172,15 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/  
 make install -j4
 cd ../../
 
+
+curl -l https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-17.0.4.zip -o llvmorg-17.0.4.zip
+unzip llvmorg-17.0.4.zip
+cd llvmorg-17.0.4/
+mkdir build/
+cd build/
+cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR -DCMAKE_PREFIX_PATH=../../../$Z5_INSTALL_DIR -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ../llvm
+make install clang-tidy
+
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
 unzip arrow-apache-arrow-13.0.0.zip
 cd arrow-apache-arrow-13.0.0/
