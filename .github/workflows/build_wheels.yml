@@ -46,7 +46,7 @@ jobs:
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
-          CIBW_BEFORE_ALL_LINUX:  yum install -y llvm && yum install -y clang-tools-extra &&
+          CIBW_BEFORE_ALL_LINUX:  yum install -y llvm && yum install -y centos-release-scl &&
                                    bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
