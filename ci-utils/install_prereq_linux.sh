@@ -173,7 +173,7 @@ make install -j4
 cd ../../
 
 
-curl -l https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-17.0.4.zip -o llvmorg-17.0.4.zip
+curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-17.0.4.zip -o llvmorg-17.0.4.zip
 unzip llvmorg-17.0.4.zip
 cd llvmorg-17.0.4/
 mkdir build/
