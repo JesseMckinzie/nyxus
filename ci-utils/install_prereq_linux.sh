@@ -193,7 +193,7 @@ cmake -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/   -DCMAKE_PREFIX_PATH=../../
 make install clang-tidy
 cd ../../
 
-cd $ROOTDIR
+cd $ROOTDIR/$Z5_INSTALL_DIR/
 echo $(pwd)
 
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
