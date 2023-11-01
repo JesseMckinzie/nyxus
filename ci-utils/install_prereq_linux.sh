@@ -174,7 +174,7 @@ cd ../../
 
 curl -L https://github.com/libevent/libevent/archive/refs/tags/release-2.1.12-stable.zip -o release-2.1.12-stable
 unzip release-2.1.12-stable
-cd release-2.1.12-stable
+cd libevent-release-2.1.12-stable
 mkdir build/
 cd build/
 cmake ..
