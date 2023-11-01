@@ -196,7 +196,7 @@ cd ../../
 
 curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-17.0.4.zip -o llvmorg-17.0.4.zip
 unzip llvmorg-17.0.4.zip
-cd llvmorg-17.0.4
+cd llvm-project-llvmorg-17.0.4 
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ../llvm
