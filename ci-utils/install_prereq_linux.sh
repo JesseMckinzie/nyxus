@@ -200,6 +200,7 @@ cd build/
 cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         -DCMAKE_PREFIX_PATH=../../../$Z5_INSTALL_DIR \
         -DCMAKE_INSTALL_LIBDIR=../../../$Z5_INSTALL_DIR/lib \
+        -DCMAKE_INSTALL_RPATH=../../../$Z5_INSTALL_DIR/lib \
         -DCMAKE_BUILD_TYPE=Release \
         -DARROW_COMPUTE=ON \
         -DARROW_CSV=ON \
