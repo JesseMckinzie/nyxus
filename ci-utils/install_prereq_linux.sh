@@ -174,6 +174,14 @@ cd ../../
 
 ROOTDIR=$(pwd)
 
+
+curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
+unzip arrow-apache-arrow-13.0.0.zip
+cd arrow-apache-arrow-13.0.0
+cd cpp
+
+CPPDIR=$(pwd)
+
 curl -L https://github.com/libevent/libevent/archive/refs/tags/release-2.1.12-stable.zip -o release-2.1.12-stable
 unzip release-2.1.12-stable
 cd libevent-release-2.1.12-stable
@@ -189,17 +197,12 @@ unzip llvmorg-17.0.4.zip
 cd llvmorg-17.0.4
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/   -DCMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR/ -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ../llvm
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ../llvm
 make install clang-tidy
-cd ../../
 
-cd $ROOTDIR/$Z5_INSTALL_DIR/
-echo $(pwd)
+cd $CPPDIR
 
-curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
-unzip arrow-apache-arrow-13.0.0.zip
-cd arrow-apache-arrow-13.0.0
-cd cpp
+
 mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
