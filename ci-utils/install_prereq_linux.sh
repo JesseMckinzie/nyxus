@@ -179,7 +179,7 @@ unzip release-2.1.12-stable
 cd libevent-release-2.1.12-stable
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/   -DCMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR/ ..
 make
 make install
 cd ../../
@@ -189,7 +189,7 @@ unzip llvmorg-17.0.4.zip
 cd llvmorg-17.0.4
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ../llvm
+cmake -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/   -DCMAKE_PREFIX_PATH=../../$Z5_INSTALL_DIR/ -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ../llvm
 make install clang-tidy
 cd ../../
 
