@@ -172,6 +172,14 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DIR/  
 make install -j4
 cd ../../
 
+curl -L https://github.com/libevent/libevent/archive/refs/tags/release-2.1.12-stable.zip -o release-2.1.12-stable
+unzip release-2.1.12-stable
+cd release-2.1.12-stable
+mkdir build/
+cd build/
+cmake ..
+make
+make install
 
 curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-17.0.4.zip -o llvmorg-17.0.4.zip
 unzip llvmorg-17.0.4.zip
