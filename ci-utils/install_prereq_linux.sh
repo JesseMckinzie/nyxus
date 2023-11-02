@@ -188,8 +188,9 @@ git clone https://github.com/apache/thrift.git
 cd thrift
 ./bootstrap.sh
 ./configure --with-lua=no
+./configure --with_qt5=no
 make
-sudo make install
+make install
 cd ..
 
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
