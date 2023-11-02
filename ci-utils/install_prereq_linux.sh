@@ -188,7 +188,7 @@ git clone https://github.com/apache/thrift.git
 cd thrift
 ./bootstrap.sh
 ./configure --with-lua=no
-./configure --with_qt5=no
+./configure --with-qt5=no
 make
 make install
 cd ..
