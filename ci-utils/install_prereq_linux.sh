@@ -194,17 +194,6 @@ make
 make install
 cd ../../
 
-curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-17.0.4.zip -o llvmorg-17.0.4.zip
-unzip llvmorg-17.0.4.zip
-cd llvm-project-llvmorg-17.0.4 
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ../llvm
-make install clang-tidy
-cd ../../
-
-cd $BUILDDIR
-
 
 cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         -DCMAKE_PREFIX_PATH=../../../$Z5_INSTALL_DIR \
