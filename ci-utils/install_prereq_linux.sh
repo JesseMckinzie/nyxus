@@ -174,16 +174,6 @@ cd ../../
 
 ROOTDIR=$(pwd)
 
-curl -L https://github.com/libevent/libevent/archive/refs/tags/release-2.1.12-stable.zip -o release-2.1.12-stable
-unzip release-2.1.12-stable
-cd libevent-release-2.1.12-stable
-mkdir build
-cd build
-cmake ..
-make
-make install
-cd ../../
-
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
 unzip arrow-apache-arrow-13.0.0.zip
 cd arrow-apache-arrow-13.0.0
