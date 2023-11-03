@@ -203,4 +203,4 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
 make -j4
 make install
 
-mv ../../../$Z5_INSTALL_DIR/lib ../../../../../$Z5_INSTALL_DIR
+mv -v ../../../$Z5_INSTALL_DIR/lib/* ../../../../../$Z5_INSTALL_DIR/lib
