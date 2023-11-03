@@ -24,6 +24,8 @@ call bootstrap.bat
 xcopy /E /I /y boost ..\local_install\include\boost
 popd
 
+echo $(ls local_install\include\boost)
+
 git clone https://github.com/Blosc/c-blosc.git 
 pushd c-blosc 
 mkdir build_man
