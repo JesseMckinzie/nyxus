@@ -203,6 +203,9 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
 make -j4
 make install
 
+mv -v ../../../$Z5_INSTALL_DIR/lib/cmake/* ./../../../../$Z5_INSTALL_DIR/lib/cmake/
+mv -v ../../../$Z5_INSTALL_DIR/lib/pkgconfig/* ./../../../../$Z5_INSTALL_DIR/lib/pkgconfig/
+
 mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so ../../../../../$Z5_INSTALL_DIR/lib
 mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so.1300 ../../../../../$Z5_INSTALL_DIR/lib
 mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so.1300.0.0 ../../../../../$Z5_INSTALL_DIR/lib
