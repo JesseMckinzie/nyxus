@@ -189,7 +189,7 @@ cd arrow-apache-arrow-13.0.0
 cd cpp
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=../../../../../$Z5_INSTALL_DIR \
+cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
         -DCMAKE_PREFIX_PATH=../../../$Z5_INSTALL_DIR \
         -DCMAKE_INSTALL_LIBDIR=lib \
         -DCMAKE_BUILD_TYPE=Release \
@@ -203,4 +203,4 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../../../$Z5_INSTALL_DIR \
 make -j4
 make install
 
-cd $ROOTDIR
+mv ../../../$Z5_INSTALL_DIR/lib ../../../../../$Z5_INSTALL_DIR
