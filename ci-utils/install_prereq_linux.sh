@@ -28,8 +28,6 @@ cd boost_1_79_0
 cp -r boost ../$Z5_INSTALL_DIR/include
 cd ../
 
-echo $(ls $Z5_INSTALL_DIR/include/boost)
-
 git clone https://github.com/madler/zlib.git
 cd zlib
 mkdir build_man
