@@ -183,15 +183,14 @@ cmake -G "Unix Makefiles" -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DCMA
 make -j4
 make install
 
-
 curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
 unzip arrow-apache-arrow-13.0.0.zip
 cd arrow-apache-arrow-13.0.0
 cd cpp
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
-        -DCMAKE_PREFIX_PATH=../../../$Z5_INSTALL_DIR \
+cmake -DCMAKE_INSTALL_PREFIX=../../../../../$Z5_INSTALL_DIR \
+        -DCMAKE_PREFIX_PATH=../../../../../$Z5_INSTALL_DIR \
         -DCMAKE_INSTALL_LIBDIR=lib \
         -DCMAKE_BUILD_TYPE=Release \
         -DARROW_COMPUTE=ON \
