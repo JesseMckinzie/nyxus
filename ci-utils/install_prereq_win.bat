@@ -25,6 +25,8 @@ xcopy /E /I /y boost ..\local_install\include\boost
 .\b2 install --prefix=../../local_install/
 popd
 
+echo dir local_install
+
 git clone https://github.com/Blosc/c-blosc.git 
 pushd c-blosc 
 mkdir build_man
