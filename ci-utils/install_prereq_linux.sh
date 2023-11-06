@@ -209,7 +209,9 @@ mv -v ../../../$Z5_INSTALL_DIR/lib/pkgconfig/* ../../../../../$Z5_INSTALL_DIR/li
 mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so ../../../../../$Z5_INSTALL_DIR/lib
 mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so.1300 ../../../../../$Z5_INSTALL_DIR/lib
 mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so.1300.0.0 ../../../../../$Z5_INSTALL_DIR/lib
+mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.a ../../../../../$Z5_INSTALL_DIR/lib
 
 mv -v ../../../$Z5_INSTALL_DIR/lib/libarrow.so ../../../../../$Z5_INSTALL_DIR/lib
 mv -v ../../../$Z5_INSTALL_DIR/lib/libarrow.so.1300 ../../../../../$Z5_INSTALL_DIR/lib
 mv -v ../../../$Z5_INSTALL_DIR/lib/libarrow.so.1300.0.0 ../../../../../$Z5_INSTALL_DIR/lib
+mv -v ../../../$Z5_INSTALL_DIR/lib/libarrow.a ./../../../../$Z5_INSTALL_DIR/lib
