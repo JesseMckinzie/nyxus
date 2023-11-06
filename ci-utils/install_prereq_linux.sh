@@ -203,15 +203,6 @@ cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
 make -j4
 make install
 
-mv -v ../../../$Z5_INSTALL_DIR/lib/cmake/* ../../../../../$Z5_INSTALL_DIR/lib/cmake/
-mv -v ../../../$Z5_INSTALL_DIR/lib/pkgconfig/* ../../../../../$Z5_INSTALL_DIR/lib/pkgconfig/
+mkdir  ../../../../../$Z5_INSTALL_DIR/arrow_lib
 
-mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so ../../../../../$Z5_INSTALL_DIR/lib
-mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so.1300 ../../../../../$Z5_INSTALL_DIR/lib
-mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.so.1300.0.0 ../../../../../$Z5_INSTALL_DIR/lib
-mv -v ../../../$Z5_INSTALL_DIR/lib/libparquet.a ../../../../../$Z5_INSTALL_DIR/lib
-
-mv -v ../../../$Z5_INSTALL_DIR/lib/libarrow.so ../../../../../$Z5_INSTALL_DIR/lib
-mv -v ../../../$Z5_INSTALL_DIR/lib/libarrow.so.1300 ../../../../../$Z5_INSTALL_DIR/lib
-mv -v ../../../$Z5_INSTALL_DIR/lib/libarrow.so.1300.0.0 ../../../../../$Z5_INSTALL_DIR/lib
-mv -v ../../../$Z5_INSTALL_DIR/lib/libarrow.a ../../../../../$Z5_INSTALL_DIR/lib
+mv -v ../../../$Z5_INSTALL_DIR/lib/* ../../../../../$Z5_INSTALL_DIR/arrow_lib
