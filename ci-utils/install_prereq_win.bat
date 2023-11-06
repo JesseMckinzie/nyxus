@@ -169,7 +169,7 @@ pushd arrow-apache-arrow-13.0.0
 pushd cpp
 mkdir build
 pushd build
-cmake ..  -DCMAKE_INSTALL_PREFIX=../../../local_install/   -DCMAKE_PREFIX_PATH=../../../local_install/ -DBOOST_ROOT=../local_install/include/boost -DBOOST_ROOT=../local_install/include/boost/lib64-mvsc-14.3 -DARROW_COMPUTE=ON -DARROW_CSV=ON -DARROW_DATASET=ON -DARROW_ACERO=ON -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON 
+cmake ..  -DCMAKE_INSTALL_PREFIX=../../../local_install/   -DCMAKE_PREFIX_PATH=../../../local_install/ -DBOOST_ROOT=../../../local_install/include/boost -DARROW_COMPUTE=ON -DARROW_CSV=ON -DARROW_DATASET=ON -DARROW_ACERO=ON -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON 
 cmake --build . --config Release  --target install --parallel 4
 popd
 popd
