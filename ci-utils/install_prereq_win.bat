@@ -22,7 +22,7 @@ pushd boost_1_79_0
 call bootstrap.bat 
 .\b2 headers
 xcopy /E /I /y boost ..\local_install\include\boost
-.\b2 install --prefix=../../local_install/
+.\b2 install --prefix=../local_install/
 popd
 
 echo dir local_install
