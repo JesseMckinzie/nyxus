@@ -174,37 +174,3 @@ cd ../../
 
 ROOTDIR=$(pwd)
 
-curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-14.0.0.zip -o llvmorg-14.0.0.zip
-unzip llvmorg-14.0.0.zip
-cd llvm-project-llvmorg-14.0.0
-mkdir build
-cd build
-cmake -G "Unix Makefiles" -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DCMAKE_INSTALL_PREFIX=../../$Z5_INSTALL_DI -DCMAKE_BUILD_TYPE=Release ../llvm
-make -j4
-make install
-
-curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
-unzip arrow-apache-arrow-13.0.0.zip
-cd arrow-apache-arrow-13.0.0
-cd cpp
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=../../../$Z5_INSTALL_DIR \
-        -DCMAKE_PREFIX_PATH=../../../$Z5_INSTALL_DIR \
-        -DCMAKE_INSTALL_LIBDIR=lib \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DARROW_COMPUTE=ON \
-        -DARROW_CSV=ON \
-        -DARROW_DATASET=ON \
-        -DARROW_ACERO=ON \
-        -DARROW_PARQUET=ON \
-        -DARROW_WITH_SNAPPY=ON \
-        .. 
-make -j4
-make install
-
--mv -v ../../../$Z5_INSTALL_DIR/lib/cmake/* ../../../../../$Z5_INSTALL_DIR/lib/cmake/
-mv -v ../../../$Z5_INSTALL_DIR/lib/pkgconfig/* ../../../../../$Z5_INSTALL_DIR/lib/pkgconfig/
-
-mv -v ../../../$Z5_INSTALL_DIR/lib/* ../../../../../$Z5_INSTALL_DIR/lib
-
