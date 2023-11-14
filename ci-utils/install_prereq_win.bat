@@ -192,9 +192,9 @@ if "%BUILD_DCMTK_DEP%" == "1" (
 
     git clone https://github.com/Microsoft/vcpkg.git
     pushd vcpkg
-    ./bootstrap-vcpkg.sh
-    ./vcpkg integrate install
-    ./vcpkg install arrow --prefix=../local_install/
+    vcpkg\bootstrap-vcpkg.bat
+    vcpkg integrate install
+    vcpkg install arrow --prefix=../local_install/
     popd
     )
 
