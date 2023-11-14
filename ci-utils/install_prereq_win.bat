@@ -189,7 +189,14 @@ if "%BUILD_DCMTK_DEP%" == "1" (
     cmake --build . --config Release --target install --parallel 4
     popd
     popd
-)
+
+    git clone https://github.com/Microsoft/vcpkg.git
+    pushd vcpkg
+    ./bootstrap-vcpkg.sh
+    ./vcpkg integrate install
+    ./vcpkg install arrow --prefix=../local_install/
+    popd
+    )
 
 if errorlevel 1 exit 1
 
