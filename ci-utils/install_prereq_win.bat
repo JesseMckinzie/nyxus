@@ -190,12 +190,8 @@ if "%BUILD_DCMTK_DEP%" == "1" (
     popd
     popd
 
-    git clone https://github.com/Microsoft/vcpkg.git
-    pushd vcpkg
-    vcpkg\bootstrap-vcpkg.bat
     vcpkg integrate install
-    vcpkg install arrow --prefix=../local_install/
-    popd
+    vcpkg install arrow
     )
 
 if errorlevel 1 exit 1
