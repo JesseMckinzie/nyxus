@@ -468,7 +468,8 @@ class TestNyxus():
             
             
             # Read the Parquet file into a Pandas DataFrame
-            parquet_df = pq.read_table(parquet_file).to_pandas()
+            #parquet_df = pq.read_table(parquet_file).to_pandas()
+            parquet_df = pd.read_parquet(parquet_file)
             pd_columns = list(features.columns)
 
             arrow_columns = list(parquet_df.columns)
@@ -503,7 +504,8 @@ class TestNyxus():
             assert parquet_file == "TestNyxusOut/test_nyxus.parquet"
             
             # Read the Parquet file into a Pandas DataFrame
-            parquet_df = pq.read_table(parquet_file).to_pandas()
+            #parquet_df = pq.read_table(parquet_file).to_pandas()
+            parquet_df = pd.read_parquet(parquet_file)
             pd_columns = list(features.columns)
 
             arrow_columns = list(parquet_df.columns)
