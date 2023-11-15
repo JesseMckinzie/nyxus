@@ -22,8 +22,8 @@ class TestNyxus():
         def setup_class(cls):
             os.mkdir('TestNyxusOut')   
         
-        @pytest.fixture(scope='session')
-        def remove_files(request):
+        @classmethod 
+        def teardown_class(cls):
             shutil.rmtree('TestNyxusOut')
             try:
                 os.remove('NyxusFeatures.arrow')
@@ -467,78 +467,8 @@ class TestNyxus():
             
             
             # Read the Parquet file into a Pandas DataFrame
-            parquet_df = pq.read_table(parquet_file).to_pandas()
-            pd_columns = list(features.columns)
-
-            arrow_columns = list(parquet_df.columns)
-                
-            for i in range(len(features.columns)):
-                column_list = features[pd_columns[i]].tolist()
-                arrow_list = parquet_df[arrow_columns[i]].tolist()
-                
-                for i in range(len(column_list)):
-                    feature_value = column_list[i]
-                    arrow_value = arrow_list[i]
-                    
-                    #skip nan values
-                    if (isinstance(feature_value, (int, float)) and math.isnan(feature_value)):
-                        if (not math.isnan(arrow_value)):
-                            assert False
-
-                        continue
-                    assert feature_value == arrow_value
+            with pq.read_table(parquet_file).to_pandas() as parquet_df:
             
-        @pytest.mark.arrow        
-        def test_parquet_writer_file_naming(self):
-            
-            nyx = nyxus.Nyxus (["*ALL*"])
-            assert nyx is not None
-            
-            
-            features = nyx.featurize(intens, seg)
-
-            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_directory='TestNyxusOut', output_filename="test_nyxus")
-            
-            assert parquet_file == "TestNyxusOut/test_nyxus.parquet"
-            
-            # Read the Parquet file into a Pandas DataFrame
-            parquet_df = pq.read_table(parquet_file).to_pandas()
-            pd_columns = list(features.columns)
-
-            arrow_columns = list(parquet_df.columns)
-                
-            for i in range(len(features.columns)):
-                column_list = features[pd_columns[i]].tolist()
-                arrow_list = parquet_df[arrow_columns[i]].tolist()
-                
-                for i in range(len(column_list)):
-                    feature_value = column_list[i]
-                    arrow_value = arrow_list[i]
-                    
-                    #skip nan values
-                    if (isinstance(feature_value, (int, float)) and math.isnan(feature_value)):
-                        if (not math.isnan(arrow_value)):
-                            assert False
-
-                        continue
-                    assert feature_value == arrow_value
-            
-        @pytest.mark.arrow     
-        def test_parquet_writer(self):
-                
-                nyx = nyxus.Nyxus (["*ALL*"])
-                assert nyx is not None
-            
-                
-                features = nyx.featurize(intens, seg)
-
-                parquet_file = nyx.featurize(intens, seg, output_type="parquet")
-                
-                assert parquet_file == "NyxusFeatures.parquet"
-                
-                # Read the Parquet file into a Pandas DataFrame
-                parquet_df = pq.read_table(parquet_file).to_pandas()
-                
                 pd_columns = list(features.columns)
                 
                 arrow_columns = list(parquet_df.columns)
@@ -558,3 +488,75 @@ class TestNyxus():
 
                             continue
                         assert feature_value == arrow_value
+            
+        @pytest.mark.arrow        
+        def test_parquet_writer_file_naming(self):
+            
+            nyx = nyxus.Nyxus (["*ALL*"])
+            assert nyx is not None
+            
+            
+            features = nyx.featurize(intens, seg)
+
+            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_directory='TestNyxusOut', output_filename="test_nyxus")
+            
+            assert parquet_file == "TestNyxusOut/test_nyxus.parquet"
+            
+            # Read the Parquet file into a Pandas DataFrame
+            with pq.read_table(parquet_file).to_pandas() as parquet_df:
+            
+                pd_columns = list(features.columns)
+                
+                arrow_columns = list(parquet_df.columns)
+                
+                for i in range(len(features.columns)):
+                    column_list = features[pd_columns[i]].tolist()
+                    arrow_list = parquet_df[arrow_columns[i]].tolist()
+                    
+                    for i in range(len(column_list)):
+                        feature_value = column_list[i]
+                        arrow_value = arrow_list[i]
+                        
+                        #skip nan values
+                        if (isinstance(feature_value, (int, float)) and math.isnan(feature_value)):
+                            if (not math.isnan(arrow_value)):
+                                assert False
+
+                            continue
+                        assert feature_value == arrow_value
+            
+        @pytest.mark.arrow     
+        def test_parquet_writer(self):
+                
+                nyx = nyxus.Nyxus (["*ALL*"])
+                assert nyx is not None
+            
+                
+                features = nyx.featurize(intens, seg)
+
+                parquet_file = nyx.featurize(intens, seg, output_type="parquet")
+                
+                assert parquet_file == "NyxusFeatures.parquet"
+                
+                # Read the Parquet file into a Pandas DataFrame
+                with pq.read_table(parquet_file).to_pandas() as parquet_df:
+                
+                    pd_columns = list(features.columns)
+                    
+                    arrow_columns = list(parquet_df.columns)
+                    
+                    for i in range(len(features.columns)):
+                        column_list = features[pd_columns[i]].tolist()
+                        arrow_list = parquet_df[arrow_columns[i]].tolist()
+                        
+                        for i in range(len(column_list)):
+                            feature_value = column_list[i]
+                            arrow_value = arrow_list[i]
+                            
+                            #skip nan values
+                            if (isinstance(feature_value, (int, float)) and math.isnan(feature_value)):
+                                if (not math.isnan(arrow_value)):
+                                    assert False
+
+                                continue
+                            assert feature_value == arrow_value
