@@ -191,9 +191,9 @@ if "%BUILD_DCMTK_DEP%" == "1" (
     popd
 
     vcpkg integrate install
-    vcpkg install arrow
+    vcpkg install arrow 
 
-    SET CMAKE_TOOLCHAIN_FILE=";%HOMEDRIVE%\vcpkg\scripts\buildsystems\vcpkg.cmake
+    $env:CMAKE_TOOLCHAIN_FILE = "C:\vcpkg\scripts\buildsystems\vcpkg.cmake"
     )
 
 if errorlevel 1 exit 1
