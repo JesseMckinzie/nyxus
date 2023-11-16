@@ -504,9 +504,9 @@ class TestNyxus():
             
             features = nyx.featurize(intens, seg)
 
-            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_directory='TestNyxusParquet', output_filename="test_nyxus")
+            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_directory='TestNyxusParquet', output_filename="test_parquet")
             
-            assert parquet_file == "TestNyxusParquet/test_nyxus.parquet"
+            assert parquet_file == "TestNyxusParquet/test_parquet.parquet"
 
             # Read the Parquet file into a Pandas DataFrame
             #parquet_df = pq.read_table(open_parquet_file).to_pandas()
@@ -535,6 +535,6 @@ class TestNyxus():
             del arrow_columns
             del parquet_df
 
-            os.remove('TestNyxusParquet/test_nyxus.parquet')
+            os.remove('TestNyxusParquet/test_parquet.parquet')
             os.rmdir('TestNyxusParquet')
             
