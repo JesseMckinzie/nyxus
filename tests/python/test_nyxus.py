@@ -534,5 +534,6 @@ class TestNyxus():
                     assert feature_value == arrow_value
             
             open_parquet_file.close()
-            shutil.rmtree('TestNyxusParquet')
+            os.remove('TestNyxusParquet/test_nyxus.parquet')
+            os.rmdir('TestNyxusParquet')
             
