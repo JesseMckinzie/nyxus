@@ -457,7 +457,6 @@ class TestNyxus():
         
         @pytest.mark.arrow        
         def test_parquet_writer(self):
-            
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
             
@@ -498,16 +497,16 @@ class TestNyxus():
             
         @pytest.mark.arrow        
         def test_parquet_writer_file_naming(self):
-            
+            os.mkdir('TestNyxusParquet')
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
             
             
             features = nyx.featurize(intens, seg)
 
-            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_directory='TestNyxusOut', output_filename="test_nyxus")
+            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_directory='TestNyxusParquet', output_filename="test_nyxus")
             
-            assert parquet_file == "TestNyxusOut/test_nyxus.parquet"
+            assert parquet_file == "TestNyxusParquet/test_nyxus.parquet"
             
             open_parquet_file = pq.ParquetFile(parquet_file)
             parquet_df = open_parquet_file.read().to_pandas()
@@ -535,4 +534,5 @@ class TestNyxus():
                     assert feature_value == arrow_value
             
             open_parquet_file.close()
+            shutil.rmtree('TestNyxusParquet')
             
