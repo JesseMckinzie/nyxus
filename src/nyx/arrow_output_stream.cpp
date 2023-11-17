@@ -21,6 +21,18 @@ std::tuple<bool, std::optional<std::string>> ArrowOutputStream::create_arrow_fil
     
     bool is_directory = (Nyxus::ends_with_substr(output_path, "/") || output_path == "");
 
+    auto current_ext = fs::path(output_path).extension().u8string();
+    auto path = fs::path(output_path).remove_filename().u8string();
+    std::cout << path << std::endl;
+
+    if (current_ext != "" && !fs::exists(path)) {
+        try {        
+            fs::create_directory(path);
+        } catch (std::exception& e) {
+            return {false, e.what()};
+        }
+    } 
+
 
     if (is_directory && output_path != "" && !fs::exists(output_path)) {
         try {        
@@ -42,7 +54,6 @@ std::tuple<bool, std::optional<std::string>> ArrowOutputStream::create_arrow_fil
         } else {return "";}
     }();
 
-    auto current_ext = fs::path(arrow_file_path_).extension().u8string();
     if (current_ext == "") {
         arrow_file_path_ += file_extension;
     } else {
