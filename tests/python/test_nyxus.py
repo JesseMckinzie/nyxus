@@ -393,7 +393,7 @@ class TestNyxus():
             
 
             file.close()
-            
+            '''
             attempts = 0
             while True:
                 
@@ -410,7 +410,7 @@ class TestNyxus():
                         break
                     
                     time.sleep(30)
-                    
+            '''
             print("parquet file is closed: " + str(file.closed))
 
         @pytest.mark.arrow
