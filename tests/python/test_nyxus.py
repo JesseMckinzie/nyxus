@@ -497,6 +497,7 @@ class TestNyxus():
             
         @pytest.mark.arrow        
         def test_parquet_writer_file_naming(self):
+        
             os.mkdir('TestNyxusParquet')
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
@@ -534,6 +535,8 @@ class TestNyxus():
 
             del arrow_columns
             del parquet_df
+            
+            time.sleep(30)
 
             os.remove('TestNyxusParquet/test_parquet.parquet')
             os.rmdir('TestNyxusParquet')
