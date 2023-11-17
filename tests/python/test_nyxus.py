@@ -536,6 +536,35 @@ class TestNyxus():
             
 
             file.close()
-            print("parquet file is closed: " + str(file.closed))            
+            print("parquet file is closed: " + str(file.closed))   
+                     
+            
+            def delete_file(file_path):
+                
+                if os.name == 'nt':
+                    import psutil
+                    # Attempt to find the process locking the file
+                    for proc in psutil.process_iter(['pid', 'name']):
+                        try:
+                            process = psutil.Process(proc.info['pid'])
+                            for file_handle, _ in process.open_files():
+                                if file_handle == file_path:
+                                    # Terminate the process
+                                    os.system(f"taskkill /F /PID {process.pid}")
+                                    break
+                        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                            pass
+
+                    # Try to delete the file after terminating the process
+                    try:
+                        os.remove(file_path)
+                        print(f"{file_path} deleted successfully.")
+                    except Exception as e:
+                        print(f"Error deleting {file_path}: {e}")
+                
+                else:
+                    os.remove(file_path)
+                    
+            delete_file('TestNyxusParquet/test_parquet.parquet')
             
             
