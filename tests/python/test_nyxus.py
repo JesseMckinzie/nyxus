@@ -25,6 +25,7 @@ class TestNyxus():
         @classmethod 
         def teardown_class(cls):
             shutil.rmtree('TestNyxusOut')
+            shutil.rmtree('TestNyxusParquet')
             try:
                 os.remove('NyxusFeatures.arrow')
             except:
@@ -536,6 +537,5 @@ class TestNyxus():
 
             file.close()
             print("parquet file is closed: " + str(file.closed))            
-            os.remove('TestNyxusParquet/test_parquet.parquet')
-            os.rmdir('TestNyxusParquet')
+            
             
