@@ -534,6 +534,24 @@ class TestNyxus():
             
 
             file.close()
+            
+            attempts = 0
+            while True:
+                
+                try:
+                    os.remove('TestNyxusOut/test_parquet.parquet')
+                    print('deleted successfully')
+                    break
+                except:
+                    
+                    attempts +=1
+                    
+                    if attempts > 5:
+                        print("Could not delete file")
+                        break
+                    
+                    time.sleep(30)
+                    
             print("parquet file is closed: " + str(file.closed))   
                      
             
