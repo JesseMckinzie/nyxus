@@ -335,12 +335,5 @@ namespace Nyxus
 			return x;
 	}
 
-	
-	inline std::tuple<std::string, std::string> split_path(const std::string& path) {
-
-		return std::make_tuple(fs::path(path).stem(), fs::path(path).remove_filename());
-
-	}
-
 }
 
