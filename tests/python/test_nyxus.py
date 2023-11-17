@@ -501,12 +501,11 @@ class TestNyxus():
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
             
-            
             features = nyx.featurize(intens, seg)
 
-            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_path='TestNyxusParquet/test_parquet.parquet')
+            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_path='TestNyxusOut/test_parquet.parquet')
             
-            assert parquet_file == "TestNyxusParquet/test_parquet.parquet"
+            assert parquet_file == "TestNyxusOut/test_parquet.parquet"
 
             # Read the Parquet file into a Pandas DataFrame
             #parquet_df = pq.read_table(open_parquet_file).to_pandas()
@@ -537,34 +536,5 @@ class TestNyxus():
             file.close()
             print("parquet file is closed: " + str(file.closed))   
                      
-            
-            def delete_file(file_path):
-                
-                if os.name == 'nt':
-                    import psutil
-                    # Attempt to find the process locking the file
-                    for proc in psutil.process_iter(['pid', 'name']):
-                        try:
-                            process = psutil.Process(proc.info['pid'])
-                            for file_handle, _ in process.open_files():
-                                if file_handle == file_path:
-                                    # Terminate the process
-                                    os.system(f"taskkill /F /PID {process.pid}")
-                                    break
-                        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                            pass
-
-                    # Try to delete the file after terminating the process
-                    try:
-                        os.remove(file_path)
-                        print(f"{file_path} deleted successfully.")
-                    except Exception as e:
-                        print(f"Error deleting {file_path}: {e}")
-                
-                else:
-                    os.remove(file_path)
-                    
-            delete_file('TestNyxusParquet/test_parquet.parquet')
-            shutil.rmtree('TestNyxusParquet')
             
             
