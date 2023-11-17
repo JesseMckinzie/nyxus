@@ -510,7 +510,9 @@ class TestNyxus():
 
             # Read the Parquet file into a Pandas DataFrame
             #parquet_df = pq.read_table(open_parquet_file).to_pandas()
-            parquet_df = pd.read_parquet(parquet_file)
+            file = pq.ParquetFile(parquet_file)
+            parquet_df = file.read().to_pandas()
+            #parquet_df = pd.read_parquet(parquet_file)
             pd_columns = list(features.columns)
 
             arrow_columns = list(parquet_df.columns)
@@ -532,9 +534,8 @@ class TestNyxus():
                     assert feature_value == arrow_value
             
 
-            del arrow_columns
-            del parquet_df
-            
+            file.close()
+            print("parquet file is closed: " + str(file.closed))            
             os.remove('TestNyxusParquet/test_parquet.parquet')
             os.rmdir('TestNyxusParquet')
             
