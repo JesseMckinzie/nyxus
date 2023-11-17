@@ -14,23 +14,25 @@
 #endif
 
 std::tuple<bool, std::optional<std::string>> ArrowOutputStream::create_arrow_file(const Nyxus::SaveOption& arrow_file_type,
-                                                         const std::string& output_dir,
-                                                         const std::string& output_filename,
+                                                         const std::string& output_path,
+                                                         const std::string& default_filename,
                                                          const std::vector<std::string>& header) {
 
+    
+    bool is_directory = (Nyxus::ends_with_substr(output_path, "/") || output_path == "");
 
 
-    std::string out = (output_dir == "" || Nyxus::ends_with_substr(output_dir, "/")) ? output_dir : output_dir + "/";
-
-    if (out != "" && !fs::exists(out)) {
+    if (is_directory && output_path != "" && !fs::exists(output_path)) {
         try {        
-            fs::create_directory(out);
+            fs::create_directory(output_path);
         } catch (std::exception& e) {
             return {false, e.what()};
         }
     }
 
-    std::string file = fs::path(output_filename).stem().u8string();
+    std::string slash = (output_path == "") ? "" : "/";
+
+    arrow_file_path_ = (is_directory) ? output_path + slash + default_filename : output_path;
 
     std::string file_extension = [&arrow_file_type](){
         if (arrow_file_type == Nyxus::SaveOption::saveArrowIPC) {
@@ -40,9 +42,17 @@ std::tuple<bool, std::optional<std::string>> ArrowOutputStream::create_arrow_fil
         } else {return "";}
     }();
 
-    file += file_extension;
+    auto current_ext = fs::path(arrow_file_path_).extension().u8string();
+    if (current_ext == "") {
+        arrow_file_path_ += file_extension;
+    } else {
+        if (current_ext != file_extension) {
+            std::cerr << "Incorrect file extension \"" + current_ext + "\". Using correct extension \"" + file_extension + "\"." << std::endl;
 
-    arrow_file_path_ = out + file;
+            auto fs_path = fs::path(arrow_file_path_);
+            arrow_file_path_ = fs_path.remove_filename().u8string() + fs_path.stem().u8string() + file_extension; // correct the extension
+        }
+    }
 
     std::cout << arrow_file_path_ << std::endl;
 

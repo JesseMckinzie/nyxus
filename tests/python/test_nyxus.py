@@ -353,7 +353,7 @@ class TestNyxus():
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
             
-            arrow_path = nyx.featurize(intens, seg, output_type="arrowipc", output_directory='TestNyxusOut')
+            arrow_path = nyx.featurize(intens, seg, output_type="arrowipc", output_path='TestNyxusOut/')
 
             features = nyx.featurize(intens, seg)
             
@@ -384,7 +384,7 @@ class TestNyxus():
             nyx = nyxus.Nyxus (["*ALL*"])
             assert nyx is not None
             
-            arrow_path = nyx.featurize(intens, seg, output_type="arrowipc", output_directory='TestNyxusOut', output_filename="test_nyxus")
+            arrow_path = nyx.featurize(intens, seg, output_type="arrowipc", output_path='TestNyxusOut/test_nyxus.arrow')
             
             assert arrow_path == "TestNyxusOut/test_nyxus.arrow"
 
@@ -504,7 +504,7 @@ class TestNyxus():
             
             features = nyx.featurize(intens, seg)
 
-            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_directory='TestNyxusParquet', output_filename="test_parquet")
+            parquet_file = nyx.featurize(intens, seg, output_type="parquet", output_path='TestNyxusParquet/test_parquet.parquet')
             
             assert parquet_file == "TestNyxusParquet/test_parquet.parquet"
 

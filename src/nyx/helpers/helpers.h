@@ -4,6 +4,16 @@
 #include <string>
 #include <vector>
 
+#if __has_include(<filesystem>)
+  #include <filesystem>
+  namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+  #include <experimental/filesystem> 
+  namespace fs = std::experimental::filesystem;
+#else
+  error "Missing the <filesystem> header."
+#endif
+
 namespace Nyxus
 {
 
@@ -324,5 +334,13 @@ namespace Nyxus
 		else
 			return x;
 	}
+
+	
+	inline std::tuple<std::string, std::string> split_path(const std::string& path) {
+
+		return std::make_tuple(fs::path(path).stem(), fs::path(path).remove_filename());
+
+	}
+
 }
 
