@@ -535,9 +535,8 @@ class TestNyxus():
 
             del arrow_columns
             del parquet_df
-            
-            time.sleep(30)
 
-            os.remove('TestNyxusParquet/test_parquet.parquet')
+            os.rename('TestNyxusParquet/test_parquet.parquet', 'test_parquet.parquet')
+            os.remove('test_parquet.parquet')
             os.rmdir('TestNyxusParquet')
             
