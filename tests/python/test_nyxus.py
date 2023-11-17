@@ -25,7 +25,6 @@ class TestNyxus():
         @classmethod 
         def teardown_class(cls):
             shutil.rmtree('TestNyxusOut')
-            shutil.rmtree('TestNyxusParquet')
             try:
                 os.remove('NyxusFeatures.arrow')
             except:
@@ -566,5 +565,6 @@ class TestNyxus():
                     os.remove(file_path)
                     
             delete_file('TestNyxusParquet/test_parquet.parquet')
+            shutil.rmtree('TestNyxusParquet')
             
             
