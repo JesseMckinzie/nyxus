@@ -2,8 +2,6 @@
 #include "arrow_output_stream.h"
 #include "helpers/helpers.h"
 
-
-#ifdef USE_ARROW
 #if __has_include(<filesystem>)
   #include <filesystem>
   namespace fs = std::filesystem;
@@ -14,8 +12,10 @@
   error "Missing the <filesystem> header."
 #endif
 
+
 namespace Nyxus {
 
+#ifdef USE_ARROW
     std::tuple<bool, std::optional<std::string>> ArrowOutputStream::create_arrow_file(const Nyxus::SaveOption& arrow_file_type,
                                                             const std::string& output_path,
                                                             const std::vector<std::string>& header) {
@@ -89,7 +89,6 @@ namespace Nyxus {
         std::cerr << "Apache Arrow functionality is not available. Please install Nyxus with Arrow enabled to use this functionality." << std::endl;
         return {false, "Apache Arrow functionality is not available."};
     }
-
 
     #endif
 };
