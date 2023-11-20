@@ -2,8 +2,6 @@
 #include "arrow_output_stream.h"
 #include "helpers/helpers.h"
 
-
-#ifdef USE_ARROW
 #if __has_include(<filesystem>)
   #include <filesystem>
   namespace fs = std::filesystem;
@@ -16,6 +14,7 @@
 
 namespace Nyxus {
 
+#ifdef USE_ARROW
     std::tuple<bool, std::optional<std::string>> ArrowOutputStream::create_arrow_file(const Nyxus::SaveOption& arrow_file_type,
                                                             const std::string& output_path,
                                                             const std::vector<std::string>& header) {
