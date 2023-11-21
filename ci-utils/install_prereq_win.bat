@@ -190,19 +190,12 @@ if "%BUILD_DCMTK_DEP%" == "1" (
     popd
     popd
 
-    )
 
-curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
-unzip arrow-apache-arrow-13.0.0.zip
-pushd arrow-apache-arrow-13.0.0
-pushd cpp
-mkdir build
-pushd build
-cmake .. -DCMAKE_INSTALL_PREFIX=../../../local_install/   -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON
-cmake --build . --config Release --target install --parallel 4
-popd 
-popd
-popd
+    vcpkg integrate install
+    vcpkg install arrow 
+
+    set ARROW_DEPENDENCY_SOURCE=VCPKG
+    )
 
 if errorlevel 1 exit 1
 
