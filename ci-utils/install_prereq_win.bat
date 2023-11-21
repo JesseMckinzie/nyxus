@@ -51,7 +51,7 @@ if "%BUILD_Z5_DEP%" == "1" (
     pushd boost_1_79_0 
     call bootstrap.bat 
     .\b2 headers
-    .\b2 install --prefix=..\local_install
+    .\b2 variant=release address-model=64 link=static,shared
     xcopy /E /I /y boost ..\local_install\include\boost
     popd
 
@@ -198,7 +198,7 @@ pushd arrow-apache-arrow-13.0.0
 pushd cpp
 mkdir build
 pushd build
-cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/   -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON -DBOOST_ROOT=C:/local/boost_1_79_0 -DBOOST_LIBRARYDIR=C:/local/boost_1_79_0/lib64-msvc-14.0
+cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/   -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON
 cmake --build . --config Release
 popd 
 popd
