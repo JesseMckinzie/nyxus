@@ -192,8 +192,6 @@ if "%BUILD_DCMTK_DEP%" == "1" (
     popd
 
     )
-    
-pacman -S --noconfirm mingw-w64-x86_64-arrow
 
 if errorlevel 1 exit 1
 
