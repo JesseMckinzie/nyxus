@@ -28,6 +28,7 @@ jobs:
         python-version: 3.8
         channels: conda-forge
         auto-activate-base: false
+        miniconda-version: "latest"
 
 
     - name: Install Conda Dependencies
