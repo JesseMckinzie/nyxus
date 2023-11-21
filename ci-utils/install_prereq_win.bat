@@ -190,11 +190,24 @@ if "%BUILD_DCMTK_DEP%" == "1" (
     popd
     popd
 
+
     vcpkg integrate install
     vcpkg install arrow 
 
     $env:CMAKE_TOOLCHAIN_FILE = "C:\vcpkg\scripts\buildsystems\vcpkg.cmake"
     )
+
+curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
+unzip arrow-apache-arrow-13.0.0.zip
+pushd arrow-apache-arrow-13.0.0
+pushd cpp
+mkdir build
+pushd build
+cmake .. -DCMAKE_INSTALL_PREFIX=../../../local_install/   -DCMAKE_PREFIX_PATH=../../../local_install/
+cmake --build . --config Release --target install --parallel 4
+popd 
+popd
+popd
 
 if errorlevel 1 exit 1
 
