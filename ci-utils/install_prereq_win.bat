@@ -51,6 +51,7 @@ if "%BUILD_Z5_DEP%" == "1" (
     pushd boost_1_79_0 
     call bootstrap.bat 
     .\b2 headers
+    .\b2 install --prefix=..\local_install
     xcopy /E /I /y boost ..\local_install\include\boost
     popd
 
@@ -190,12 +191,18 @@ if "%BUILD_DCMTK_DEP%" == "1" (
     popd
     popd
 
-
-    vcpkg integrate install
-    vcpkg install arrow 
-
-    set ARROW_DEPENDENCY_SOURCE=VCPKG
     )
+curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
+unzip arrow-apache-arrow-13.0.0.zip
+pushd arrow-apache-arrow-13.0.0
+pushd cpp
+mkdir build
+pushd build
+cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/   -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON -DBOOST_ROOT=C:/local/boost_1_79_0 -DBOOST_LIBRARYDIR=C:/local/boost_1_79_0/lib64-msvc-14.0
+cmake --build . --config Release
+popd 
+popd
+popd
 
 if errorlevel 1 exit 1
 
