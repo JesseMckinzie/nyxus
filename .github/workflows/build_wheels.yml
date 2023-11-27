@@ -52,7 +52,7 @@ jobs:
                                    bash ci-utils/install_prereq_linux.sh --build_arrow no &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
-          CIBW_BEFORE_ALL_WINDOWS: pacman -S --noconfirm mingw-w64-x86_64-arrow && ci-utils\install_prereq_win.bat &&
+          CIBW_BEFORE_ALL_WINDOWS: ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install
                                    
                                      
