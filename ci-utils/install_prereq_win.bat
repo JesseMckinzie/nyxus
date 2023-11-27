@@ -122,7 +122,7 @@ pushd arrow-apache-arrow-13.0.0
 pushd cpp
 mkdir build
 pushd build
-cmake .. -G "MSYS Makefiles" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/ -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON
+cmake .. -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=../../../local_install/ -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON
 make install
 popd 
 popd
