@@ -51,9 +51,15 @@ if "%BUILD_Z5_DEP%" == "1" (
     pushd boost_1_79_0 
     call bootstrap.bat 
     .\b2 headers
-    .\b2 variant=release address-model=64 link=static,shared
+    .\b2 install --prefix=../local_install
     xcopy /E /I /y boost ..\local_install\include\boost
     popd
+
+    SET BOOSTDIR="%cd%\boost_1_79_0"
+    SET CURRENTDIR="%cd%"
+    dir "%CURRENTDIR%"
+    dir "%BOOSTDIR%"
+
 
     curl -L https://github.com/Blosc/c-blosc/archive/refs/tags/v1.21.5.zip -o v1.21.5.zip
     tar -xf v1.21.5.zip
@@ -116,8 +122,17 @@ if "%BUILD_Z5_DEP%" == "1" (
     popd
 )
 
-vcpkg integrate install
-vcpkg install arrow 
+curl -L https://github.com/apache/arrow/archive/refs/tags/apache-arrow-13.0.0.zip -o  arrow-apache-arrow-13.0.0.zip
+unzip arrow-apache-arrow-13.0.0.zip
+pushd arrow-apache-arrow-13.0.0
+pushd cpp
+mkdir build
+pushd build
+cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/ -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON -DBOOST_ROOT=
+cmake --build . --config Release
+popd 
+popd
+popd
 
 
 if "%BUILD_DCMTK_DEP%" == "1" (
