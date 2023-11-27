@@ -57,8 +57,8 @@ if "%BUILD_Z5_DEP%" == "1" (
 
     SET BOOSTDIR="%cd%\boost_1_79_0"
     SET CURRENTDIR="%cd%"
-    dir "%CURRENTDIR%"
-    dir "%BOOSTDIR%"
+    echo dir "%CURRENTDIR%"
+    echo dir "%BOOSTDIR%"
 
 
     curl -L https://github.com/Blosc/c-blosc/archive/refs/tags/v1.21.5.zip -o v1.21.5.zip
