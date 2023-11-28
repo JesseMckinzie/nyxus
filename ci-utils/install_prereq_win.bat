@@ -56,21 +56,6 @@ if "%BUILD_Z5_DEP%" == "1" (
     xcopy /E /I /y boost ..\local_install\include\boost
     popd
 
-    SET BOOSTDIR="%cd%\boost_1_79_0"
-    SET CURRENTDIR="%cd%"
-
-    echo "local_install contents:"
-    dir local_install
-
-    echo "local_install/include contents:"
-    dir local_install/include
-
-    echo "local_install/lib contents:"
-    dir local_install/lib 
-    
-
-
-
     curl -L https://github.com/Blosc/c-blosc/archive/refs/tags/v1.21.5.zip -o v1.21.5.zip
     tar -xf v1.21.5.zip
     pushd c-blosc-1.21.5
