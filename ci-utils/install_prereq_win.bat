@@ -57,8 +57,8 @@ if "%BUILD_Z5_DEP%" == "1" (
 
     SET BOOSTDIR="%cd%\boost_1_79_0"
     SET CURRENTDIR="%cd%"
-    echo dir "%CURRENTDIR%"
-    echo dir "%BOOSTDIR%"
+
+    echo dir local_install
 
 
     curl -L https://github.com/Blosc/c-blosc/archive/refs/tags/v1.21.5.zip -o v1.21.5.zip
@@ -130,7 +130,7 @@ pushd arrow-apache-arrow-13.0.0
 pushd cpp
 mkdir build
 pushd build
-cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/ -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON -DBOOST_ROOT="%_ROOTDIR%/local_install/boost_1_79_0" -DBOOST_INCLUDEDIR="%_ROOTDIR%/local_install/include/boost"
+cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/ -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON -DBOOST_ROOT="%_ROOTDIR%/local_install/include/boost" -DBOOST_INCLUDEDIR="%_ROOTDIR%/local_install/include/boost"
 cmake --build . --config Release
 popd 
 popd
