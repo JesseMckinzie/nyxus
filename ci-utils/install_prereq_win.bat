@@ -139,7 +139,7 @@ pushd arrow-apache-arrow-13.0.0
 pushd cpp
 mkdir build
 pushd build
-cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/ -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON -DBOOST_ROOT=D:/a/nyxus/nyxus/boost_1_79_0
+cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../../../local_install/ -DCMAKE_PREFIX_PATH=../../../local_install/ -DARROW_PARQUET=ON -DARROW_WITH_SNAPPY=ON -DBOOST_ROOT=%_ROOTDIR%/boost_1_79_0
 cmake --build . --config Release --target install --parallel 4
 popd 
 popd
