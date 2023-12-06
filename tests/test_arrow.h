@@ -278,7 +278,7 @@ void test_arrow() {
     ASSERT_TRUE(are_tables_equal(*results_table, *features_table));
 
 
-    auto is_deleted = fs::remove(outputPath);
+    auto is_deleted = fs::remove_all(temp);
 
     if(!is_deleted) {
         FAIL() << "Error deleting arrow file." << std::endl;
@@ -344,7 +344,7 @@ void test_parquet() {
     ASSERT_TRUE(are_tables_equal(*results_table, *features_table));
 
 
-    auto is_deleted = fs::remove(outputPath);
+    auto is_deleted = fs::remove_all(temp);
 
     if(!is_deleted) {
         FAIL() << "Error deleting arrow file." << std::endl;
