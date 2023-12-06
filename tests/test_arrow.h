@@ -221,7 +221,13 @@ bool are_tables_equal(const arrow::Table& table1, const arrow::Table& table2) {
 
 void test_arrow() {
 
-    auto temp = fs::temp_directory_path();
+    auto temp = fs::temp_directory_path()/"nyxus_temp/";
+
+    if(!fs::exists(temp)) {
+        auto created = fs::create_directory(temp);
+    }
+
+    fs::permissions(temp, fs::perms::all);
 
     std::string outputPath = temp.u8string() + "NyxusFeatures.arrow";
 
@@ -281,8 +287,14 @@ void test_arrow() {
 
 void test_parquet() {
 
-    auto temp = fs::temp_directory_path();
+    auto temp = fs::temp_directory_path()/"nyxus_temp/";
 
+    if(!fs::exists(temp)) {
+        auto created = fs::create_directory(temp);
+    }
+
+    fs::permissions(temp, fs::perms::all);
+    
     std::string outputPath = temp.u8string() + "NyxusFeatures.parquet";
 
     auto arrow_stream = ArrowOutputStream();
