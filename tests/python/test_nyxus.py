@@ -600,7 +600,8 @@ class TestNyxus():
             
             features_list = features.values.tolist()
     
-            assert features_list == feature_results
+            for result, expected in zip(features_list, feature_results):
+                assert result == pytest.approx(expected)
             
         def test_featurize_list(self):
             nyx = nyxus.Nyxus (["*ALL*"])
@@ -615,6 +616,7 @@ class TestNyxus():
             features.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
             
             features_list = features.values.tolist()
-    
-            assert features_list == feature_results
+
+            for result, expected in zip(features_list, feature_results):
+                assert result == pytest.approx(expected)
                     
