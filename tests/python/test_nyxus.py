@@ -598,10 +598,9 @@ class TestNyxus():
             
             features.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
             
-            features_list = features.values.tolist()
-    
-            for result, expected in zip(features_list, feature_results):
-                assert result == pytest.approx(expected)
+            expected = pd.DataFrame.from_dict(feature_results)
+            
+            assert features.equals(expected)
             
         def test_featurize_list(self):
             nyx = nyxus.Nyxus (["*ALL*"])
@@ -615,8 +614,15 @@ class TestNyxus():
             
             features.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
             
-            features_list = features.values.tolist()
+            expected = pd.DataFrame.from_dict(feature_results)
+            
+            assert features.equals(expected)
+            
+            '''
+            features_list = features.to_dict()
+            
+            print(features_list)
 
             for result, expected in zip(features_list, feature_results):
                 assert result == pytest.approx(expected)
-                    
+            '''
