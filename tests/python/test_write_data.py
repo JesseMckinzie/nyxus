@@ -22,7 +22,7 @@ def write_test_data(path: str):
                 bw.shape = int_image.shape[:2]
                 print(bw.shape)
                 bw.dtype = np.uint8
-
+                print(int_image[:,:])
                 bw[:] = int_image[:, :]
         
         # write segmentation image
@@ -33,6 +33,5 @@ def write_test_data(path: str):
                 print(bw.shape)
                 bw.dtype = np.uint8
                 
-
-                bw[:] = int_image[:, :]
-
+                print(seg_image[:,:])
+                bw[:] = seg_image[:, :]
