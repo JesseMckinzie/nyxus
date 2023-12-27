@@ -50,6 +50,8 @@ class TestNyxus():
             
             features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')
             
+            assert 0 == 1
+            
             features.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
             
             print(features.to_dict())
