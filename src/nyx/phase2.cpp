@@ -132,7 +132,7 @@ namespace Nyxus
 
 				
 				std::cout << "--------------------------" << std::endl;
-				*/
+				
 				std::cout << "dataL: ";
 				for (const auto& data: dataL) {
 					std::cout << data << " ";
@@ -142,6 +142,7 @@ namespace Nyxus
 				std::cout << "--------------------------" << std::endl;
 				std::cout << "--------------------------" << std::endl;
 				std::cout << std::endl;
+				*/
 
 				// Iterate pixels
 				for (unsigned long i = 0; i < tileSize; i++)
