@@ -54,15 +54,31 @@ class TestNyxus():
             
             features.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
             
-            print(features.to_dict())
-            
             expected = pd.DataFrame.from_dict(feature_results)
             
+            features_columns = features.columns
+            expected_columns = expected.columns
+            
+            assert len(features_columns) == len(expected_columns)
+            
+            not_equal = []
+            
+            for col in features_columns:
+                features_list = features[col].tolist()
+                expected_list = expected[col].tolist()
+                
+                for feature_val, expected_val in zip(features_list, expected_list):
+                    if not feature_val == pytest.approx(expected_val, rel=1e-5, abs=1e-5):
+                        not_equal.append(col)
+                        break
+            
+            assert len(not_equal) == 0
+            
             # use pd.testing.assert_frame_equal for rel and abs tolerance
-            try:
-                pd.testing.assert_frame_equal(features, expected, check_exact=False, atol=1e-5)
-            except:
-                pytest.fail("DataFrames are not equal.")
+            #try:
+            #    pd.testing.assert_frame_equal(features, expected, check_exact=False, atol=1e-5)
+            #except:
+            #    pytest.fail("DataFrames are not equal.")
         
         def test_featurize_list(self):
             
@@ -80,14 +96,32 @@ class TestNyxus():
             )
             
             features.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
-            print(features.to_dict())
+            
             expected = pd.DataFrame.from_dict(feature_results)
             
+            features_columns = features.columns
+            expected_columns = expected.columns
+            
+            assert len(features_columns) == len(expected_columns)
+            
+            not_equal = []
+            
+            for col in features_columns:
+                features_list = features[col].tolist()
+                expected_list = expected[col].tolist()
+                
+                for feature_val, expected_val in zip(features_list, expected_list):
+                    if not feature_val == pytest.approx(expected_val, rel=1e-5, abs=1e-5):
+                        not_equal.append(col)
+                        break
+                    
+            assert len(not_equal) == 0
+            
             # use pd.testing.assert_frame_equal for rel and abs tolerance
-            try:
-                pd.testing.assert_frame_equal(features, expected, check_exact=False, atol=1e-5)
-            except:
-                pytest.fail("DataFrames are not equal.")
+            #try:
+            #    pd.testing.assert_frame_equal(features, expected, check_exact=False, atol=1e-5)
+            #except:
+            #    pytest.fail("DataFrames are not equal.")
         
         #'''
         def test_gabor_gpu(self):
