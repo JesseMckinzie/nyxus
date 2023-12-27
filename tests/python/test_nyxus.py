@@ -50,7 +50,7 @@ class TestNyxus():
             
             features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')
             
-            assert 0 == 1
+            #assert 0 == 1
             
             features.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
             
@@ -74,13 +74,13 @@ class TestNyxus():
             assert nyx is not None
             
             features = nyx.featurize_files(
-                [data_path + 'int/p0_y1_r1_c0.ome.tif', data_path + 'int/p0_y1_r1_c1.ome.tif'],
-                [data_path + 'seg/p0_y1_r1_c0.ome.tif', data_path + 'seg/p0_y1_r1_c1.ome.tif'],
+                [data_path + 'int/p0_y1_r1_c0.tiff', data_path + 'int/p0_y1_r1_c1.tiff'],
+                [data_path + 'seg/p0_y1_r1_c0.tiff', data_path + 'seg/p0_y1_r1_c1.tiff'],
                 single_roi=False,
             )
             
             features.replace([np.inf, -np.inf, np.nan], 0, inplace=True)
-            
+            print(features.to_dict())
             expected = pd.DataFrame.from_dict(feature_results)
             
             # use pd.testing.assert_frame_equal for rel and abs tolerance
