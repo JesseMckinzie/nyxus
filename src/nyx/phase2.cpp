@@ -121,6 +121,25 @@ namespace Nyxus
 				// Get ahold of tile's pixel buffer
 				auto dataI = theImLoader.get_int_tile_buffer(),
 					dataL = theImLoader.get_seg_tile_buffer();
+				
+				std::cout << "------  images: ----------" << std::endl;
+
+				std::cout << "dataI: ";
+				for (const auto& data: dataI) {
+					std::cout << data << " ";
+				} std::cout << std::endl;
+
+				/*
+				std::cout << "--------------------------" << std::endl;
+				std::cout << "dataL: ";
+				for (const auto& data: dataL) {
+					std::cout << data << " ";
+				} std::cout << std::endl;
+				*/
+
+				std::cout << "--------------------------" << std::endl;
+				std::cout << "--------------------------" << std::endl;
+				std::cout << std::endl;
 
 				// Iterate pixels
 				for (unsigned long i = 0; i < tileSize; i++)
