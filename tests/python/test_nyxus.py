@@ -71,6 +71,8 @@ class TestNyxus():
                     if not feature_val == pytest.approx(expected_val, rel=1e-5, abs=1e-5):
                         not_equal.append(col)
                         break
+                    
+            print(not_equal)
             
             assert len(not_equal) == 0
             
@@ -90,8 +92,8 @@ class TestNyxus():
             assert nyx is not None
             
             features = nyx.featurize_files(
-                [data_path + 'int/p0_y1_r1_c0.tiff', data_path + 'int/p0_y1_r1_c1.tiff'],
-                [data_path + 'seg/p0_y1_r1_c0.tiff', data_path + 'seg/p0_y1_r1_c1.tiff'],
+                [data_path + 'int/p0_y1_r1_c0.ome.tif', data_path + 'int/p0_y1_r1_c1.ome.tif'],
+                [data_path + 'seg/p0_y1_r1_c0.ome.tif', data_path + 'seg/p0_y1_r1_c1.ome.tif'],
                 single_roi=False,
             )
             
@@ -114,6 +116,8 @@ class TestNyxus():
                     if not feature_val == pytest.approx(expected_val, rel=1e-5, abs=1e-5):
                         not_equal.append(col)
                         break
+                    
+            print(not_equal)
                     
             assert len(not_equal) == 0
             
