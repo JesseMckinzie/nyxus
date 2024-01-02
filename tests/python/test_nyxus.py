@@ -45,7 +45,7 @@ class TestNyxus():
             
             data_path = path + '/data/'
             
-            nyx = nyxus.Nyxus (["*ALL*"])
+            nyx = nyxus.Nyxus (["*ALL*"], n_feature_calc_threads=1)
             assert nyx is not None
             
             features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')
@@ -88,7 +88,7 @@ class TestNyxus():
             
             data_path = path + '/data/'
             
-            nyx = nyxus.Nyxus (["*ALL*"])
+            nyx = nyxus.Nyxus (["*ALL*"], n_feature_calc_threads=1)
             assert nyx is not None
             
             features = nyx.featurize_files(
