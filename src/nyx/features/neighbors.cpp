@@ -242,8 +242,7 @@ void NeighborsFeature::manual_reduce()
 				continue;
 
 			// Make sure that the other ROI's pixel cloud is non-empty
-			if (r2.contour.size() == 0)
-				continue;
+			if (r2.contour.size() == 0)				continue;
 
 			// Iterate r1's outer pixels
 			double mind = r1.contour[0].min_sqdist(r2.contour);
