@@ -118,6 +118,13 @@ class TestNyxus():
                         break
                     
             print(not_equal)
+            
+            for ne in not_equal:
+                print('-----' + str(ne) + 'result ---------')
+                print(features[ne])
+                print('-----' + str(ne) + 'expected ---------')
+                print(expected[ne])
+                print('-------------------------------------')
                     
             assert len(not_equal) == 0
             
