@@ -121,9 +121,9 @@ class TestNyxus():
             
             for ne in not_equal:
                 print('-----' + str(ne) + 'result ---------')
-                print(features[ne])
+                print(features[ne].tolist())
                 print('-----' + str(ne) + 'expected ---------')
-                print(expected[ne])
+                print(expected[ne].tolist())
                 print('-------------------------------------')
                     
             assert len(not_equal) == 0
