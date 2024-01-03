@@ -128,7 +128,7 @@ class TestNyxus():
                 result = []
                 
                 for i in range(len(features[ne].tolist())):
-                    result[i] = features[ne].tolist()[i] - expected[ne].tolist()[i]
+                    result.append(features[ne].tolist()[i] - expected[ne].tolist()[i])
                 print(result)
                 print('-------------------------------------')
                     
