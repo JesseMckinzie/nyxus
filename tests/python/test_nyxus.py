@@ -124,6 +124,12 @@ class TestNyxus():
                 print(features[ne].tolist())
                 print('-----' + str(ne) + 'expected ---------')
                 print(expected[ne].tolist())
+                print ('------ diff ------------------' )
+                result = []
+                
+                for i in range(len(features[ne].tolist())):
+                    result[i] = features[ne].tolist()[i] - expected[ne].tolist()[i]
+                print(result)
                 print('-------------------------------------')
                     
             assert len(not_equal) == 0
