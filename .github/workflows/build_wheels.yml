@@ -12,7 +12,7 @@ jobs:
       MACOSX_DEPLOYMENT_TARGET: "10.15"
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-12, windows-latest]
+        os: [ubuntu-20.04]
         cibw_archs: ["auto64"]
         cibw_build: ["cp38-*", "cp39-*", "cp310-*", "cp311-*"]
 
@@ -50,6 +50,13 @@ jobs:
                                    bash ci-utils/install_arrow_yum.sh &&
                                    bash ci-utils/install_prereq_linux.sh --build_arrow no &&
                                    mkdir -p /tmp/nyxus_bld &&
+                                   yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo &&
+                                   yum clean all &&
+                                   yum -y install cuda-toolkit &&
+                                   ls -al /usr/local &&
+                                   export PATH=$PATH:/usr/local/cuda/bin &&
+                                   nvcc --version &&
+                                   export CUDA11=1 &&
                                    cp -r local_install /tmp/nyxus_bld
           CIBW_BEFORE_ALL_WINDOWS: ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install
