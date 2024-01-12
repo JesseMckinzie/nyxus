@@ -47,7 +47,7 @@ endif()
 option(USE_CUDA11 "CUDA 11 Build" OFF)
 option(USE_CUDA12 "CUDA 12 Build" ON)
 if (USE_CUDA11 OR USE_CUDA12)
-
+	set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
 
 	if (NOT(CMAKE_CUDA_COMPILER) OR NOT(CUDAToolkit_FOUND))
 		message(FATAL_ERROR "Unable to find CUDA compiler.")
