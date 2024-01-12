@@ -345,7 +345,7 @@ if(USE_DCMTK)
 	endif()
 endif()
 
-if(USEGPU OR CUDA11 OR CUDA12)
+if(USEGPU OR USE_CUDA11 OR USE_CUDA12)
 	include_directories("${CUDAToolkit_INCLUDE_DIRS}")
 	set(GPU_SOURCE_FILES
         src/nyx/gpu/gabor.cu
