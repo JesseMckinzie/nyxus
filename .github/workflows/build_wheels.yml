@@ -53,6 +53,7 @@ jobs:
                                    ls -al /usr/local &&
                                    export PATH=$PATH:/usr/local/cuda/bin &&
                                    nvcc --version &&
+                                   echo cuda path is &&
                                    ls /usr/local/cuda/ &&
                                    bash ci-utils/install_arrow_yum.sh &&
                                    bash ci-utils/install_prereq_linux.sh --build_arrow no &&
