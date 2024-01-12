@@ -34,8 +34,8 @@ class TestNyxus():
                 os.remove('NyxusFeatures.parquet')
             except:
                 print('No .parquet file to delete')
-            
 
+        @pytest.mark.gpu
         def test_gabor_gpu(self):
             # cpu gabor
             cpu_nyx = nyxus.Nyxus(["GABOR"])
