@@ -48,7 +48,7 @@ option(USE_CUDA11 "CUDA 11 Build" ON)
 option(USE_CUDA12 "CUDA 12 Build" OFF)
 if (USE_CUDA11 OR USE_CUDA12)
 	set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
-	include_directories("${CUDA_INCLUDE_DIRS}")
+	include_directories("/usr/local/cuda/include")
 
 	if (NOT(CMAKE_CUDA_COMPILER) OR NOT(CUDAToolkit_FOUND))
 		message(FATAL_ERROR "Unable to find CUDA compiler.")
@@ -345,7 +345,7 @@ if(USE_DCMTK)
 	endif()
 endif()
 
-if(USEGPU)
+if(USEGPU OR USE_CUDA11 OR USE_CUDA12)
 	include_directories("${CUDAToolkit_INCLUDE_DIRS}")
 	set(GPU_SOURCE_FILES
         src/nyx/gpu/gabor.cu
