@@ -47,16 +47,17 @@ jobs:
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld 
           CIBW_BEFORE_ALL_LINUX:  yum install -y llvm libevent-devel openssl-devel && 
-                                   bash ci-utils/install_arrow_yum.sh &&
-                                   bash ci-utils/install_prereq_linux.sh --build_arrow no &&
-                                   mkdir -p /tmp/nyxus_bld &&
                                    yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo &&
                                    yum clean all &&
                                    yum -y install cuda-toolkit &&
                                    ls -al /usr/local &&
                                    export PATH=$PATH:/usr/local/cuda/bin &&
                                    nvcc --version &&
-                                   export CUDA11=1 &&
+                                   ls /usr/local/cuda/
+                                   bash ci-utils/install_arrow_yum.sh &&
+                                   bash ci-utils/install_prereq_linux.sh --build_arrow no &&
+                                   mkdir -p /tmp/nyxus_bld &&
+                                   export CUDA12=1 &&
                                    cp -r local_install /tmp/nyxus_bld
           CIBW_BEFORE_ALL_WINDOWS: ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install

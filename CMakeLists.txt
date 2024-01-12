@@ -45,7 +45,7 @@ if (USEGPU)
 endif()
 
 option(USE_CUDA11 "CUDA 11 Build" OFF)
-option(USE_CUDA12 "CUDA 12 Build" OFF)
+option(USE_CUDA12 "CUDA 12 Build" ON)
 if (USE_CUDA11 OR USE_CUDA12)
 
 
