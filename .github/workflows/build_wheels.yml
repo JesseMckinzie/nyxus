@@ -46,7 +46,7 @@ jobs:
                                    bash ci-utils/install_prereq_linux.sh --build_arrow yes &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld 
-          CIBW_BEFORE_ALL_LINUX:  yum install -y llvm libevent-devel openssl-devel && 
+          CIBW_BEFORE_ALL_LINUX:  yum install -y llvm libevent-devel openssl-devel wget && 
                                    wget https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-toolkit-11-3-11.3.1-1.x86_64.rpm &&
                                    yum clean all &&
                                    yum -y localinstall cuda-toolkit-11-3-11.3.1-1.x86_64.rpm &&
