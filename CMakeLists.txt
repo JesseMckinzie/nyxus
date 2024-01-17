@@ -44,9 +44,10 @@ if (USEGPU)
 	endif()
 endif()
 
-option(USE_CUDA11 "CUDA 11 Build" ON)
+option(USE_CUDA11 "CUDA 11 Build" OFF)
 option(USE_CUDA12 "CUDA 12 Build" OFF)
 if (USE_CUDA11 OR USE_CUDA12)
+	message(FATAL_ERROR "USING CUDA 11 OR 12")
 	set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
 	include_directories("/usr/local/cuda/include")
 
