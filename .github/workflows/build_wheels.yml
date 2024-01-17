@@ -58,7 +58,7 @@ jobs:
                                    bash ci-utils/install_arrow_yum.sh &&
                                    bash ci-utils/install_prereq_linux.sh --build_arrow no &&
                                    mkdir -p /tmp/nyxus_bld &&
-                                   cp -r local_install /tmp/nyxus_bld
+                                   cp -r local_install /tmp/nyxus_bld &&
                                    export CMAKE_ARGS="-DUSE_CUDA11=ON"
           CIBW_BEFORE_ALL_WINDOWS: ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install
