@@ -90,10 +90,19 @@ class CMakeBuild(build_ext):
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-
+    
+def get_name():
+    
+    if len(os.environ.get("CMAKE_ARGS", "")):
+        args = os.environ.get("CMAKE_ARGS", "").split(" ")
+        
+        if "-DUSE_CUDA11" in args or "-DUSE_CUDA12" in args: #check if gpu build is requested
+            return "nyxusgpu"
+    
+    return "nyxus"
 
 setup(
-    name="nyxus",
+    name=get_name(),
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(dict(build_ext=CMakeBuild)),
     author="Andriy Kharchenko",
