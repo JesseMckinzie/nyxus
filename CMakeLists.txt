@@ -345,7 +345,7 @@ endif()
 
 if(USEGPU OR USE_CUDA11 OR USE_CUDA12)
 	#include_directories("${CUDAToolkit_INCLUDE_DIRS}")
-	FindCUDAToolkit()
+
 	set(GPU_SOURCE_FILES
         src/nyx/gpu/gabor.cu
 		src/nyx/gpu/gpu_helpers.cu
