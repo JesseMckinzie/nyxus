@@ -55,7 +55,7 @@ jobs:
                                    nvcc --version &&
                                    echo cuda path is &&
                                    echo ---------- &&
-                                   ls /usr/local/cuda/lib &&
+                                   ls /usr/local/cuda/lib64 &&
                                    echo ---------- &&
                                    ls /usr/local/cuda/ &&
                                    bash ci-utils/install_arrow_yum.sh &&
