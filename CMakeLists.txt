@@ -363,8 +363,8 @@ if(USEGPU OR USE_CUDA11 OR USE_CUDA12)
 		target_compile_options(nyxus_gpu PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-fPIC>)
 	endif()
 	list(APPEND Nyxus_LIBRARIES nyxus_gpu)
-	#list(APPEND Nyxus_LIBRARIES CUDA::cufft)
-	#list(APPEND Nyxus_LIBRARIES CUDA::cudart)
+	list(APPEND Nyxus_LIBRARIES CUDA::cufft)
+	list(APPEND Nyxus_LIBRARIES CUDA::cudart)
 
 
 	if(BUILD_LIB)
