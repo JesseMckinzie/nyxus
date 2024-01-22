@@ -101,7 +101,7 @@ def get_name():
     return "nyxus"
 
 setup(
-    name=get_name(),
+    name="nyxus",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(dict(build_ext=CMakeBuild)),
     author="Andriy Kharchenko",
