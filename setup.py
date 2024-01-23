@@ -96,12 +96,12 @@ def get_name():
     if len(os.environ.get("CMAKE_ARGS", "")):
         args = os.environ.get("CMAKE_ARGS", "").split(" ")
         if "-DUSE_CUDA11=ON" in args or "-DUSE_CUDA12=ON" in args: #check if gpu build is requested
-            return "nyxusgpu"
+            return "nyxus-gpu"
     
     return "nyxus"
 
 setup(
-    name="nyxus",
+    name=get_name(),
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(dict(build_ext=CMakeBuild)),
     author="Andriy Kharchenko",
@@ -116,6 +116,7 @@ setup(
     test_suite="tests",
     zip_safe=False,
     python_requires=">=3.8",
+    classifiers=get_classifiers(),
     install_requires=["numpy", "pandas"],
     tests_require = ["pyarrow"]
 )
