@@ -116,7 +116,6 @@ setup(
     test_suite="tests",
     zip_safe=False,
     python_requires=">=3.8",
-    classifiers=get_classifiers(),
     install_requires=["numpy", "pandas"],
     tests_require = ["pyarrow"]
 )
