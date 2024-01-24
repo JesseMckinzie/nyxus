@@ -95,8 +95,10 @@ def get_name():
     
     if len(os.environ.get("CMAKE_ARGS", "")):
         args = os.environ.get("CMAKE_ARGS", "").split(" ")
-        if "-DUSE_CUDA11=ON" in args or "-DUSE_CUDA12=ON" in args: #check if gpu build is requested
-            return "nyxus-gpu"
+        if "-DUSE_CUDA11=ON" in args: #check if gpu build is requested
+            return "nyxus-cuda11"
+        if "-DUSE_CUDA12=ON" in args:
+            return "nyxus-cuda12"
     
     return "nyxus"
 
