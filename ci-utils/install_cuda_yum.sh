@@ -7,10 +7,10 @@
 
 yum clean all
 
-curl -L https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-toolkit-12-3-12.3.1-1.x86_64.rpm -o cuda-toolkit-12-3-12.3.1-1.x86_64.rpm
+curl -L https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-11-3-11.3.1-1.x86_64.rpm -o cuda-11-3-11.3.1-1.x86_64.rpm
 
 echo "Installing CUDA version 11.3"
-yum -y localinstall cuda-toolkit-12-3-12.3.1-1.x86_64.rpm
+yum -y localinstall cuda-11-3-11.3.1-1.x86_64.rpm
 
 #yum -y install cuda-toolkit-11-3-1-11.3.1
 
