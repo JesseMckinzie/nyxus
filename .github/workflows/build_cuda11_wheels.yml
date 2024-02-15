@@ -23,11 +23,6 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         name: Add MSVS Path
 
-      - uses: Jimver/cuda-toolkit@v0.2.14
-        id: cuda-toolkit
-        with:
-          cuda: '12.3.2'
-
       - uses: actions/setup-python@v4
         name: Install Python
         with:
@@ -36,6 +31,11 @@ jobs:
       - name: Install cibuildwheel
         run: |
           python -m pip install cibuildwheel==2.16.2 delvewheel wheel
+
+      - uses: Jimver/cuda-toolkit@v0.2.14
+        id: cuda-toolkit
+        with:
+          cuda: '11.3.1'
 
       - name: Building wheels 
         run: |
