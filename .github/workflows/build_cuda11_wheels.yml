@@ -23,6 +23,15 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         name: Add MSVS Path
 
+      steps:
+      - uses: Jimver/cuda-toolkit@v0.2.14
+        id: cuda-toolkit
+        with:
+          cuda: '12.3.2'
+        run: echo "Installed cuda version is: ${{steps.cuda-toolkit.outputs.cuda}}"
+        run: echo "Cuda install location: ${{steps.cuda-toolkit.outputs.CUDA_PATH}}"
+         run: nvcc -V
+
       - uses: actions/setup-python@v4
         name: Install Python
         with:
@@ -46,7 +55,7 @@ jobs:
                                    bash ci-utils/install_prereq_linux.sh --build_arrow no &&
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
-          CIBW_BEFORE_ALL_WINDOWS: ci-utils\install_cuda_windows.bat &&
+          CIBW_BEFORE_ALL_WINDOWS: nvcc -V &&
                                    ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install
           CIBW_ENVIRONMENT_LINUX: LD_LIBRARY_PATH="/tmp/nyxus_bld/local_install/lib:/tmp/nyxus_bld/local_install/lib64:/usr/local/cuda/targets/x86_64-linux/lib:$LD_LIBRARY_PATH" CPATH="/usr/local/cuda/targets/x86_64-linux/include:$CPATH" PATH="/usr/local/cuda/bin:$PATH" ON_GITHUB="TRUE" NYXUS_DEP_DIR="/tmp/nyxus_bld/local_install" CXXFLAGS="-I /usr/local/cuda/include" CMAKE_ARGS="-DUSEGPU=ON -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -DCMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES=/usr/local/cuda/include" 
