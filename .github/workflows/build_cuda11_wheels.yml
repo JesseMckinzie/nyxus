@@ -23,7 +23,6 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         name: Add MSVS Path
 
-      steps:
       - uses: Jimver/cuda-toolkit@v0.2.14
         id: cuda-toolkit
         with:
