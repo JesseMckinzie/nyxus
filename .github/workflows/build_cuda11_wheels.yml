@@ -35,7 +35,7 @@ jobs:
       - uses: Jimver/cuda-toolkit@v0.2.14
         id: cuda-toolkit
         with:
-          cuda: '11.0.167'
+          cuda: '12.3.2'
 
       - name: Building wheels 
         run: |
