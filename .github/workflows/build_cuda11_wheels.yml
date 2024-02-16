@@ -24,6 +24,8 @@ jobs:
         name: Add MSVS Path
 
       - name: Install CUDA
+        env: 
+          visual_studio: "Visual Studio 17 2022"
         shell: powershell
         run: .\ci-utils\install_cuda_windows.ps1
 
