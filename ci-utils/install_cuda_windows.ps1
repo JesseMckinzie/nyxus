@@ -70,7 +70,7 @@ $CUDA_PACKAGES_IN = @(
 ## -------------------
 
 # Get the cuda version from the environment as env:cuda.
-$CUDA_VERSION_FULL = "11.6.1"
+$CUDA_VERSION_FULL = "11.8.0"
 # Make sure CUDA_VERSION_FULL is set and valid, otherwise error.
 
 # Validate CUDA version, extracting components via regex
