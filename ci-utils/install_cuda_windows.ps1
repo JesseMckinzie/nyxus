@@ -1,4 +1,4 @@
-# From: https://github.com/ptheywood/cuda-cmake-github-actions/tree/master
+# From: https://github.com/ptheywood/cuda-cmake-github-actions
 
 ## -------------------
 ## Constants
