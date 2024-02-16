@@ -62,6 +62,7 @@ $CUDA_PACKAGES_IN = @(
     "nvrtc_dev";
     "cudart";
     "thrust";
+    "cufft";
 )
 
 ## -------------------
