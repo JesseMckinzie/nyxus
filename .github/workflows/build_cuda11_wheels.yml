@@ -24,12 +24,15 @@ jobs:
         name: Add MSVS Path
 
       - name: Install CUDA
+        if: runner.os == 'Windows'
         env: 
+          cuda: "11.8.0"
           visual_studio: "Visual Studio 17 2022"
         shell: powershell
         run: .\ci-utils\install_cuda_windows.ps1
 
       - name: nvcc check
+        if: runner.os == 'Windows'
         shell: powershell
         run: |
           nvcc -V

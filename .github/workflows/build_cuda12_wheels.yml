@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [windows-latest]
         cibw_archs: ["auto64"]
         cibw_build: ["cp38-*", "cp39-*", "cp310-*", "cp311-*"]
 
@@ -27,6 +27,23 @@ jobs:
         name: Install Python
         with:
           python-version: '3.9'
+
+      - name: Install CUDA
+        if: runner.os == 'Windows'
+        env: 
+          cuda: "12.0.0"
+          visual_studio: "Visual Studio 17 2022"
+        shell: powershell
+        run: .\ci-utils\install_cuda_windows.ps1
+
+      - name: nvcc check
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          nvcc -V
+          ls $env:CUDA_PATH
+          ls $env:CUDA_PATH\bin
+          ls $env:CUDA_PATH\include
  
       - name: Install cibuildwheel
         run: |
@@ -47,7 +64,9 @@ jobs:
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
           CIBW_ENVIRONMENT_LINUX: LD_LIBRARY_PATH="/tmp/nyxus_bld/local_install/lib:/tmp/nyxus_bld/local_install/lib64:/usr/local/cuda/targets/x86_64-linux/lib:$LD_LIBRARY_PATH" CPATH="/usr/local/cuda/targets/x86_64-linux/include:$CPATH" PATH="/usr/local/cuda/bin:$PATH" ON_GITHUB="TRUE" NYXUS_DEP_DIR="/tmp/nyxus_bld/local_install" CXXFLAGS="-I /usr/local/cuda/include" CMAKE_ARGS="-DUSEGPU=ON -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -DCMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES=/usr/local/cuda/include" 
+          CIBW_ENVIRONMENT_WINDOWS: PATH="$TEMP\\nyxus\\bin;$PATH" ON_GITHUB="TRUE" NYXUS_DEP_DIR="C:\\TEMP\\nyxus_bld\\local_install" CMAKE_ARGS="-DUSEGPU=ON"
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: auditwheel repair --exclude=libcufft.so --exclude=libcufft.so.11 --exclude=libcufft.so.11.0.12.1  --exclude=libcudart.so --exclude=libcudart.so.12 --exclude=libcudart.so.12.3.101  -w {dest_dir} {wheel}
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
           CIBW_TEST_REQUIRES: numpy pandas pyarrow pytest bfio
           CIBW_TEST_COMMAND: pytest {project}/tests/python -m "not skip_ci"
