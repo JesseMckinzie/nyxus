@@ -32,6 +32,21 @@ or
 conda install nyxus -c conda-forge
 ```
 
+To install CUDA enabled wheels from pip, the following two method can be used based on the CUDA version installed on the machine. For machines using CUDA major version 11, the wheels can be installed
+with 
+
+```
+pip install nyxus-cuda11x
+```
+
+For machines with CUDA major version 12, use
+
+```
+pip install nyxus-cuda12x
+```
+
+While the pip package names differ from the non-gpu version the import name is still the same, i.e., `import nyxus` in a python script.
+
 Usage is very straightforward. Given `intensities` and `labels` folders, Nyxus pairs up intensity-label images and extracts features from all of them. A summary of the available feature are [listed below](#available-features).
 
 ```python 
