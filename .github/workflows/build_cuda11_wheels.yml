@@ -73,7 +73,7 @@ jobs:
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
           CIBW_TEST_REQUIRES: numpy pandas pyarrow pytest bfio
           CIBW_TEST_COMMAND: python3 -m pip install nvidia-pyindex &&
-                             py -m pip install nvidia-cuda-runtime-cu11 &&
+                             python3 -m pip install nvidia-cuda-runtime-cu11 &&
                              nvcc -V && 
                              pytest {project}/tests/python -m "not skip_ci"
 
