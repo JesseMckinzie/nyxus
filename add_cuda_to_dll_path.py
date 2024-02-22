@@ -11,4 +11,5 @@ def add_cuda_to_path():
         if "cuda" in folder.lower() or "tensorrt" in folder.lower():
             os.add_dll_directory(folder)
             
-add_cuda_to_path()
+if __name__ == "__main__":
+    add_cuda_to_path()
