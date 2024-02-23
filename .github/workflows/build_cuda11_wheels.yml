@@ -64,6 +64,7 @@ jobs:
                                    mkdir -p /tmp/nyxus_bld &&
                                    cp -r local_install /tmp/nyxus_bld
           CIBW_BEFORE_ALL_WINDOWS: nvcc -V &&
+                                   python test_path.py &&
                                    echo %PATH% &&
                                    ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\nyxus_bld\local_install
