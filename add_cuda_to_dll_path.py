@@ -1,10 +1,9 @@
 import sys
 import os
+from pathlib import Path
 import shutil
 
-path = str(sys.executable)
-
-path = os.path.dirname(path)
+path = str(Path(__file__).parent.resolve())
 
 if not path.endswith('\\'):
     path += '\\'
