@@ -14,4 +14,4 @@ if not path.endswith('\\'):
     
 print(path + 'bin')
 
-#shutil.copytree('C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.8\\bin', path + 'bin')
+shutil.copytree('C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.8\\bin', path + 'bin')
