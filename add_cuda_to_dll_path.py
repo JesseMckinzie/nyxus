@@ -12,4 +12,4 @@ path = os.path.dirname(path)
 if not path.endswith('\\'):
     path += '\\'
 
-shutil.copyfile('C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.8\\bin', path)
+shutil.copytree('C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.8\\bin', path)
