@@ -1,15 +1,5 @@
-from .nyxus import Nyxus
-from .nyxus import Nyxus3D
-from .nyxus import Nested
-from .functions import gpu_is_available, get_gpu_properties
-
-from . import _version
-__version__ = _version.get_versions()['version']
-
-import os
-
 def add_cuda_to_path():
-    if os.name != "nt" or not gpu_is_available():
+    if os.name != "nt":
         return
     path = os.getenv("PATH")
     if not path:
@@ -20,4 +10,14 @@ def add_cuda_to_path():
             os.add_dll_directory(folder)
             
 add_cuda_to_path()
+
+from .nyxus import Nyxus
+from .nyxus import Nyxus3D
+from .nyxus import Nested
+from .functions import gpu_is_available, get_gpu_properties
+
+from . import _version
+__version__ = _version.get_versions()['version']
+
+import os
 
