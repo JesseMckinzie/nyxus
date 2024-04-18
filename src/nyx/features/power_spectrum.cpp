@@ -9,6 +9,7 @@
 #include "../helpers/helpers.h"
 #include "../helpers/fft.h"
 #include "../helpers/lstsq.h"
+#include "../parallel.h"
 
 using namespace Nyxus;
 
@@ -23,8 +24,38 @@ void PowerSpectrumFeature::calculate(LR& r) {
 
     auto slope = power_spectrum_slope(Im0);
 
-    fvals[0] = slope; 
+    std::cerr << "slope: " << slope << std::endl;
 
+    slope_ = slope; 
+
+}
+
+void PowerSpectrumFeature::parallel_process(std::vector<int>& roi_labels, std::unordered_map <int, LR>& roiData, int n_threads)
+{
+	size_t jobSize = roi_labels.size(),
+		workPerThread = jobSize / n_threads;
+
+	runParallel(PowerSpectrumFeature::parallel_process_1_batch, n_threads, workPerThread, jobSize, &roi_labels, &roiData);
+}
+
+void PowerSpectrumFeature::parallel_process_1_batch(size_t firstitem, size_t lastitem, std::vector<int>* ptrLabels, std::unordered_map <int, LR>* ptrLabelData)
+{
+	// Calculate the feature for each batch ROI item 
+	for (auto i = firstitem; i < lastitem; i++)
+	{
+		// Get ahold of ROI's label and cache
+		int roiLabel = (*ptrLabels)[i];
+		LR& r = (*ptrLabelData)[roiLabel];
+
+		// Skip the ROI if its data is invalid to prevent nans and infs in the output
+		if (r.has_bad_data())
+			continue;
+
+		// Calculate the feature and save it in ROI's csv-friendly buffer 'fvals'
+		PowerSpectrumFeature f;
+		f.calculate(r);
+		f.save_value(r.fvals);
+	}
 }
 
 bool PowerSpectrumFeature::required(const FeatureSet& fs) 
@@ -43,13 +74,18 @@ void PowerSpectrumFeature::reduce (size_t start, size_t end, std::vector<int>* p
 
         fsf.calculate (r);
 
+        for (auto& vec: r.fvals) {
+            for (auto& value: vec) {
+                std::cout << "val: " << value << std::endl;
+            }
+        }
         fsf.save_value (r.fvals);
     }
 }
 
 void PowerSpectrumFeature::save_value(std::vector<std::vector<double>>& feature_vals) {
     
-    feature_vals[(int)Feature2D::POWER_SPECTRUM_SLOPE][0] = fvals[0];
+    feature_vals[(int)Feature2D::POWER_SPECTRUM_SLOPE][0] = slope_;
 
 }
 
@@ -92,7 +128,11 @@ double PowerSpectrumFeature::power_spectrum_slope(const ImageMatrix& Im) {
             std::transform(power.begin(), power.end(), power.begin(), [](double x) { return std::log(x); });
             
             return lstsq(A, power)[0]; // get slope from least squares
+        } else {
+            return 0;
         }
+    } else {
+        return 0;
     }
 }
 
