@@ -467,7 +467,8 @@ namespace Nyxus
 		// Image quality features
 		{"FOCUS_SCORE", Feature2D::FOCUS_SCORE},
 		{"POWER_SPECTRUM_SLOPE", Feature2D::POWER_SPECTRUM_SLOPE},
-		{"SATURATION", Feature2D::SATURATION}
+		{"SATURATION", Feature2D::SATURATION},
+		{"SHARPNESS", Feature2D::SHARPNESS}
 	};
 
 	std::map <std::string, Fgroup2D> UserFacing2dFeaturegroupNames =

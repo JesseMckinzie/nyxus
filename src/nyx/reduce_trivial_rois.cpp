@@ -43,6 +43,7 @@
 #include "features/focus_score.h"
 #include "features/power_spectrum.h"
 #include "features/saturation.h"
+#include "features/sharpness.h"
 
 
 #include "helpers/timing.h"
@@ -309,6 +310,11 @@ namespace Nyxus
 			if (SaturationFeature::required(theFeatureSet)) {
 				STOPWATCH("ImageQuality/Saturation/Rd/#00FFFF", "\t=");
 				runParallel(SaturationFeature::parallel_process_1_batch, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
+			}
+
+			if (SharpnessFeature::required(theFeatureSet)) {
+				STOPWATCH("ImageQuality/Sharpness/Rd/#00FFFF", "\t=");
+				runParallel(SharpnessFeature::parallel_process_1_batch, n_reduce_threads, workPerThread, jobSize, &PendingRoisLabels, &roiData);
 			}
 		}
 		else

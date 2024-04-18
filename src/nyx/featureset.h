@@ -461,6 +461,7 @@ namespace Nyxus
 		FOCUS_SCORE,
 		POWER_SPECTRUM_SLOPE,
 		SATURATION,
+		SHARPNESS,
 
 		_COUNT_
 	};

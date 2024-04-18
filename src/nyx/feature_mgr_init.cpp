@@ -31,6 +31,7 @@
 #include "features/focus_score.h"
 #include "features/power_spectrum.h"
 #include "features/saturation.h"
+#include "features/sharpness.h"
 
 FeatureManager::FeatureManager()
 {
@@ -67,5 +68,6 @@ FeatureManager::FeatureManager()
 	register_feature (new FocusScoreFeature());
 	register_feature (new PowerSpectrumFeature());
 	register_feature (new SaturationFeature());
+	register_feature (new SharpnessFeature());
 
 }

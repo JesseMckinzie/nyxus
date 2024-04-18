@@ -174,6 +174,7 @@ set(SOURCE
 	src/nyx/features/roi_radius.cpp
 	src/nyx/features/rotation.cpp
 	src/nyx/features/saturation.cpp
+	src/nyx/features/sharpness.cpp
 	src/nyx/features/specfunc.cpp
 	src/nyx/features/zernike.cpp
 	src/nyx/features/zernike_nontriv.cpp
