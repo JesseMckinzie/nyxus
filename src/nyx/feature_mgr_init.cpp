@@ -30,6 +30,7 @@
 #include "features/zernike.h"
 #include "features/focus_score.h"
 #include "features/power_spectrum.h"
+#include "features/saturation.h"
 
 FeatureManager::FeatureManager()
 {
@@ -65,5 +66,6 @@ FeatureManager::FeatureManager()
 	register_feature (new PixelIntensityFeatures_3D());
 	register_feature (new FocusScoreFeature());
 	register_feature (new PowerSpectrumFeature());
+	register_feature (new SaturationFeature());
 
 }
