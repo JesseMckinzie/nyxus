@@ -194,7 +194,7 @@ class TestNyxus():
                 else:
                     assert params[key] == pytest.approx(result[key])
 
-        def test_image_quality(self):
+        def test_image_quality_fs(self):
             '''
             Test that ImageQuality class can be imported and will calculated features.
             Numerical tests are in C++ tests
@@ -204,10 +204,155 @@ class TestNyxus():
             
             data_path = path + '/data/'
             
-            nyx = nyxus.ImageQuality (["*ALL_IMQ*"])
+            nyx = nyxus.ImageQuality (["FOCUS_SCORE"])
 
-            assert True
+            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
 
+            assert directory_features.shape[1] > 3
+
+        def test_image_quality_minsat(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["MIN_SATURATION"])
+
+            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
+
+            assert directory_features.shape[1] > 3
+
+        def test_image_quality_maxsat(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["MAX_SATURATION"])
+
+            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
+
+            assert directory_features.shape[1] > 3
+
+        def test_image_quality_pss(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["POWER_SPECTRUM_SLOPE"])
+
+            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
+
+            assert directory_features.shape[1] > 3
+        
+        def test_image_quality_sharp(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["SHARPNESS"])
+
+            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
+
+            assert directory_features.shape[1] > 3
+
+        def test_image_quality_fs_mon(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["FOCUS_SCORE"])
+
+            directory_features = nyx.featurize(tissuenet_int, tissuenet_seg, intensity_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'], label_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'])    
+
+            assert directory_features.shape[1] > 3
+
+        def test_image_quality_minsat_mon(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["MIN_SATURATION"])
+
+            directory_features = nyx.featurize(tissuenet_int, tissuenet_seg, intensity_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'], label_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'])      
+
+            assert directory_features.shape[1] > 3
+
+        def test_image_quality_maxsat_mon(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["MAX_SATURATION"])
+
+            directory_features = nyx.featurize(tissuenet_int, tissuenet_seg, intensity_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'], label_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'])      
+
+            assert directory_features.shape[1] > 3
+
+        def test_image_quality_pss_mon(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["POWER_SPECTRUM_SLOPE"])
+
+            directory_features = nyx.featurize(tissuenet_int, tissuenet_seg, intensity_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'], label_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'])      
+
+            assert directory_features.shape[1] > 3
+        
+        def test_image_quality_sharp_mon(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["SHARPNESS"])
+
+            directory_features = nyx.featurize(tissuenet_int, tissuenet_seg, intensity_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'], label_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'])     
+
+            assert directory_features.shape[1] > 3
 
         def test_set_params(self):
             
