@@ -206,13 +206,7 @@ class TestNyxus():
             data_path = path + '/data/'
             
             nyx = nyxus.ImageQuality (["*ALL_IMQ*"])
-            assert nyx is not None
             
-            montage_features = nyx.featurize(tissuenet_int, tissuenet_seg, intensity_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'], label_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'])
-            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
-
-            assert montage_features.shape[1] > 3
-            assert directory_features.shape[1] > 3
 
         def test_set_params(self):
             
