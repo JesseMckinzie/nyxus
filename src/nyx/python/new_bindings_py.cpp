@@ -354,7 +354,7 @@ py::tuple featurize_montage_imp (
     const std::string output_type="",
     const std::string output_path="")
 {  
-    std::cerr
+    std::cerr << "1" << std::endl;
     // Set the whole-slide/multi-ROI flag
     theEnvironment.singleROI = false;
 
@@ -370,7 +370,7 @@ py::tuple featurize_montage_imp (
     auto label_height = intens_buffer.shape[2];
 
     auto label_nf = intens_buffer.shape[0];
-
+    std::cerr << "2" << std::endl;
 
     if(nf != label_nf) {
          throw std::invalid_argument("The number of intensity (" + std::to_string(nf) + ") and label (" + std::to_string(label_nf) + ") images must be the same.");
@@ -382,10 +382,10 @@ py::tuple featurize_montage_imp (
 
     theEnvironment.intensity_dir = "__NONE__";
     theEnvironment.labels_dir = "__NONE__";
-
+    std::cerr << "3" << std::endl;
     // One-time initialization
     init_feature_buffers();
-
+    std::cerr << "4" << std::endl;
     theResultsCache.clear();
 
     // Process the image sdata
@@ -398,7 +398,7 @@ py::tuple featurize_montage_imp (
 			return SaveOption::saveParquet;
 		} else {return SaveOption::saveBuffer;}
 	}();
-
+    std::cerr << "5" << std::endl;
     int errorCode = processMontage(
         intensity_images,
         label_images,
@@ -408,10 +408,10 @@ py::tuple featurize_montage_imp (
         error_message,
         theEnvironment.saveOption,
         output_path);
-
+    std::cerr << "6" << std::endl;
     if (errorCode)
         throw std::runtime_error("Error #" + std::to_string(errorCode) + " " + error_message + " occurred during dataset processing.");
-
+    std::cerr << "7" << std::endl;
     if (theEnvironment.saveOption == Nyxus::SaveOption::saveBuffer) {
 
         auto pyHeader = py::array(py::cast(theResultsCache.get_headerBuf()));
@@ -425,7 +425,7 @@ py::tuple featurize_montage_imp (
         return py::make_tuple(pyHeader, pyStrData, pyNumData, error_message);
     
     } 
-
+    std::cerr << "8" << std::endl;
     return py::make_tuple(error_message);
 }
 
