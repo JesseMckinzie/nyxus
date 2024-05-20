@@ -1432,7 +1432,7 @@ class ImageQuality:
     def featurize(
         self,
         intensity_images: np.ndarray,
-        label_images: np.ndarray = [],
+        label_images: np.ndarray = np.array([[]]),
         intensity_names: list = [],
         label_names: list = [],
         output_type: Optional[str] = "pandas",
@@ -1476,7 +1476,11 @@ class ImageQuality:
         """
         if (output_type != "" and output_type not in self._valid_output_types):
             raise ValueError(f'Invalid output type: {output_type}. Valid options are: {self._valid_output_types}')
-            
+        
+        # Handle single_roi        
+        if (label_images.size == 0):
+            label_images = np.ones_like(intensity_images)
+
         
         # verify argument types
         if not isinstance(intensity_images, np.ndarray):
