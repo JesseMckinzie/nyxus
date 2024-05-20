@@ -61,7 +61,7 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
           CIBW_TEST_REQUIRES: numpy pandas pyarrow pytest bfio
-          CIBW_TEST_COMMAND: pytest -vv {project}/tests/python -s log_cli=True
+          CIBW_TEST_COMMAND: pytest -vv {project}/tests/python -s
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
