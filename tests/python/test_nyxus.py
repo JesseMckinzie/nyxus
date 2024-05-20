@@ -194,69 +194,6 @@ class TestNyxus():
                 else:
                     assert params[key] == pytest.approx(result[key])
 
-        def test_image_quality_fs(self):
-            '''
-            Test that ImageQuality class can be imported and will calculated features.
-            Numerical tests are in C++ tests
-            '''
-            
-            path = str(pathlib.Path(__file__).parent.resolve())
-            
-            data_path = path + '/data/'
-            
-            nyx = nyxus.ImageQuality (["FOCUS_SCORE"])
-
-            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
-
-            assert directory_features.shape[1] > 3
-
-        def test_image_quality_minsat(self):
-            '''
-            Test that ImageQuality class can be imported and will calculated features.
-            Numerical tests are in C++ tests
-            '''
-            
-            path = str(pathlib.Path(__file__).parent.resolve())
-            
-            data_path = path + '/data/'
-            
-            nyx = nyxus.ImageQuality (["MIN_SATURATION"])
-
-            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
-
-            assert directory_features.shape[1] > 3
-
-        def test_image_quality_maxsat(self):
-            '''
-            Test that ImageQuality class can be imported and will calculated features.
-            Numerical tests are in C++ tests
-            '''
-            
-            path = str(pathlib.Path(__file__).parent.resolve())
-            
-            data_path = path + '/data/'
-            
-            nyx = nyxus.ImageQuality (["MAX_SATURATION"])
-
-            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
-
-            assert directory_features.shape[1] > 3
-
-        def test_image_quality_pss(self):
-            '''
-            Test that ImageQuality class can be imported and will calculated features.
-            Numerical tests are in C++ tests
-            '''
-            
-            path = str(pathlib.Path(__file__).parent.resolve())
-            
-            data_path = path + '/data/'
-            
-            nyx = nyxus.ImageQuality (["POWER_SPECTRUM_SLOPE"])
-
-            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
-
-            assert directory_features.shape[1] > 3
         
         def test_image_quality(self):
             '''
