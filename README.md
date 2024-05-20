@@ -577,6 +577,25 @@ the parent-child map remains the same but the `featurize` result becomes
 
 ```
 
+## Image Quality
+
+Nyxus also provides the ability to determine image qaulity based on specific feature calculations. The image quality
+features are included in the ImageQuality class. This class functions similarly to the Nyxus class: 
+
+``` python
+     
+from nyxus import ImageQuality
+
+int_path = 'path/to/intensity'
+seg_path = 'path/to/segmentation'
+
+imq = ImageQuality(['*ALL_IMQ*'])
+
+features = imq.feature_directory(int_path, seg_path)
+```
+
+where `features` is a pandas DataFrame that is the same as the Nyxus class but with the image quality features. 
+
 ## Building from source
 Nyxus uses `CMake` as the build system and needs a `C++17` supported compiler to build from the source.
 

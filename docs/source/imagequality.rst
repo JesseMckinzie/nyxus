@@ -1,10 +1,25 @@
 Image Quality features
 ======================
 
-Image quality features are available in Nyxus to determine how blurry an image is. 
-These features are available in the `IMAGE_QUALITY` feature group. This group is not included
-in the `ALL` group and must be enabled separately. The following features are in the image quality
-group.
+Image quality features are available in Nyxus in the ImageQuality class to determine how blurry an image is. 
+These features are available in the `IMAGE_QUALITY` feature group. 
+
+The ImageQuality class is used similarly to Nyxus,
+
+.. code-block:: python 
+     
+   from nyxus import ImageQuality
+     
+   int_path = 'path/to/intensity'
+   seg_path = 'path/to/segmentation'
+
+   imq = ImageQuality(['*ALL_IMQ*'])
+
+   features = imq.feature_directory(int_path, seg_path)
+
+The output will be a pandas DataFrame, just like in the Nyxus class.
+
+The following features are included in the ImageQaulity class:
 
 .. list-table::
    :header-rows: 1
