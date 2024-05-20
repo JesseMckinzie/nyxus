@@ -194,8 +194,39 @@ class TestNyxus():
                 else:
                     assert params[key] == pytest.approx(result[key])
 
-        
         def test_image_quality(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["*ALL_IMQ*"])
+
+            directory_features = nyx.featurize_directory(data_path + 'int/', data_path + 'seg/')      
+
+            assert directory_features.shape[1] > 3
+
+        def test_image_quality_montage(self):
+            '''
+            Test that ImageQuality class can be imported and will calculated features.
+            Numerical tests are in C++ tests
+            '''
+            
+            path = str(pathlib.Path(__file__).parent.resolve())
+            
+            data_path = path + '/data/'
+            
+            nyx = nyxus.ImageQuality (["*ALL_IMQ*"])
+
+            directory_features = nyx.featurize(tissuenet_int, tissuenet_seg, intensity_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'], label_names=['p0_y1_r1_c0.ome.tif', 'p0_y1_r1_c1.ome.tif'])    
+
+            assert directory_features.shape[1] > 3
+        
+        def test_image_quality_single_roi(self):
             '''
             Test that ImageQuality class can be imported and will calculated features.
             Numerical tests are in C++ tests
@@ -211,7 +242,7 @@ class TestNyxus():
 
             assert directory_features.shape[1] > 3
 
-        def test_image_quality_montage(self):
+        def test_image_quality_montage_single_roi(self):
             '''
             Test that ImageQuality class can be imported and will calculated features.
             Numerical tests are in C++ tests
