@@ -675,6 +675,7 @@ class TestNyxus():
             
             data_path = path + '/data/'
             
+            #nyx = nyxus.ImageQuality (["*ALL_IMQ*"])
             #nyx = nyxus.ImageQuality (["POWER_SPECTRUM_SLOPE"])
             nyx = nyxus.Nyxus (["GLRLM_SRE"])
 
