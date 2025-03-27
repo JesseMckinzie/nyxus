@@ -34,6 +34,7 @@ namespace Nyxus
 {
 	bool featurize_triv_wholeslide (size_t sidx, ImageLoader & imlo, size_t memory_limit, LR & vroi)
 	{
+
 		const std::string & ifpath = LR::dataset_props[sidx].fname_int;
 
 		// can we process this slide ?
@@ -140,11 +141,13 @@ namespace Nyxus
 
 		LR vroi (1); // virtual ROI representing the whole slide ROI-labelled as '1'
 
+
 		if (featurize_wholeslide (slide_idx, imlo, vroi) == false)	// non-wsi counterpart: processIntSegImagePair()
 		{
 			std::cerr << "processIntSegImagePair() returned an error code while processing slide " << p.fname_int << "\n";
 			rv = 1;
 		}
+
 
 		// thread-safely save results of this single slide
 		if (write_apache) 
@@ -270,13 +273,11 @@ namespace Nyxus
 				return 1;
 			}
 		}
-
 		// run batches of threads
 		size_t n_jobs = (nf + n_threads - 1) / n_threads;
 		for (size_t j=0; j<n_jobs; j++)
 		{
 			VERBOSLVL1 (std::cout << "whole-slide job " << j+1 << "/" << n_jobs << "\n");
-
 			std::vector<std::future<void>> T;
 			for (int t=0; t < n_threads; t++)
 			{
@@ -285,8 +286,9 @@ namespace Nyxus
 				// done?
 				if (idx + 1 > nf)
 					break;
-
+				std::cerr << "before async call" << std::endl;
 				int rval = 0;
+
 				T.push_back (std::async(std::launch::async, 
 					featurize_wsi_thread,
 					intensFiles,
@@ -297,6 +299,8 @@ namespace Nyxus
 					write_apache,
 					saveOption,
 					std::ref(rval)));
+
+				std::cerr << "after async call" << std::endl;
 			}
 		}
 
@@ -312,7 +316,6 @@ namespace Nyxus
 				return 2;
 			}
 		}
-
 		//
 		// future: free GPU cache for all participating devices
 		//
